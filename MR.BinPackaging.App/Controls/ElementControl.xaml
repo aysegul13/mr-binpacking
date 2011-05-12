@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="MR.BinPackaging.App.Controls.ElementControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             MinWidth="32"
+             x:Name="elemControl">
+    <Grid ToolTip="{Binding ElementName=elemControl, Path=Message}">
+        <Border x:Name="Border" Background="{Binding ElementName=elemControl, Path=Color}" BorderBrush="Black" BorderThickness="0,3,0,0" />
+        <!--Content="{Binding ElementName=elemControl, Path=Message}"-->
+        <Label Content="{Binding ElementName=elemControl, Path=Message}" VerticalAlignment="Center" HorizontalAlignment="Center"
+               FontWeight="Bold" Padding="0" Foreground="SteelBlue" />
+    </Grid>
+    <!--<Canvas ToolTip="{Binding ElementName=elemControl, Path=Message}">
+        <Line X1="0" Y1="0" X2="{Binding ElementName=elemControl, Path=ActualWidth}" Y2="0" Stroke="Black" StrokeThickness="1" />
+        <Rectangle Canvas.Left="0" Canvas.Top="0" Width="{Binding ElementName=elemControl, Path=ActualWidth}" Height="{Binding ElementName=elemControl, Path=ActualHeight}" Fill="Beige"/>
+        <Label Content="{Binding ElementName=elemControl, Path=Message}" FontWeight="Bold" Padding="0" Foreground="SteelBlue"
+               Width="{Binding ElementName=elemControl, Path=ActualWidth}" Height="{Binding ElementName=elemControl, Path=ActualHeight}"
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+    </Canvas>-->
+</UserControl>

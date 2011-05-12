@@ -1,0 +1,39 @@
+﻿<Window x:Class="MR.BinPackaging.App.PreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PreviewWindow" Height="380" Width="400" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto" MinWidth="150"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="SlateGray">
+            <Expander Header="Elementy" IsExpanded="True">
+                <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="spElements" Orientation="Horizontal" Background="LightGray" FlowDirection="LeftToRight" Height="140"/>
+                </ScrollViewer>
+            </Expander>
+        </Border>
+        <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="LightGray">
+            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                <StackPanel x:Name="spResult" Orientation="Horizontal" HorizontalAlignment="Center"/>
+                <!--<Canvas x:Name="cnResult"/>-->
+            </ScrollViewer>
+        </Border>
+        <Border Grid.Row="1" Grid.Column="1" BorderThickness="1,0,1,1" BorderBrush="SlateGray">
+            <StackPanel>
+                <Label x:Name="laBinCount" Content="Liczba pudełek: "/>
+                <Label x:Name="laQualityEstimation" Content="Oszacowanie jakości: "/>
+                <Label x:Name="laErrorEstimation" Content="Oszacowanie błędu: "/>
+                <Label x:Name="laExecutionTime" Content="Czas obliczeń: "/>
+                <Label x:Name="laDrawingTime" Content="Czas rysowania: "/>
+                <Label x:Name="laLowerBound" Content="LB: "/>
+                <Label x:Name="laStrongerLowerBound" Content="SLB: "/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
