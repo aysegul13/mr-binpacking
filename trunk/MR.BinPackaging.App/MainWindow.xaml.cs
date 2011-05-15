@@ -187,20 +187,20 @@ namespace MR.BinPackaging.App
 
         private void ToggleButton_Click(object sender, RoutedEventArgs e)
         {
-            ExperimentParams prms = new ExperimentParams()
-            {
-                Algorithm = new NextFit(),
-                BinSize = 100,
-                Dist = Distribution.Uniform,
-                MinN = 100,
-                MaxN = 10000,
-                Step = 100,
-                MinVal = 0.0,
-                MaxVal = 1.0,
-                Repeat = 10
-            };
+            //ExperimentParams prms = new ExperimentParams()
+            //{
+            //    Algorithm = new NextFit(),
+            //    BinSize = 100,
+            //    Dist = Distribution.Uniform,
+            //    MinN = 100,
+            //    MaxN = 10000,
+            //    Step = 100,
+            //    MinVal = 0.0,
+            //    MaxVal = 1.0,
+            //    Repeat = 10
+            //};
 
-            TestWindow test = new TestWindow(prms);
+            TestWindow test = new TestWindow(null);
             test.Show();
         }
 
