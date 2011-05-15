@@ -29,6 +29,8 @@ namespace MR.BinPackaging.App.Controls
         double AxisYMax = 10.0;
         int AxisYIntervals = 10;
         bool logScale = false;
+        bool barChart = true;
+        bool showLabels = true;
 
 
         double chartWidth, chartHeight;
@@ -46,10 +48,14 @@ namespace MR.BinPackaging.App.Controls
             //double linear = chartOffsetY + chartHeight * (1 - (y - AxisYMin) / (AxisYMax + 1 - AxisYMin));
             //return chartOffsetY + chartHeight * (1 - y / (AxisYMax + 1));
 
+            double h;
             if (logScale)
-                return chartOffsetY + chartHeight * (1 - Math.Log(Math.Max(y, 1), 2) / (AxisYMax + 1));
+                h = Math.Log(Math.Max(y, 1), 2) / AxisYMax;
             else
-                return chartOffsetY + chartHeight * (1 - y / (AxisYMax + 1));
+                h = y / AxisYMax;
+
+            h = h * AxisYIntervals / (AxisYIntervals + 1);
+            return chartOffsetY + chartHeight * (1 - h);
         }
 
         public void DrawRect(double x, double y)
@@ -63,7 +69,8 @@ namespace MR.BinPackaging.App.Controls
             {
                 Width = X2 - X1,
                 Height = Y1 - Y2,
-                Fill = Brushes.YellowGreen
+                Fill = Brushes.YellowGreen,
+                ToolTip = y
             };
 
             Canvas.SetLeft(rect, X1);
@@ -83,7 +90,8 @@ namespace MR.BinPackaging.App.Controls
                 StrokeThickness = 2,
                 Width = d,
                 Height = d,
-                Stroke = Brushes.Purple
+                Stroke = Brushes.Purple,
+                ToolTip = y
             };
 
             Canvas.SetLeft(ellipse, newX - d / 2);
@@ -92,7 +100,6 @@ namespace MR.BinPackaging.App.Controls
         }
 
         private bool first = true;
-
         public void Refresh()
         {
             Canvas.Children.Clear();
@@ -105,22 +112,41 @@ namespace MR.BinPackaging.App.Controls
                     Algorithm = new BestFitDecreasing(),
                     BinSize = 100,
                     Dist = Distribution.Uniform,
-                    MinN = 2000,
-                    MaxN = 3000,
+                    MinN = 1000,
+                    MaxN = 2000,
                     Step = 100,
                     MinVal = 0.0,
                     MaxVal = 1.0,
                     Repeat = 1
                 };
 
-                List<List<Statistics>> stats = Experiment.ExecuteExperiment(prms);
-                Points = Experiment.GetCoordinates(stats, StatField.ExecutionTime);
+
+                //List<List<Statistics>> stats = Experiment.ExecuteExperiment(prms)
+                //Points = Experiment.GetCoordinates(stats, StatField.ExecutionTime);
+
+                Points = new List<Point2D>();
+                for (int i = 0; i < 10; i++)
+                {
+                    Points.Add(new Point2D(i + 1, (i + 1) * 10));
+                    //Points.Add(new Point2D(i + 1, Math.Pow(2, i)));
+                }
             }
 
             first = false;
             //
 
-            AxisYMax = Points.Select(p => p.Y).Max();
+            if (logScale)
+                AxisYMax = Points.Select(p => Math.Log(Math.Max(p.Y, 1), 2)).Max();
+            else
+                AxisYMax = Points.Select(p => p.Y).Max();
+
+            //int factor = 1;
+            //while (AxisYMax > 1.0)
+            //{
+            //    AxisYMax /= 10.0;
+            //    factor *= 10;
+            //}
+            //AxisYMax = factor;
 
             chartWidth = Canvas.ActualWidth - 2 * chartOffsetX;
             chartHeight = Canvas.ActualHeight - 2 * chartOffsetY;
@@ -152,9 +178,10 @@ namespace MR.BinPackaging.App.Controls
 
             PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
 
-            for (int i = 1; i <= Points.Count * 2; i++)
+            double max = Points.Select(p => p.Y).Max();
+            for (int i = 1; i <= Points.Count * 4; i++)
             {
-                X = i / 2.0;
+                X = i / 4.0;
                 //Y = Math.Log(X, 2);
                 //Y = X * X;
                 Y = Math.Pow(2, X);
@@ -163,6 +190,9 @@ namespace MR.BinPackaging.App.Controls
                 myLineSegment.Point = new Point(ConvertX(X), ConvertY(Y));
 
                 myPathSegmentCollection.Add(myLineSegment);
+
+                if (Y > max)
+                    break;
             }
 
 
@@ -230,7 +260,7 @@ namespace MR.BinPackaging.App.Controls
             double h = chartHeight / (AxisYIntervals + 1);
             for (int i = 0; i <= AxisYIntervals; i++)
             {
-                double Y = Canvas.ActualHeight - chartOffsetY - i*h;
+                double Y = Canvas.ActualHeight - chartOffsetY - i * h;
                 Line newLine = new Line()
                 {
                     X1 = chartOffsetX - 5,
@@ -241,6 +271,17 @@ namespace MR.BinPackaging.App.Controls
                     Stroke = Brushes.Black
                 };
                 Canvas.Children.Add(newLine);
+
+                Label newLabel = new Label()
+                {
+                    Width = chartOffsetX - 5,
+                    FlowDirection = FlowDirection.RightToLeft,
+                    Content = (i * AxisYMax / AxisYIntervals).ToString("0.##"),
+                    Padding = new Thickness(0.0)
+                };
+                Canvas.SetLeft(newLabel, 0);
+                Canvas.SetTop(newLabel, Y);
+                Canvas.Children.Add(newLabel);
             }
         }
 

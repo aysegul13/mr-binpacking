@@ -133,11 +133,12 @@
                                 <Button x:Name="bFirstFit" Content="FF" Click="bFirstFit_Click" />
                                 <Button x:Name="bBestFit" Content="BF" Click="bBestFit_Click" />
                                 <Button x:Name="bFirstFitD" Content="FFD" Click="bFirstFitD_Click" />
-                                <Button x:Name="bBestFitD" Content="BFD" Click="bBestFitD_Click" />
+                                <Button x:Name="bBestFiftD" Content="BFD" Click="bBestFitD_Click" />
+                                <Button x:Name="bRandomFit" Content="RF" Click="bRandomFit_Click" />
                             </StackPanel>
                             <StackPanel Grid.Row="6" Grid.Column="1"  Orientation="Horizontal">
                                 <Button x:Name="bLoad" Content="Load" Click="bLoad_Click" />
-                                <Button x:Name="bSave" Content="Save"/>
+                                <Button x:Name="bSave" Content="Save" Click="bSave_Click" />
                             </StackPanel>
                         </Grid>
                     </Border>
