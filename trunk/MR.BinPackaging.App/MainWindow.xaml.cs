@@ -163,29 +163,6 @@ namespace MR.BinPackaging.App
                 tbElements.Text += elem + " ";
         }
 
-        private void bLoad_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openDialog = new OpenFileDialog();
-            if (openDialog.ShowDialog() == true)
-            {
-                //TODO: odczytywanie wielu instancji z jednego pliku
-                using (StreamReader sr = new StreamReader(openDialog.FileName))
-                {
-                    Elements.Clear();
-                    string line = sr.ReadLine();
-                    BinSize = Int32.Parse(line);
-
-                    sr.ReadLine();  //line with elements number, ignore
-
-                    while ((line = sr.ReadLine()) != null)
-                        Elements.Add(Int32.Parse(line));
-                }
-
-                RefreshElements();
-                RefreshPreview();
-            }
-        }
-
         private void bShuffle_Click(object sender, RoutedEventArgs e)
         {
             this.Elements = this.Elements.OrderBy(el => Guid.NewGuid()).ToList();
@@ -225,6 +202,38 @@ namespace MR.BinPackaging.App
 
             TestWindow test = new TestWindow(prms);
             test.Show();
+        }
+
+        private void bLoad_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openDialog = new OpenFileDialog();
+            if (openDialog.ShowDialog() == true)
+            {
+                Instance instance = Loader.LoadFromFile(openDialog.FileName);
+
+                RefreshElements();
+                RefreshPreview();
+            }
+        }
+
+        private void bSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            if (saveDialog.ShowDialog() == true)
+            {
+                Instance instance = new Instance(BinSize)
+                {
+                    Elements = this.Elements
+                };
+
+                Loader.SaveToFile(instance, saveDialog.FileName);
+            }
+        }
+
+        private void bRandomFit_Click(object sender, RoutedEventArgs e)
+        {
+            PreviewWindow prev = new PreviewWindow(new RandomFit(), Elements, BinSize);
+            prev.Show();
         }
     }
 }
