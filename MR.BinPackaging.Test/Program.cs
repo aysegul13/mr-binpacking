@@ -14,7 +14,7 @@ namespace MR.BinPackaging.Test
         {
             ExperimentParams prms = new ExperimentParams()
             {
-                Algorithm = new NextFit(),
+                Algorithms = new List<IListAlgorithm>(),
                 BinSize = 100,
                 Dist = Distribution.Uniform,
                 MinN = 100,
@@ -25,7 +25,9 @@ namespace MR.BinPackaging.Test
                 Repeat = 10
             };
 
-            List<List<Statistics>> stats = Experiment.ExecuteExperiment(prms);
+            prms.Algorithms.Add(new NextFit());
+
+            ExperimentResult stats = Experiment.ExecuteExperiment(prms);
 
             List<Point2D> results = Experiment.GetCoordinates(stats, StatField.Result);
 
