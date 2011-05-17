@@ -27,10 +27,15 @@ namespace MR.BinPackaging.App.Controls
         }
 
         List<List<Point2D>> DataSeries;
-        double AxisYMax = 10.0;
+        double AxisYMax = 0.0;
         int AxisYIntervals = 10;
+
+        double AxisXMin = 0;
+        int AxisXIntervalWidth = 1;
+
         bool logScale = false;
         bool barChart = true;
+        bool drawLine = true;
         bool showLabels = true;
 
 
@@ -41,7 +46,13 @@ namespace MR.BinPackaging.App.Controls
 
         public double ConvertX(double x)
         {
-            return chartOffsetX + chartWidth * x / (DataSeries[0].Count + 1);
+            int count = DataSeries[0].Count;
+            if (barChart)
+                count++;
+
+            x = (x - AxisXMin) / AxisXIntervalWidth;
+
+            return chartOffsetX + chartWidth * x / count;
         }
 
         public double ConvertY(double y)
@@ -58,8 +69,8 @@ namespace MR.BinPackaging.App.Controls
 
         public void DrawRect(double x, double y, Brush brush)
         {
-            double X1 = ConvertX(x + 0.1);
-            double X2 = ConvertX(x + 0.9);
+            double X1 = ConvertX(x + 0.1 * AxisXIntervalWidth);
+            double X2 = ConvertX(x + 0.9 * AxisXIntervalWidth);
             double Y1 = ConvertY(0);
             double Y2 = ConvertY(y);
 
@@ -68,7 +79,7 @@ namespace MR.BinPackaging.App.Controls
                 Width = X2 - X1,
                 Height = Y1 - Y2,
                 Fill = brush,
-                ToolTip = String.Format("({0}, {1})", x, y)
+                ToolTip = String.Format("({0}; {1})", x, y)
             };
 
             Canvas.SetLeft(rect, X1);
@@ -89,7 +100,7 @@ namespace MR.BinPackaging.App.Controls
                 Width = d,
                 Height = d,
                 Stroke = brush,
-                ToolTip = String.Format("({0}, {1})", x, y)
+                ToolTip = String.Format("({0}; {1})", x, y)
             };
 
             Canvas.SetLeft(ellipse, newX - d / 2);
@@ -131,10 +142,28 @@ namespace MR.BinPackaging.App.Controls
 
                 for (int j = 0; j < DataSeries[i].Count; j++)
                 {
-                    DrawRect(j, DataSeries[i][j].Y, brush);
-                    //DrawRect(i, Math.Pow(2, i));
-                    //DrawRect(i, Points[i]);
-                    DrawPoint(j + 1, DataSeries[i][j].Y, brush);
+                    if (!barChart)
+                    {
+                        if (drawLine && (j > 0))
+                        {
+                            Line newLine = new Line()
+                            {
+                                X1 = ConvertX(DataSeries[i][j - 1].X),
+                                X2 = ConvertX(DataSeries[i][j].X),
+                                Y1 = ConvertY(DataSeries[i][j - 1].Y),
+                                Y2 = ConvertY(DataSeries[i][j].Y),
+                                Stroke = brush,
+                                StrokeThickness = 2.0
+                            };
+                            Canvas.Children.Add(newLine);
+                        }
+
+                        DrawPoint(DataSeries[i][j].X, DataSeries[i][j].Y, brush);
+                    }
+                    else
+                    {
+                        DrawRect(DataSeries[i][j].X, DataSeries[i][j].Y, brush);
+                    }
                 }
             }
 
@@ -146,31 +175,34 @@ namespace MR.BinPackaging.App.Controls
 
         public void DrawFunction()
         {
-            double X = 0.01;
+            double X = AxisXMin;
             //double Y = Math.Log(X, 2);
             //double Y = X * X;
-            double Y = Math.Pow(2, X);
+            //double Y = Math.Pow(2, X);
+            double Y = X;
 
             PathFigure myPathFigure = new PathFigure();
             myPathFigure.StartPoint = new Point(ConvertX(X), ConvertY(Y));
-
             PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
-
 
             double max = 0.01;
             foreach (var series in DataSeries)
                 max = Math.Max(max, series.Select(p => p.Y).Max());
 
-            for (int i = 1; i <= DataSeries[0].Count * 4; i++)
+            int count = DataSeries[0].Count * 4;
+            if (barChart)
+                count += 4;
+
+            for (int i = 1; i < count; i++)
             {
-                X = i / 4.0;
+                X = AxisXMin + i * AxisXIntervalWidth;
                 //Y = Math.Log(X, 2);
                 //Y = X * X;
-                Y = Math.Pow(2, X);
+                //Y = Math.Pow(2, X);
+                Y = X;
 
                 LineSegment myLineSegment = new LineSegment();
                 myLineSegment.Point = new Point(ConvertX(X), ConvertY(Y));
-
                 myPathSegmentCollection.Add(myLineSegment);
 
                 if (Y > max)
@@ -179,10 +211,8 @@ namespace MR.BinPackaging.App.Controls
 
 
             myPathFigure.Segments = myPathSegmentCollection;
-
             PathFigureCollection myPathFigureCollection = new PathFigureCollection();
             myPathFigureCollection.Add(myPathFigure);
-
             PathGeometry myPathGeometry = new PathGeometry();
             myPathGeometry.Figures = myPathFigureCollection;
 
@@ -199,6 +229,7 @@ namespace MR.BinPackaging.App.Controls
         {
             double Y = Canvas.ActualHeight - chartOffsetY;
 
+            //axis line
             Line axisX = new Line()
             {
                 X1 = chartOffsetX,
@@ -210,9 +241,37 @@ namespace MR.BinPackaging.App.Controls
             };
             Canvas.Children.Add(axisX);
 
-            for (int i = 0; i <= DataSeries[0].Count; i++)
+            //arrow
+            axisX = new Line()
             {
-                double X = ConvertX(i);
+                X1 = Canvas.ActualWidth - chartOffsetX - 10,
+                X2 = Canvas.ActualWidth - chartOffsetX,
+                Y1 = Y - 5,
+                Y2 = Y,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black
+            };
+            Canvas.Children.Add(axisX);
+
+            axisX = new Line()
+            {
+                X1 = Canvas.ActualWidth - chartOffsetX - 10,
+                X2 = Canvas.ActualWidth - chartOffsetX,
+                Y1 = Y + 5,
+                Y2 = Y,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black
+            };
+            Canvas.Children.Add(axisX);
+
+
+            int count = DataSeries[0].Count;
+            if (barChart)
+                count++;
+
+            for (int i = 0; i < count; i++)
+            {
+                double X = ConvertX(AxisXMin + i * AxisXIntervalWidth);
                 Line newLine = new Line()
                 {
                     X1 = X,
@@ -228,6 +287,7 @@ namespace MR.BinPackaging.App.Controls
 
         public void DrawYAxis()
         {
+            //axis line
             Line axisY = new Line()
             {
                 X1 = chartOffsetX,
@@ -239,8 +299,32 @@ namespace MR.BinPackaging.App.Controls
             };
             Canvas.Children.Add(axisY);
 
+            //arrow
+            axisY = new Line()
+            {
+                X1 = chartOffsetX - 5,
+                X2 = chartOffsetX,
+                Y1 = chartOffsetY + 10,
+                Y2 = chartOffsetY,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black
+            };
+            Canvas.Children.Add(axisY);
+
+            axisY = new Line()
+            {
+                X1 = chartOffsetX + 5,
+                X2 = chartOffsetX,
+                Y1 = chartOffsetY + 10,
+                Y2 = chartOffsetY,
+                StrokeThickness = 2,
+                Stroke = Brushes.Black
+            };
+            Canvas.Children.Add(axisY);
+
+
             double h = chartHeight / (AxisYIntervals + 1);
-            for (int i = 0; i <= AxisYIntervals; i++)
+            for (int i = 0; i < AxisYIntervals + 1; i++)
             {
                 double Y = Canvas.ActualHeight - chartOffsetY - i * h;
                 Line newLine = new Line()
@@ -267,24 +351,6 @@ namespace MR.BinPackaging.App.Controls
             }
         }
 
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Refresh();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            logScale = true;
-            Refresh();
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            logScale = false;
-            Refresh();
-        }
-
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             ExperimentParams prms = new ExperimentParams()
@@ -292,8 +358,8 @@ namespace MR.BinPackaging.App.Controls
                 Algorithms = new List<IListAlgorithm>(),
                 BinSize = 100,
                 Dist = Distribution.Uniform,
-                MinN = 1000,
-                MaxN = 2000,
+                MinN = 100,
+                MaxN = 1000,
                 Step = 100,
                 MinVal = 0.0,
                 MaxVal = 1.0,
@@ -310,12 +376,34 @@ namespace MR.BinPackaging.App.Controls
             for (int i = 0; i < stats.DataSeries.Count; i++)
                 DataSeries.Add(Experiment.GetCoordinates(stats[i], StatField.ExecutionTime));
 
+
+            AxisXIntervalWidth = prms.Step;
+            AxisXMin = prms.MinN;
+
             //DataSeries = new List<Point2D>();
             //for (int i = 0; i < 10; i++)
             //{
             //    DataSeries.Add(new Point2D(i + 1, (i + 1) * 10));
             //    //Points.Add(new Point2D(i + 1, Math.Pow(2, i)));
             //}
+        }
+
+        private void tgbType_Click(object sender, RoutedEventArgs e)
+        {
+            barChart = !barChart;
+            Refresh();
+        }
+
+        private void tgbScale_Click(object sender, RoutedEventArgs e)
+        {
+            logScale = !logScale;
+            Refresh();
+        }
+
+        private void tgbLines_Click(object sender, RoutedEventArgs e)
+        {
+            drawLine = !drawLine;
+            Refresh();
         }
     }
 }

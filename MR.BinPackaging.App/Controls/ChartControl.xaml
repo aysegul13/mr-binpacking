@@ -25,9 +25,9 @@
             </Canvas>
         </ScrollViewer>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Content="Refresh" MinWidth="75" Click="Button_Click" />
-            <Button Content="Log scale" MinWidth="75" Click="Button_Click_1"/>
-            <Button Content="Linear scale" MinWidth="75" Click="Button_Click_2"/>
+            <ToggleButton x:Name="tgbType" Content="Type" MinWidth="75" Click="tgbType_Click"/>
+            <ToggleButton x:Name="tgbScale" Content="Scale" MinWidth="75" Click="tgbScale_Click"/>
+            <ToggleButton x:Name="tgbLines" Content="Lines" MinWidth="75" Click="tgbLines_Click"/>
             <Button Content="Generate data" MinWidth="75" Click="Button_Click_3"/>
         </StackPanel>
     </Grid>
