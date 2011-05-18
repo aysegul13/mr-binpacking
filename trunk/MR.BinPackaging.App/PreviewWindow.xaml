@@ -27,12 +27,14 @@
         <Border Grid.Row="1" Grid.Column="1" BorderThickness="1,0,1,1" BorderBrush="SlateGray">
             <StackPanel>
                 <Label x:Name="laBinCount" Content="Liczba pudełek: "/>
-                <Label x:Name="laQualityEstimation" Content="Oszacowanie jakości: "/>
-                <Label x:Name="laErrorEstimation" Content="Oszacowanie błędu: "/>
+                <!--<Label x:Name="laQualityEstimation" Content="Oszacowanie jakości: "/>
+                <Label x:Name="laErrorEstimation" Content="Oszacowanie błędu: "/>-->
                 <Label x:Name="laExecutionTime" Content="Czas obliczeń: "/>
-                <Label x:Name="laDrawingTime" Content="Czas rysowania: "/>
+                <!--<Label x:Name="laDrawingTime" Content="Czas rysowania: "/>-->
                 <Label x:Name="laLowerBound" Content="LB: "/>
                 <Label x:Name="laStrongerLowerBound" Content="SLB: "/>
+                <Button x:Name="bNext" Content="Next" MinWidth="75" Click="bNext_Click"/>
+                <Label x:Name="laMessage" Content=""/>
             </StackPanel>
         </Border>
     </Grid>
