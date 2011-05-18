@@ -10,9 +10,17 @@ namespace MR.BinPackaging.Library
     {
         public string Name { get; private set; }
 
+        //presentation properties
+        public string Message { get; set; }
+        public int SelectedElement { get; set; }
+        public int SelectedBin { get; set; }
+        public bool IsWaiting { get; set; }
+        public Instance ActualResult { get; set; }
+
         public FirstFitDecreasing()
         {
             Name = "First Fit Decreasing";
+            IsWaiting = false;
         }
 
         public Instance Execute(List<int> elements, int binSize)

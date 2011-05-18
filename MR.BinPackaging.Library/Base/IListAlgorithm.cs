@@ -9,6 +9,13 @@ namespace MR.BinPackaging.Library.Base
     {
         string Name { get; }
 
+        //presentation properties
+        string Message { get; set; }
+        int SelectedElement { get; set; }
+        int SelectedBin { get; set; }
+        bool IsWaiting { get; set; }
+        Instance ActualResult { get; set; }
+
         Instance Execute(List<int> elements, int binSize);
     }
 }

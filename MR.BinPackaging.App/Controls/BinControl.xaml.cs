@@ -67,9 +67,9 @@ namespace MR.BinPackaging.App.Controls
                 bin = value;
 
                 if (ShowScaled)
-                    FreeSpace = (Bin != null) ? ((double)Bin.FreeSpace() / Bin.Size).ToString("0.000") : "";
+                    FreeSpace = (bin != null) ? ((double)bin.FreeSpace() / bin.Size).ToString("0.000") : "";
                 else
-                    FreeSpace = (Bin != null) ? Bin.FreeSpace().ToString() : "";
+                    FreeSpace = (bin != null) ? bin.FreeSpace().ToString() : "";
 
                 dataItems.Clear();
                 foreach (var binElem in value.Elements)
@@ -77,7 +77,25 @@ namespace MR.BinPackaging.App.Controls
                     ElementControl newElemControl = new ElementControl(binElem);
                     dataItems.Insert(0, newElemControl);
                 }
+
+                //UpdateSizes();
             }
+        }
+
+        public void SelectElem(int index)
+        {
+            Border.BorderBrush = Brushes.CornflowerBlue;
+
+            if (bFiller.Visibility == Visibility.Visible)
+                bFiller.BorderBrush = Brushes.CornflowerBlue;
+            else
+                dataItems[index].Border.BorderBrush = Brushes.CornflowerBlue;
+        }
+
+        public void SelectBin()
+        {
+            Border.BorderBrush = Brushes.CornflowerBlue;
+            bFiller.BorderBrush = Brushes.CornflowerBlue;
         }
 
         public void UpdateLabels()
@@ -143,6 +161,16 @@ namespace MR.BinPackaging.App.Controls
         private void binControl_Loaded(object sender, RoutedEventArgs e)
         {
             UpdateSizes();
+        }
+
+        private void ItemsControl_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            SelectBin();
         }
     }
 }
