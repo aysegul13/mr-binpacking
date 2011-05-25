@@ -257,5 +257,11 @@ namespace MR.BinPackaging.App
                 }
             }
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if ((workerThread != null) && workerThread.IsAlive)
+                workerThread.Abort();
+        }
     }
 }

@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using MR.BinPackaging.Library.Base;
+using System.Windows.Media.Animation;
 
 namespace MR.BinPackaging.App.Controls
 {
@@ -84,18 +85,63 @@ namespace MR.BinPackaging.App.Controls
 
         public void SelectElem(int index)
         {
-            Border.BorderBrush = Brushes.CornflowerBlue;
+            DoubleAnimation myDoubleAnimation = new DoubleAnimation();
+            myDoubleAnimation.From = 1.0;
+            myDoubleAnimation.To = 0.0;
+            myDoubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(1000));
+            myDoubleAnimation.AutoReverse = true;
+            myDoubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
 
-            if (bFiller.Visibility == Visibility.Visible)
-                bFiller.BorderBrush = Brushes.CornflowerBlue;
+            Storyboard myStoryboard = new Storyboard();
+            myStoryboard.Children.Add(myDoubleAnimation);
+
+            if (index < 0)
+            {
+                bFiller.Name = "Test";
+                bFiller.RegisterName(bFiller.Name, bFiller);
+                Storyboard.SetTargetName(myDoubleAnimation, bFiller.Name);
+                Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Rectangle.OpacityProperty));
+                myStoryboard.Begin(bFiller);
+            }
             else
-                dataItems[index].Border.BorderBrush = Brushes.CornflowerBlue;
+            {
+                dataItems[index].Name = "Test";
+                dataItems[index].RegisterName(dataItems[index].Name, dataItems[index]);
+                Storyboard.SetTargetName(myDoubleAnimation, dataItems[index].Name);
+                Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Rectangle.OpacityProperty));
+                myStoryboard.Begin(dataItems[index]);
+            }
+
+
+            //Border.BorderBrush = Brushes.CornflowerBlue;
+
+            //if (bFiller.Visibility == Visibility.Visible)
+            //    bFiller.BorderBrush = Brushes.CornflowerBlue;
+            //else
+            //    dataItems[index].Border.BorderBrush = Brushes.CornflowerBlue;
         }
 
         public void SelectBin()
         {
-            Border.BorderBrush = Brushes.CornflowerBlue;
-            bFiller.BorderBrush = Brushes.CornflowerBlue;
+            //Border.BorderBrush = Brushes.CornflowerBlue;
+            //bFiller.BorderBrush = Brushes.CornflowerBlue;
+
+            DoubleAnimation myDoubleAnimation = new DoubleAnimation();
+            myDoubleAnimation.From = 1.0;
+            myDoubleAnimation.To = 0.0;
+            myDoubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(1000));
+            myDoubleAnimation.AutoReverse = true;
+            myDoubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
+
+            this.Name = "Test";
+            this.RegisterName(this.Name, this);
+
+            Storyboard myStoryboard = new Storyboard();
+            myStoryboard.Children.Add(myDoubleAnimation);
+            Storyboard.SetTargetName(myDoubleAnimation, this.Name);
+            Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Rectangle.OpacityProperty));
+
+            myStoryboard.Begin(this);
         }
 
         public void UpdateLabels()
@@ -170,7 +216,12 @@ namespace MR.BinPackaging.App.Controls
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            SelectBin();
+            Random random = new Random();
+
+            int index = random.Next(DataItems.Count + 1) - 1;
+            SelectElem(index);
+
+            //SelectBin();            
         }
     }
 }
