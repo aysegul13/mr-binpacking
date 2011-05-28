@@ -50,33 +50,40 @@ namespace MR.BinPackaging.Library
 
         public Instance Execute(List<int> elements, int binSize)
         {
-            Instance result = new Instance(binSize);
-            result.Elements = elements;
+            ActualResult = new Instance(binSize);
+            ActualResult.Elements = elements;
 
-            foreach (var elem in result.Elements)
+            for (int i = 0; i < ActualResult.Elements.Count; i++)
             {
+                int elem = ActualResult.Elements[i];
                 int minSpaceLeft = binSize;
                 int minIndex = -1;
 
-                for (int i = 0; i < result.Bins.Count; i++)
+                for (int k = 0; k < ActualResult.Bins.Count; k++)
                 {
-                    if ((result.Bins[i].FreeSpace() >= elem) && (result.Bins[i].FreeSpace() - elem < minSpaceLeft))
+                    //select bin
+                    Wait(k, i);
+
+                    if ((ActualResult.Bins[k].FreeSpace() >= elem) && (ActualResult.Bins[k].FreeSpace() - elem < minSpaceLeft))
                     {
-                        minSpaceLeft = result.Bins[i].FreeSpace() - elem;
-                        minIndex = i;
+                        minSpaceLeft = ActualResult.Bins[k].FreeSpace() - elem;
+                        minIndex = k;
                     }
                 }
 
                 if (minIndex < 0)
                 {
-                    result.Bins.Add(new Bin(result.BinSize));
-                    minIndex = result.Bins.Count - 1;
+                    ActualResult.Bins.Add(new Bin(ActualResult.BinSize));
+                    minIndex = ActualResult.Bins.Count - 1;
+
+                    //select bin
+                    Wait(minIndex, i);
                 }
 
-                result.Bins[minIndex].Insert(elem);
+                ActualResult.Bins[minIndex].Insert(elem);
             }
 
-            return result;
+            return ActualResult;
         }
     }
 }

@@ -108,7 +108,8 @@ namespace MR.BinPackaging.App.Controls
 
         public void StopAnimation()
         {
-            storyboard.Stop(Border);
+            storyboard.Seek(TimeSpan.Zero);
+            storyboard.Stop(Border);          
         }
 
         public void UpdateLabels()
