@@ -13,9 +13,54 @@ namespace MR.BinPackaging.Library
 
         //presentation properties
         public string Message { get; set; }
-        public int SelectedElement { get; set; }
-        public int SelectedBin { get; set; }
-        public Instance ActualResult { get; set; }
+
+        private int selectedElement;
+        public int SelectedElement
+        {
+            get
+            {
+                if (algorithm != null)
+                    return algorithm.SelectedElement;
+                else
+                    return selectedElement;
+            }
+            set
+            {
+                selectedElement = value;
+            }
+        }
+
+        private int selectedBin;
+        public int SelectedBin
+        {
+            get
+            {
+                if (algorithm != null)
+                    return algorithm.SelectedBin;
+                else
+                    return selectedBin;
+            }
+            set
+            {
+                selectedBin = value;
+            }
+        }
+
+        private Instance actualResult = null;
+        public Instance ActualResult
+        {
+            get
+            {
+                if (algorithm != null)
+                    return algorithm.ActualResult;
+                else
+                    return actualResult;
+            }
+            set
+            {
+                actualResult = value;
+            }
+        }
 
         private volatile bool isWaiting = false;
         public bool IsWaiting
@@ -27,8 +72,12 @@ namespace MR.BinPackaging.Library
             set
             {
                 isWaiting = value;
+                if (algorithm != null)
+                    algorithm.IsWaiting = value;
             }
         }
+
+        private IListAlgorithm algorithm = null;
 
         public FirstFitDecreasing()
         {
@@ -44,16 +93,33 @@ namespace MR.BinPackaging.Library
 
             Message = bin + "." + elem;
 
-            while (IsWaiting)
-                Thread.Sleep(100);
+            if (algorithm != null)
+            {
+                while (algorithm.IsWaiting)
+                    Thread.Sleep(100);
+            }
+            else
+            {
+                while (IsWaiting)
+                    Thread.Sleep(100);
+            }
         }
 
         public Instance Execute(List<int> elements, int binSize)
         {
+            ActualResult = new Instance(binSize);
+            ActualResult.Elements = elements;
+
             List<int> elementsSorted = new List<int>(elements);
             elementsSorted.Sort((x, y) => y.CompareTo(x));
 
-            return  new FirstFit().Execute(elementsSorted, binSize);
+            ActualResult.Elements = elementsSorted;
+
+            Wait(-1, -1);
+
+            algorithm = new FirstFit();
+
+            return  algorithm.Execute(elementsSorted, binSize);
         }
     }
 }

@@ -94,6 +94,34 @@ namespace MR.BinPackaging.App
 
         Instance result = null;
 
+        private void DrawPreview()
+        {
+            spElements.Children.Clear();
+            previewBins.Clear();
+
+            foreach (var elem in Elements)
+            {
+                Bin bin = new Bin(BinSize);
+                bin.Insert(elem);
+
+                BinControl newBin = new BinControl();
+                newBin.AutoRefresh = false;
+                newBin.Bin = bin;
+                newBin.ShowFiller = false;
+
+                newBin.LayoutTransform = new ScaleTransform(0.8, 0.8);
+                newBin.Border.BorderThickness = new Thickness(0);
+                newBin.Border.Background = Brushes.Transparent;
+                newBin.laFreeSpace.Visibility = Visibility.Collapsed;
+
+                foreach (var elemControl in newBin.DataItems)
+                    elemControl.Border.BorderThickness = new Thickness(3);
+
+                spElements.Children.Add(newBin);
+                previewBins.Add(newBin);
+            }
+        }
+
         private void Draw(Instance instance)
         {
             spResult.Children.Clear();
@@ -219,36 +247,18 @@ namespace MR.BinPackaging.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            foreach (var elem in Elements)
-            {
-                Bin bin = new Bin(BinSize);
-                bin.Insert(elem);
-
-                BinControl newBin = new BinControl();
-                newBin.AutoRefresh = false;
-                newBin.Bin = bin;
-                newBin.ShowFiller = false;
-
-                newBin.LayoutTransform = new ScaleTransform(0.8, 0.8);
-                newBin.Border.BorderThickness = new Thickness(0);
-                newBin.Border.Background = Brushes.Transparent;
-                newBin.laFreeSpace.Visibility = Visibility.Collapsed;
-
-                foreach (var elemControl in newBin.DataItems)
-                    elemControl.Border.BorderThickness = new Thickness(3);
-
-                previewBins.Add(newBin);
-                spElements.Children.Add(newBin);
-            }
-
+            DrawPreview();
             Execute();
         }
 
+        private bool first = true;
         private void bNext_Click(object sender, RoutedEventArgs e)
         {
             if (result == null)
             {
                 laMessage.Content = Algorithm.Message;
+
+                Elements = Algorithm.ActualResult.Elements;
 
                 Instance inst = new Instance(Algorithm.ActualResult.BinSize);
                 foreach (var bin in Algorithm.ActualResult.Bins)
@@ -261,6 +271,10 @@ namespace MR.BinPackaging.App
                     inst.Bins.Add(newBin);
                 }
 
+                if (first)
+                    DrawPreview();
+
+                first = false;
                 Draw(inst);
                 //Draw(Algorithm.ActualResult);
                 this.GoAhead();
@@ -268,6 +282,7 @@ namespace MR.BinPackaging.App
             else
             {
                 workerThread.Join();
+                DrawPreview();
                 Draw(result);
             }
         }
