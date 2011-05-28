@@ -29,14 +29,6 @@ namespace MR.BinPackaging.App.Controls
             get { return dataItems; }
         }
 
-        public BinControl()
-        {
-            dataItems = new ObservableCollection<ElementControl>();
-            InitializeComponent();
-
-            Bin = new Bin();
-        }
-
         public bool AutoRefresh = true;
         public bool ShowScaled = false;
         public bool ShowFiller = true;
@@ -83,65 +75,40 @@ namespace MR.BinPackaging.App.Controls
             }
         }
 
-        public void SelectElem(int index)
+        private Storyboard storyboard;
+
+
+        public BinControl()
         {
-            DoubleAnimation myDoubleAnimation = new DoubleAnimation();
-            myDoubleAnimation.From = 1.0;
-            myDoubleAnimation.To = 0.0;
-            myDoubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(1000));
-            myDoubleAnimation.AutoReverse = true;
-            myDoubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
+            dataItems = new ObservableCollection<ElementControl>();
+            InitializeComponent();
 
-            Storyboard myStoryboard = new Storyboard();
-            myStoryboard.Children.Add(myDoubleAnimation);
+            Bin = new Bin();
 
-            if (index < 0)
-            {
-                bFiller.Name = "Test";
-                bFiller.RegisterName(bFiller.Name, bFiller);
-                Storyboard.SetTargetName(myDoubleAnimation, bFiller.Name);
-                Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Rectangle.OpacityProperty));
-                myStoryboard.Begin(bFiller);
-            }
-            else
-            {
-                dataItems[index].Name = "Test";
-                dataItems[index].RegisterName(dataItems[index].Name, dataItems[index]);
-                Storyboard.SetTargetName(myDoubleAnimation, dataItems[index].Name);
-                Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Rectangle.OpacityProperty));
-                myStoryboard.Begin(dataItems[index]);
-            }
+            DoubleAnimation doubleAnimation = new DoubleAnimation();
+            doubleAnimation.From = 1.0;
+            doubleAnimation.To = 0.0;
+            doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(1000));
+            doubleAnimation.AutoReverse = true;
+            doubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
 
+            storyboard = new Storyboard();
+            storyboard.Children.Add(doubleAnimation);
 
-            //Border.BorderBrush = Brushes.CornflowerBlue;
-
-            //if (bFiller.Visibility == Visibility.Visible)
-            //    bFiller.BorderBrush = Brushes.CornflowerBlue;
-            //else
-            //    dataItems[index].Border.BorderBrush = Brushes.CornflowerBlue;
+            Border.RegisterName(Border.Name, Border);
+            Storyboard.SetTargetName(doubleAnimation, Border.Name);
+            Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(Border.OpacityProperty));
         }
 
-        public void SelectBin()
+
+        public void StartAnimation()
         {
-            //Border.BorderBrush = Brushes.CornflowerBlue;
-            //bFiller.BorderBrush = Brushes.CornflowerBlue;
+            storyboard.Begin(Border, true);
+        }
 
-            DoubleAnimation myDoubleAnimation = new DoubleAnimation();
-            myDoubleAnimation.From = 1.0;
-            myDoubleAnimation.To = 0.0;
-            myDoubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(1000));
-            myDoubleAnimation.AutoReverse = true;
-            myDoubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
-
-            this.Name = "Test";
-            this.RegisterName(this.Name, this);
-
-            Storyboard myStoryboard = new Storyboard();
-            myStoryboard.Children.Add(myDoubleAnimation);
-            Storyboard.SetTargetName(myDoubleAnimation, this.Name);
-            Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Rectangle.OpacityProperty));
-
-            myStoryboard.Begin(this);
+        public void StopAnimation()
+        {
+            storyboard.Stop(Border);
         }
 
         public void UpdateLabels()
@@ -209,19 +176,14 @@ namespace MR.BinPackaging.App.Controls
             UpdateSizes();
         }
 
-        private void ItemsControl_SourceUpdated(object sender, DataTransferEventArgs e)
-        {
-            
-        }
-
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Random random = new Random();
+            StartAnimation();         
+        }
 
-            int index = random.Next(DataItems.Count + 1) - 1;
-            SelectElem(index);
-
-            //SelectBin();            
+        private void Border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            StopAnimation();
         }
     }
 }

@@ -28,6 +28,9 @@ namespace MR.BinPackaging.App
         private List<int> Elements;
         private int BinSize = 10;
 
+        private List<BinControl> previewBins = new List<BinControl>();
+        private List<BinControl> algorithmBins = new List<BinControl>();
+
         public PreviewWindow(IListAlgorithm algorithm, List<int> elements, int binSize)
         {
             InitializeComponent();
@@ -94,6 +97,7 @@ namespace MR.BinPackaging.App
         private void Draw(Instance instance)
         {
             spResult.Children.Clear();
+            algorithmBins.Clear();
 
             foreach (var bin in instance.Bins)
             {
@@ -101,6 +105,7 @@ namespace MR.BinPackaging.App
                 newBin.Bin = bin;
 
                 spResult.Children.Add(newBin);
+                algorithmBins.Add(newBin);
 
                 newBin.UpdateSizes();
 
@@ -133,6 +138,22 @@ namespace MR.BinPackaging.App
                 //}
 
                 //binCnt++;
+            }
+
+
+            if (Algorithm.SelectedElement > 0)
+                previewBins[Algorithm.SelectedElement - 1].StopAnimation();
+
+            if (Algorithm.SelectedElement >= 0)
+                previewBins[Algorithm.SelectedElement].StartAnimation();
+
+            if (Algorithm.SelectedBin >= 0)
+                algorithmBins[Algorithm.SelectedBin].StartAnimation();
+
+            if (result != null)
+            {
+                previewBins[Algorithm.SelectedElement].StopAnimation();
+                algorithmBins[Algorithm.SelectedBin].StopAnimation();
             }
         }
 
@@ -216,45 +237,38 @@ namespace MR.BinPackaging.App
                 foreach (var elemControl in newBin.DataItems)
                     elemControl.Border.BorderThickness = new Thickness(3);
 
+                previewBins.Add(newBin);
                 spElements.Children.Add(newBin);
             }
+
+            Execute();
         }
 
-        bool first = true;
         private void bNext_Click(object sender, RoutedEventArgs e)
         {
-            if (first)
+            if (result == null)
             {
-                first = false;
+                laMessage.Content = Algorithm.Message;
 
-                Execute();
+                Instance inst = new Instance(Algorithm.ActualResult.BinSize);
+                foreach (var bin in Algorithm.ActualResult.Bins)
+                {
+                    Bin newBin = new Bin(Algorithm.ActualResult.BinSize);
+
+                    foreach (var elem in bin.Elements)
+                        newBin.Insert(elem);
+
+                    inst.Bins.Add(newBin);
+                }
+
+                Draw(inst);
+                //Draw(Algorithm.ActualResult);
+                this.GoAhead();
             }
             else
             {
-                if (result == null)
-                {
-                    laMessage.Content = Algorithm.Message;
-
-                    Instance inst = new Instance(Algorithm.ActualResult.BinSize);
-                    foreach (var bin in Algorithm.ActualResult.Bins)
-                    {
-                        Bin newBin = new Bin(Algorithm.ActualResult.BinSize);
-
-                        foreach (var elem in bin.Elements)
-                            newBin.Insert(elem);
-
-                        inst.Bins.Add(newBin);
-                    }
-
-                    Draw(inst);
-                    //Draw(Algorithm.ActualResult);
-                    this.GoAhead();
-                }
-                else
-                {
-                    workerThread.Join();
-                    Draw(result);
-                }
+                workerThread.Join();
+                Draw(result);
             }
         }
 
