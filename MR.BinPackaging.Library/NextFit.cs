@@ -39,12 +39,13 @@ namespace MR.BinPackaging.Library
         public void Wait(int bin, int elem)
         {
             IsWaiting = true;
+            SelectedBin = bin;
+            SelectedElement = elem;
+
             Message = bin + "." + elem;
 
             while (IsWaiting)
-            {
                 Thread.Sleep(100);
-            }
         }
 
         public Instance Execute(List<int> elements, int binSize)
@@ -56,19 +57,20 @@ namespace MR.BinPackaging.Library
             ActualResult.Bins.Add(new Bin(ActualResult.BinSize));
             int k = 0;
             //select bin
+            //Wait(k, 0);
             int sum = 0;
 
             for (int i = 0; i < ActualResult.Elements.Count; i++)
             {
-                //select element
-                //Wait(k, 0);
+                //select bin, element
+                Wait(k, i);
 
                 int elem = ActualResult.Elements[i];
-
                 if (sum + elem > ActualResult.BinSize)
                 {
                     ActualResult.Bins.Add(new Bin(ActualResult.BinSize));
                     k++;
+
                     //select bin
                     Wait(k, i);
                     sum = 0;
@@ -76,8 +78,6 @@ namespace MR.BinPackaging.Library
 
                 ActualResult.Bins[k].Insert(elem);
                 sum += elem;
-
-                Wait(k, i);
             }
 
             return ActualResult;
