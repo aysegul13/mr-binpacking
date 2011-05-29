@@ -12,7 +12,21 @@ namespace MR.BinPackaging.Library
         public string Name { get; private set; }
 
         //presentation properties
-        public string Message { get; set; }
+        private string message;
+        public string Message
+        {
+            get
+            {
+                if (algorithm != null)
+                    return algorithm.Message;
+                else
+                    return message;
+            }
+            set
+            {
+                message = value;
+            }
+        }
 
         private int selectedElement;
         public int SelectedElement
@@ -79,10 +93,13 @@ namespace MR.BinPackaging.Library
 
         private IListAlgorithm algorithm = null;
 
+        public bool IsPresentation { get; set; }
+
         public FirstFitDecreasing()
         {
             Name = "First Fit Decreasing";
             IsWaiting = false;
+            IsPresentation = true;
         }
 
         public void Wait(int bin, int elem)
@@ -90,8 +107,6 @@ namespace MR.BinPackaging.Library
             IsWaiting = true;
             SelectedBin = bin;
             SelectedElement = elem;
-
-            Message = bin + "." + elem;
 
             if (algorithm != null)
             {
@@ -107,6 +122,9 @@ namespace MR.BinPackaging.Library
 
         public Instance Execute(List<int> elements, int binSize)
         {
+            if (IsPresentation)
+                Message = "";
+
             ActualResult = new Instance(binSize);
             ActualResult.Elements = elements;
 
@@ -115,7 +133,11 @@ namespace MR.BinPackaging.Library
 
             ActualResult.Elements = elementsSorted;
 
-            Wait(-1, -1);
+            if (IsPresentation)
+            {
+                Message = "Elementy zostały posortowane malejąco." + Environment.NewLine + Environment.NewLine;
+                Wait(-1, -1);
+            }
 
             algorithm = new FirstFit();
 

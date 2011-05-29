@@ -30,10 +30,14 @@ namespace MR.BinPackaging.Library
             }
         }
 
+        public bool IsPresentation { get; set; }
+
         public NextFit()
         {
             Name = "Next Fit";
             IsWaiting = false;
+
+            IsPresentation = true;
         }
 
         public void Wait(int bin, int elem)
@@ -42,42 +46,60 @@ namespace MR.BinPackaging.Library
             SelectedBin = bin;
             SelectedElement = elem;
 
-            Message = bin + "." + elem;
-
             while (IsWaiting)
                 Thread.Sleep(100);
         }
 
         public Instance Execute(List<int> elements, int binSize)
         {
-            //Instance result = new Instance(binSize);
+            if (IsPresentation)
+                Message = "";
+
             ActualResult = new Instance(binSize);
             ActualResult.Elements = elements;
 
             ActualResult.Bins.Add(new Bin(ActualResult.BinSize));
+
+            if (IsPresentation)
+                Message = "Brak skrzynek. Dodano nową skrzynkę." + Environment.NewLine + Environment.NewLine;
+
             int k = 0;
-            //select bin
-            //Wait(k, 0);
             int sum = 0;
 
             for (int i = 0; i < ActualResult.Elements.Count; i++)
             {
-                //select bin, element
-                Wait(k, i);
-
                 int elem = ActualResult.Elements[i];
+
+                #region UI
+                if (IsPresentation)
+                {
+                    Message += String.Format("Sprawdzanie miejsca w skrzynce {0} dla elementu {1} ({2})", k + 1, i + 1, elem) + Environment.NewLine + Environment.NewLine;
+                    Wait(k, i);
+                }
+                #endregion
+
                 if (sum + elem > ActualResult.BinSize)
                 {
                     ActualResult.Bins.Add(new Bin(ActualResult.BinSize));
                     k++;
-
-                    //select bin
-                    Wait(k, i);
                     sum = 0;
+
+                    #region UI
+                    if (IsPresentation)
+                    {
+                        Message = String.Format("Brak miejsca w skrzynce {0} dla elementu {1} ({2}). Dodano nową skrzynkę.", k, i + 1, elem) + Environment.NewLine + Environment.NewLine;
+                        Wait(k, i);
+                    }
+                    #endregion
                 }
 
                 ActualResult.Bins[k].Insert(elem);
                 sum += elem;
+
+                #region UI
+                if (IsPresentation)
+                    Message = String.Format("Wstawiono element {0} ({1}) do skrzynki {2}.", i + 1, elem, k + 1) + Environment.NewLine + Environment.NewLine;
+                #endregion
             }
 
             return ActualResult;

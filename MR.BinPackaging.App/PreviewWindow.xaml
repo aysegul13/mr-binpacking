@@ -34,7 +34,9 @@
                 <Label x:Name="laLowerBound" Content="LB: "/>
                 <Label x:Name="laStrongerLowerBound" Content="SLB: "/>
                 <Button x:Name="bNext" Content="Next" MinWidth="75" Click="bNext_Click"/>
-                <Label x:Name="laMessage" Content=""/>
+                <Label MaxWidth="150">
+                    <TextBlock x:Name="tblMessage" Text="" TextWrapping="Wrap" FontWeight="Bold" />
+                </Label>
             </StackPanel>
         </Border>
     </Grid>
