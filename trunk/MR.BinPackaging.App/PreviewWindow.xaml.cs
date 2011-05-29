@@ -38,6 +38,8 @@ namespace MR.BinPackaging.App
             Algorithm = algorithm;
             Elements = elements;
             BinSize = binSize;
+
+            this.Title = algorithm.Name;
         }
 
         //private double originalHeight = 1.0;
@@ -268,7 +270,7 @@ namespace MR.BinPackaging.App
         {
             if (result == null)
             {
-                laMessage.Content = Algorithm.Message;
+                tblMessage.Text = Algorithm.Message;
 
                 Elements = Algorithm.ActualResult.Elements;
 
