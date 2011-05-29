@@ -131,6 +131,20 @@ namespace MR.BinPackaging.App
 
         private void RefreshPreview()
         {
+            ////Bin bin = new Bin(BinSize);
+            ////bin.Insert(4);
+            //BinControl newBin = (spPreview.Children[2] as BinControl);
+            //newBin.AutoRefresh = false;
+            ////newBin.Bin = bin;
+            ////newBin.Bin = (spPreview.Children[5] as BinControl).Bin;
+            //newBin.bFiller.Visibility = Visibility.Collapsed;
+            //spPreview.Children.Insert(2, newBin);
+
+            ////UIElement el = spPreview.Children[4];
+            ////spPreview.Children.RemoveAt(4);
+            ////spPreview.Children.Insert(4, el);
+            //--------------------------------------------------------------------
+
             spPreview.Children.Clear();
 
             foreach (var elem in Elements)

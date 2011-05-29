@@ -87,6 +87,7 @@ namespace MR.BinPackaging.App
         {
             result = Algorithm.Execute(Elements, BinSize);
         }
+
         public void GoAhead()
         {
             Algorithm.IsWaiting = false;
@@ -99,8 +100,9 @@ namespace MR.BinPackaging.App
             spElements.Children.Clear();
             previewBins.Clear();
 
-            foreach (var elem in Elements)
+            for (int i = 0; i < Elements.Count; i++)
             {
+                int elem = Elements[i];
                 Bin bin = new Bin(BinSize);
                 bin.Insert(elem);
 
@@ -117,8 +119,18 @@ namespace MR.BinPackaging.App
                 foreach (var elemControl in newBin.DataItems)
                     elemControl.Border.BorderThickness = new Thickness(3);
 
-                spElements.Children.Add(newBin);
-                previewBins.Add(newBin);
+                if (previewBins.Count < Elements.Count)
+                {
+                    spElements.Children.Add(newBin);
+                    previewBins.Add(newBin);
+                }
+                else
+                {
+                    spElements.Children.RemoveAt(i);
+                    spElements.Children.Insert(i, newBin);
+
+                    previewBins[i] = newBin;
+                }
             }
         }
 
@@ -273,7 +285,6 @@ namespace MR.BinPackaging.App
 
                 if (first)
                     DrawPreview();
-
                 first = false;
                 Draw(inst);
                 //Draw(Algorithm.ActualResult);
