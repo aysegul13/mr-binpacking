@@ -58,7 +58,7 @@ namespace MR.BinPackaging.Library
         public double MinVal { get; set; }
         public double MaxVal { get; set; }
 
-        public List<IListAlgorithm> Algorithms { get; set; }
+        public List<ListAlgorithm> Algorithms { get; set; }
     }
 
     public class AlgorithmResult

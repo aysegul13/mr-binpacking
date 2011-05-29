@@ -7,93 +7,83 @@ using System.Threading;
 
 namespace MR.BinPackaging.Library
 {
-    public class BestFitDecreasing : IListAlgorithm
+    public class BestFitDecreasing : ListAlgorithm
     {
-        public string Name { get; private set; }
-
-        //presentation properties
-        private string message;
-        public string Message
+        public override string Message
         {
             get
             {
                 if (algorithm != null)
                     return algorithm.Message;
                 else
-                    return message;
+                    return base.Message;
             }
             set
             {
-                message = value;
+                base.Message = value;
             }
         }
 
-        private int selectedElement;
-        public int SelectedElement
+        public override int SelectedElement
         {
             get
             {
                 if (algorithm != null)
                     return algorithm.SelectedElement;
                 else
-                    return selectedElement;
+                    return base.SelectedElement;
             }
             set
             {
-                selectedElement = value;
+                base.SelectedElement = value;
             }
         }
 
-        private int selectedBin;
-        public int SelectedBin
+        public override int SelectedBin
         {
             get
             {
                 if (algorithm != null)
                     return algorithm.SelectedBin;
                 else
-                    return selectedBin;
+                    return base.SelectedBin;
             }
             set
             {
-                selectedBin = value;
+                base.SelectedBin = value;
             }
         }
 
-        private Instance actualResult = null;
-        public Instance ActualResult
+        public override Instance ActualResult
         {
             get
             {
                 if (algorithm != null)
                     return algorithm.ActualResult;
                 else
-                    return actualResult;
+                    return base.ActualResult;
             }
             set
             {
-                actualResult = value;
+                base.ActualResult = value;
             }
         }
 
-        private volatile bool isWaiting = false;
-        public bool IsWaiting
+        public override bool IsWaiting
         {
             get
             {
-                return isWaiting;
+                return base.IsWaiting;
             }
             set
             {
-                isWaiting = value;
+                base.IsWaiting = value;
                 if (algorithm != null)
                     algorithm.IsWaiting = value;
             }
         }
 
-        public bool IsPresentation { get; set; }
-
-        private IListAlgorithm algorithm = null;
+        private ListAlgorithm algorithm = null;
 
         public BestFitDecreasing()
         {
@@ -102,7 +92,7 @@ namespace MR.BinPackaging.Library
             IsPresentation = true;
         }
 
-        public void Wait(int bin, int elem)
+        public override void Wait(int bin, int elem)
         {
             IsWaiting = true;
             SelectedBin = bin;
@@ -120,7 +110,7 @@ namespace MR.BinPackaging.Library
             }
         }
 
-        public Instance Execute(List<int> elements, int binSize)
+        public override Instance Execute(List<int> elements, int binSize)
         {
             if (IsPresentation)
                 Message = "";

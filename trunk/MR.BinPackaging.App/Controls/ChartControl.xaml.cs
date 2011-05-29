@@ -355,7 +355,7 @@ namespace MR.BinPackaging.App.Controls
         {
             ExperimentParams prms = new ExperimentParams()
             {
-                Algorithms = new List<IListAlgorithm>(),
+                Algorithms = new List<ListAlgorithm>(),
                 BinSize = 100,
                 Dist = Distribution.Uniform,
                 MinN = 100,
