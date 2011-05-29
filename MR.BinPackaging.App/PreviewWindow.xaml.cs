@@ -24,14 +24,14 @@ namespace MR.BinPackaging.App
     /// </summary>
     public partial class PreviewWindow : Window
     {
-        private IListAlgorithm Algorithm;
+        private ListAlgorithm Algorithm;
         private List<int> Elements;
         private int BinSize = 10;
 
         private List<BinControl> previewBins = new List<BinControl>();
         private List<BinControl> algorithmBins = new List<BinControl>();
 
-        public PreviewWindow(IListAlgorithm algorithm, List<int> elements, int binSize)
+        public PreviewWindow(ListAlgorithm algorithm, List<int> elements, int binSize)
         {
             InitializeComponent();
 
@@ -289,11 +289,13 @@ namespace MR.BinPackaging.App
                     DrawPreview();
                 first = false;
                 Draw(inst);
-                //Draw(Algorithm.ActualResult);
-                this.GoAhead();
+                GoAhead();
             }
             else
             {
+                bNext.IsEnabled = false;
+                tblMessage.Text = Algorithm.Message;
+
                 workerThread.Join();
                 DrawPreview();
                 Draw(result);

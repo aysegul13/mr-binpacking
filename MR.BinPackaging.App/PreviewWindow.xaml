@@ -1,7 +1,7 @@
 ﻿<Window x:Class="MR.BinPackaging.App.PreviewWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="PreviewWindow" Height="380" Width="400" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="PreviewWindow" Height="400" Width="480" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -9,35 +9,37 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="Auto" MinWidth="150"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Border Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="SlateGray">
+        <Border Grid.ColumnSpan="2" BorderThickness="0,0,0,1" BorderBrush="SlateGray">
             <Expander Header="Elementy" IsExpanded="True">
-                <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-                    <StackPanel x:Name="spElements" Orientation="Horizontal" Background="LightGray" FlowDirection="LeftToRight" Height="140"/>
-                </ScrollViewer>
+                <Border BorderThickness="0,1,0,0" BorderBrush="SlateGray">
+                    <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="spElements" Orientation="Horizontal" Background="LightGray" FlowDirection="LeftToRight" Height="140"/>
+                    </ScrollViewer>
+                </Border>
             </Expander>
         </Border>
-        <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="LightGray">
-            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-                <StackPanel x:Name="spResult" Orientation="Horizontal" HorizontalAlignment="Center"/>
-                <!--<Canvas x:Name="cnResult"/>-->
-            </ScrollViewer>
-        </Border>
-        <Border Grid.Row="1" Grid.Column="1" BorderThickness="1,0,1,1" BorderBrush="SlateGray">
-            <StackPanel>
-                <Label x:Name="laBinCount" Content="Liczba pudełek: "/>
-                <!--<Label x:Name="laQualityEstimation" Content="Oszacowanie jakości: "/>
-                <Label x:Name="laErrorEstimation" Content="Oszacowanie błędu: "/>-->
-                <Label x:Name="laExecutionTime" Content="Czas obliczeń: "/>
-                <!--<Label x:Name="laDrawingTime" Content="Czas rysowania: "/>-->
-                <Label x:Name="laLowerBound" Content="LB: "/>
-                <Label x:Name="laStrongerLowerBound" Content="SLB: "/>
-                <Button x:Name="bNext" Content="Next" MinWidth="75" Click="bNext_Click"/>
-                <Label MaxWidth="150">
-                    <TextBlock x:Name="tblMessage" Text="" TextWrapping="Wrap" FontWeight="Bold" />
-                </Label>
-            </StackPanel>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+            <StackPanel x:Name="spResult" Orientation="Horizontal" HorizontalAlignment="Center"/>
+            <!--<Canvas x:Name="cnResult"/>-->
+        </ScrollViewer>
+        <Border Grid.Row="1" Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="SlateGray">
+            <Expander ExpandDirection="Left" IsExpanded="True">
+                <Border BorderThickness="0,0,1,0" BorderBrush="SlateGray">
+                    <StackPanel Width="150">
+                        <Label x:Name="laBinCount" Content="Liczba pudełek: "/>
+                        <Label x:Name="laExecutionTime" Content="Czas obliczeń: "/>
+                        <Label x:Name="laLowerBounds" Content="LB/SLB: "/>
+                        <Label x:Name="laQualityEstimations" Content="Oszac. jakości LB/SLB: "/>
+                        <Label x:Name="laErrorEstimations" Content="Oszac. błędu LB/SLB: "/>
+                        <Label MaxWidth="150">
+                            <TextBlock x:Name="tblMessage" Text="" TextWrapping="Wrap" FontWeight="Bold" />
+                        </Label>
+                        <Button x:Name="bNext" Content="Next" MinWidth="75" Margin="2" Click="bNext_Click"/>
+                    </StackPanel>
+                </Border>
+            </Expander>
         </Border>
     </Grid>
 </Window>

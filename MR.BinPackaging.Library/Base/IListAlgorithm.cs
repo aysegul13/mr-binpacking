@@ -2,20 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace MR.BinPackaging.Library.Base
 {
-    public interface IListAlgorithm
+    public abstract class ListAlgorithm
     {
-        string Name { get; }
+        public virtual string Name { get; protected set; }
 
-        //presentation properties
-        string Message { get; set; }
-        int SelectedElement { get; set; }
-        int SelectedBin { get; set; }
-        bool IsWaiting { get; set; }
-        Instance ActualResult { get; set; }
+        public virtual string Message { get; set; }
+        public virtual int SelectedElement { get; set; }
+        public virtual int SelectedBin { get; set; }
 
-        Instance Execute(List<int> elements, int binSize);
+        private volatile bool isWaiting = false;
+        public virtual bool IsWaiting
+        {
+            get { return isWaiting; }
+            set { isWaiting = value; }
+        }
+
+        public bool IsPresentation { get; set; }
+        public virtual Instance ActualResult { get; set; }
+
+        public virtual void Wait(int bin, int elem)
+        {
+            IsWaiting = true;
+            SelectedBin = bin;
+            SelectedElement = elem;
+
+            while (IsWaiting)
+                Thread.Sleep(100);
+        }
+
+        public abstract Instance Execute(List<int> elements, int binSize);
     }
 }

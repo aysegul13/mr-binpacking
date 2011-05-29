@@ -7,31 +7,8 @@ using System.Threading;
 
 namespace MR.BinPackaging.Library
 {
-    public class NextFit : IListAlgorithm
+    public class NextFit : ListAlgorithm
     {
-        public string Name { get; private set; }
-
-        //presentation properties
-        public string Message { get; set; }
-        public int SelectedElement { get; set; }
-        public int SelectedBin { get; set; }
-        public Instance ActualResult { get; set; }
-
-        private volatile bool isWaiting = false;
-        public bool IsWaiting
-        {
-            get
-            {
-                return isWaiting;
-            }
-            set
-            {
-                isWaiting = value;
-            }
-        }
-
-        public bool IsPresentation { get; set; }
-
         public NextFit()
         {
             Name = "Next Fit";
@@ -40,17 +17,7 @@ namespace MR.BinPackaging.Library
             IsPresentation = true;
         }
 
-        public void Wait(int bin, int elem)
-        {
-            IsWaiting = true;
-            SelectedBin = bin;
-            SelectedElement = elem;
-
-            while (IsWaiting)
-                Thread.Sleep(100);
-        }
-
-        public Instance Execute(List<int> elements, int binSize)
+        public override Instance Execute(List<int> elements, int binSize)
         {
             if (IsPresentation)
                 Message = "";
