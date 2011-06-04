@@ -11,10 +11,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MR.BinPackaging.Library;
-using MR.BinPackaging.Library.Base;
+using MR.BinPacking.Library;
+using MR.BinPacking.Library.Base;
 
-namespace MR.BinPackaging.App.Controls
+namespace MR.BinPacking.App.Controls
 {
     /// <summary>
     /// Interaction logic for ChartControl.xaml

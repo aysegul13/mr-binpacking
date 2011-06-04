@@ -12,10 +12,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
-using MR.BinPackaging.Library.Base;
+using MR.BinPacking.Library.Base;
 using System.Windows.Media.Animation;
 
-namespace MR.BinPackaging.App.Controls
+namespace MR.BinPacking.App.Controls
 {
     /// <summary>
     /// Interaction logic for BinControl.xaml

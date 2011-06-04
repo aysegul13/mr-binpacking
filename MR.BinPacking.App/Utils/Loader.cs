@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MR.BinPackaging.Library.Base;
+using MR.BinPacking.Library.Base;
 using System.IO;
 
-namespace MR.BinPackaging.App.Utils
+namespace MR.BinPacking.App.Utils
 {
     internal static class Loader
     {

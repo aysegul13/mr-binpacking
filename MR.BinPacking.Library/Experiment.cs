@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MR.BinPackaging.Library.Base;
+using MR.BinPacking.Library.Base;
 using System.Diagnostics;
 
-namespace MR.BinPackaging.Library
+namespace MR.BinPacking.Library
 {
     public enum StatField { LowerBound, StrongerLowerBound, Result, ExecutionTime };
 

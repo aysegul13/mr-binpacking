@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace MR.BinPackaging.Library.Base
+namespace MR.BinPacking.Library.Base
 {
     public abstract class ListAlgorithm
     {

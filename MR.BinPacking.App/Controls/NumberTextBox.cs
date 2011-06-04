@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 
-namespace MR.BinPackaging.App.Controls
+namespace MR.BinPacking.App.Controls
 {
     public class NumberTextBox : TextBox
     {

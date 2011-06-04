@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MR.BinPackaging.Library.Base;
+using MR.BinPacking.Library.Base;
 
-namespace MR.BinPackaging.Library
+namespace MR.BinPacking.Library
 {
     public static class Bounds
     {

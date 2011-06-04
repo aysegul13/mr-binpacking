@@ -8,8 +8,8 @@
     <ProjectGuid>{399A01B8-9C0C-4738-9CAC-35A524973AFE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MR.BinPackaging.Library</RootNamespace>
-    <AssemblyName>MR.BinPackaging.Library</AssemblyName>
+    <RootNamespace>MR.BinPacking.Library</RootNamespace>
+    <AssemblyName>MR.BinPacking.Library</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

@@ -10,9 +10,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using MR.BinPackaging.Library;
+using MR.BinPacking.Library;
 
-namespace MR.BinPackaging.App
+namespace MR.BinPacking.App
 {
     /// <summary>
     /// Interaction logic for TestWindow.xaml
