@@ -28,15 +28,16 @@
             <Expander ExpandDirection="Left" IsExpanded="True">
                 <Border BorderThickness="0,0,1,0" BorderBrush="SlateGray">
                     <StackPanel Width="150">
-                        <Label x:Name="laBinCount" Content="Liczba pudełek: "/>
-                        <Label x:Name="laExecutionTime" Content="Czas obliczeń: "/>
-                        <Label x:Name="laLowerBounds" Content="LB/SLB: "/>
-                        <Label x:Name="laQualityEstimations" Content="Oszac. jakości LB/SLB: "/>
-                        <Label x:Name="laErrorEstimations" Content="Oszac. błędu LB/SLB: "/>
+                        <Label x:Name="laBinCount" Content="Liczba pudełek: " Visibility="Collapsed" />
+                        <Label x:Name="laExecutionTime" Content="Czas obliczeń: " Visibility="Collapsed" />
+                        <Label x:Name="laLowerBounds" Content="LB/SLB: " Visibility="Collapsed" />
+                        <Label x:Name="laQualityEstimations" Content="Oszac. jakości LB/SLB: " Visibility="Collapsed" />
+                        <Label x:Name="laErrorEstimations" Content="Oszac. błędu LB/SLB: " Visibility="Collapsed" />
                         <Label MaxWidth="150">
                             <TextBlock x:Name="tblMessage" Text="" TextWrapping="Wrap" FontWeight="Bold" />
                         </Label>
-                        <Button x:Name="bNext" Content="Next" MinWidth="75" Margin="2" Click="bNext_Click"/>
+                        <Button x:Name="bNext" Content="Dalej" MinWidth="75" Margin="2,1" Click="bNext_Click"/>
+                        <Button x:Name="bEnd" Content="Do końca" MinWidth="75" Margin="2,1" Click="bEnd_Click"/>
                     </StackPanel>
                 </Border>
             </Expander>

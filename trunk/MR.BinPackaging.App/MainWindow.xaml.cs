@@ -249,5 +249,34 @@ namespace MR.BinPackaging.App
             PreviewWindow prev = new PreviewWindow(new RandomFit(), Elements, BinSize);
             prev.Show();
         }
+
+        private void bPresentation_Click(object sender, RoutedEventArgs e)
+        {
+            List<ListAlgorithm> algorithms = new List<ListAlgorithm>();
+
+            if (cbNextFit.IsChecked == true)
+                algorithms.Add(new NextFit());
+
+            if (cbFirstFit.IsChecked == true)
+                algorithms.Add(new FirstFit());
+
+            if (cbBestFit.IsChecked == true)
+                algorithms.Add(new BestFit());
+
+            if (cbFirstFitD.IsChecked == true)
+                algorithms.Add(new FirstFitDecreasing());
+
+            if (cbBestFitD.IsChecked == true)
+                algorithms.Add(new BestFitDecreasing());
+
+            if (cbRandomFit.IsChecked == true)
+                algorithms.Add(new RandomFit());
+
+            foreach (var alg in algorithms)
+            {
+                PreviewWindow prev = new PreviewWindow(alg, Elements, BinSize);
+                prev.Show();
+            }
+        }
     }
 }

@@ -42,8 +42,6 @@ namespace MR.BinPackaging.App
             this.Title = algorithm.Name;
         }
 
-        //private double originalHeight = 1.0;
-
 
         public const Int32 WM_EXITSIZEMOVE = 0x0232;
         private IntPtr WinProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, ref Boolean handled)
@@ -220,8 +218,8 @@ namespace MR.BinPackaging.App
             //laErrorEstimation.Content = "Oszacowanie błędu: " + (100.0 * (result.Bins.Count - minBound) / (double)minBound).ToString("0.000");
 
 
-            laLowerBound.Content = "LB: " + Bounds.LowerBound(Elements, BinSize);
-            laStrongerLowerBound.Content = "SLB: " + Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
+            //laLowerBound.Content = "LB: " + Bounds.LowerBound(Elements, BinSize);
+            //laStrongerLowerBound.Content = "SLB: " + Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
 
 
             sw.Reset();
@@ -236,7 +234,7 @@ namespace MR.BinPackaging.App
 
             //double totalHeight = Math.Max(100.0, cnResult.ActualHeight - 32 - 4);
             //int binCnt = 0;
-            
+
 
             sw.Stop();
 
@@ -297,8 +295,8 @@ namespace MR.BinPackaging.App
                 tblMessage.Text = Algorithm.Message;
 
                 workerThread.Join();
-                DrawPreview();
                 Draw(result);
+                ShowInfo();
             }
         }
 
@@ -306,6 +304,32 @@ namespace MR.BinPackaging.App
         {
             if ((workerThread != null) && workerThread.IsAlive)
                 workerThread.Abort();
+        }
+
+        private void bEnd_Click(object sender, RoutedEventArgs e)
+        {
+            Algorithm.IsPresentation = false;
+            GoAhead();
+
+            workerThread.Join();
+            Draw(result);
+            ShowInfo();
+        }
+
+        private void ShowInfo()
+        {
+            laBinCount.Visibility = Visibility.Visible;
+            laLowerBounds.Visibility = Visibility.Visible;
+            laQualityEstimations.Visibility = Visibility.Visible;
+            laErrorEstimations.Visibility = Visibility.Visible;
+
+            //TODO: poprawić - powinno być tylko jeżeli IsPresentation było od początku
+            if (!Algorithm.IsPresentation)
+                laExecutionTime.Visibility = Visibility.Visible;
+
+            tblMessage.Visibility = Visibility.Hidden;
+            bNext.Visibility = Visibility.Hidden;
+            bEnd.Visibility = Visibility.Hidden;
         }
     }
 }
