@@ -10,14 +10,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using MR.BinPackaging.Library.Base;
-using MR.BinPackaging.App.Controls;
+using MR.BinPacking.Library.Base;
+using MR.BinPacking.App.Controls;
 using System.Diagnostics;
-using MR.BinPackaging.Library;
+using MR.BinPacking.Library;
 using System.Windows.Interop;
 using System.Threading;
 
-namespace MR.BinPackaging.App
+namespace MR.BinPacking.App
 {
     /// <summary>
     /// Interaction logic for PreviewWindow.xaml

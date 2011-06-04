@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MR.BinPackaging.App.Controls
+namespace MR.BinPacking.App.Controls
 {
     /// <summary>
     /// Interaction logic for TestControl.xaml

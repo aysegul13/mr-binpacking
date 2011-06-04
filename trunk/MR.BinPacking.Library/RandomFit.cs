@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MR.BinPackaging.Library.Base;
+using MR.BinPacking.Library.Base;
 using System.Threading;
 
-namespace MR.BinPackaging.Library
+namespace MR.BinPacking.Library
 {
     public class RandomFit : ListAlgorithm
     {

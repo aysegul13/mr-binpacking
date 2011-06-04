@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 
-namespace MR.BinPackaging.App
+namespace MR.BinPacking.App
 {
     /// <summary>
     /// Interaction logic for App.xaml

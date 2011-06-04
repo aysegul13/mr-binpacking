@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MR.BinPackaging.Library.Base
+namespace MR.BinPacking.Library.Base
 {
     public class Bin
     {

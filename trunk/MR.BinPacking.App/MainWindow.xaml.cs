@@ -12,16 +12,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
-using MR.BinPackaging.App.Controls;
-using MR.BinPackaging.Library.Base;
-using MR.BinPackaging.Library;
-using MR.BinPackaging.App.Utils;
+using MR.BinPacking.App.Controls;
+using MR.BinPacking.Library.Base;
+using MR.BinPacking.Library;
+using MR.BinPacking.App.Utils;
 using System.Windows.Interop;
 using Microsoft.Win32;
 using System.IO;
 using System.Diagnostics;
 
-namespace MR.BinPackaging.App
+namespace MR.BinPacking.App
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
