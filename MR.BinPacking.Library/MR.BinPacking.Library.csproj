@@ -38,19 +38,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\Bin.cs" />
-    <Compile Include="Base\IListAlgorithm.cs" />
+    <Compile Include="Base\ListAlgorithm.cs" />
     <Compile Include="Base\Instance.cs" />
-    <Compile Include="BestFit.cs" />
-    <Compile Include="BestFitDecreasing.cs" />
+    <Compile Include="Algorithms\BestFit.cs" />
+    <Compile Include="Algorithms\BestFitDecreasing.cs" />
     <Compile Include="Bounds.cs" />
-    <Compile Include="Experiment.cs" />
-    <Compile Include="FirstFit.cs" />
-    <Compile Include="FirstFitDecreasing.cs" />
-    <Compile Include="Generator.cs" />
-    <Compile Include="NextFit.cs" />
-    <Compile Include="Probability.cs" />
+    <Compile Include="Experiment\AlgorithmResult.cs" />
+    <Compile Include="Experiment\Experiment.cs" />
+    <Compile Include="Experiment\ExperimentParams.cs" />
+    <Compile Include="Experiment\ExperimentResult.cs" />
+    <Compile Include="Experiment\Point2D.cs" />
+    <Compile Include="Experiment\StatField.cs" />
+    <Compile Include="Experiment\Statistics.cs" />
+    <Compile Include="Algorithms\FirstFit.cs" />
+    <Compile Include="Algorithms\FirstFitDecreasing.cs" />
+    <Compile Include="Utils\Generator.cs" />
+    <Compile Include="Algorithms\NextFit.cs" />
+    <Compile Include="Utils\Probability.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomFit.cs" />
+    <Compile Include="Algorithms\RandomFit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

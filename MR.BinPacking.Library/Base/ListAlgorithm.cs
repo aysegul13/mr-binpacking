@@ -21,7 +21,7 @@ namespace MR.BinPacking.Library.Base
             set { isWaiting = value; }
         }
 
-        public bool IsPresentation { get; set; }
+        public virtual bool IsPresentation { get; set; }
         public virtual Instance ActualResult { get; set; }
 
         public virtual void Wait(int bin, int elem)

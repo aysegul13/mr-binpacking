@@ -5,7 +5,7 @@ using System.Text;
 using MR.BinPacking.Library.Base;
 using System.Threading;
 
-namespace MR.BinPacking.Library
+namespace MR.BinPacking.Library.Algorithms
 {
     public class FirstFitDecreasing : ListAlgorithm
     {
@@ -83,6 +83,20 @@ namespace MR.BinPacking.Library
             }
         }
 
+        public override bool IsPresentation
+        {
+            get
+            {
+                return base.IsPresentation;
+            }
+            set
+            {
+                base.IsPresentation = value;
+                if (algorithm != null)
+                    algorithm.IsPresentation = value;
+            }
+        }
+
         private ListAlgorithm algorithm = null;
 
         public FirstFitDecreasing()
@@ -130,6 +144,7 @@ namespace MR.BinPacking.Library
             }
 
             algorithm = new FirstFit();
+            algorithm.IsPresentation = IsPresentation;
 
             return  algorithm.Execute(elementsSorted, binSize);
         }

@@ -20,6 +20,9 @@ using System.Windows.Interop;
 using Microsoft.Win32;
 using System.IO;
 using System.Diagnostics;
+using MR.BinPacking.Library.Algorithms;
+using MR.BinPacking.Library.Utils;
+using MR.BinPacking.Library.Experiment;
 
 namespace MR.BinPacking.App
 {
@@ -102,6 +105,7 @@ namespace MR.BinPacking.App
 
             Elements = Generator.GenerateData(elementsNumber, minValue, maxValue, Distribution.Uniform);
 
+            RefreshElements();
             RefreshPreview();
         }
 
@@ -114,6 +118,7 @@ namespace MR.BinPacking.App
 
             Elements = Generator.GenerateData(elementsNumber, minValue, maxValue, Distribution.Gauss);
 
+            RefreshElements();
             RefreshPreview();
         }
 
@@ -126,6 +131,7 @@ namespace MR.BinPacking.App
 
             Elements = Generator.GenerateData(elementsNumber, minValue, maxValue, Distribution.Exponential);
 
+            RefreshElements();
             RefreshPreview();
         }
 
@@ -201,17 +207,19 @@ namespace MR.BinPacking.App
 
         private void ToggleButton_Click(object sender, RoutedEventArgs e)
         {
+            //List<ListAlgorithm> algorithms = new List<ListAlgorithm>() { new NextFit(), new FirstFit() };
+
             //ExperimentParams prms = new ExperimentParams()
             //{
-            //    Algorithm = new NextFit(),
+            //    Algorithms = algorithms,
             //    BinSize = 100,
             //    Dist = Distribution.Uniform,
             //    MinN = 100,
-            //    MaxN = 10000,
+            //    MaxN = 1000,
             //    Step = 100,
             //    MinVal = 0.0,
             //    MaxVal = 1.0,
-            //    Repeat = 10
+            //    Repeat = 2
             //};
 
             TestWindow test = new TestWindow(null);
@@ -224,6 +232,9 @@ namespace MR.BinPacking.App
             if (openDialog.ShowDialog() == true)
             {
                 Instance instance = Loader.LoadFromFile(openDialog.FileName);
+                BinSize = instance.BinSize;
+                Elements = instance.Elements;
+
 
                 RefreshElements();
                 RefreshPreview();
@@ -274,6 +285,37 @@ namespace MR.BinPacking.App
 
             foreach (var alg in algorithms)
             {
+                PreviewWindow prev = new PreviewWindow(alg, Elements, BinSize);
+                prev.Show();
+            }
+        }
+
+        private void bResult_Click(object sender, RoutedEventArgs e)
+        {
+            List<ListAlgorithm> algorithms = new List<ListAlgorithm>();
+
+            if (cbNextFit.IsChecked == true)
+                algorithms.Add(new NextFit());
+
+            if (cbFirstFit.IsChecked == true)
+                algorithms.Add(new FirstFit());
+
+            if (cbBestFit.IsChecked == true)
+                algorithms.Add(new BestFit());
+
+            if (cbFirstFitD.IsChecked == true)
+                algorithms.Add(new FirstFitDecreasing());
+
+            if (cbBestFitD.IsChecked == true)
+                algorithms.Add(new BestFitDecreasing());
+
+            if (cbRandomFit.IsChecked == true)
+                algorithms.Add(new RandomFit());
+
+            foreach (var alg in algorithms)
+            {
+                alg.IsPresentation = false;
+                alg.IsWaiting = false;
                 PreviewWindow prev = new PreviewWindow(alg, Elements, BinSize);
                 prev.Show();
             }

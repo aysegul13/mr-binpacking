@@ -20,11 +20,11 @@ namespace MR.BinPacking.Library
             if ((alpha < 0) || (2 * alpha > c))
                 throw new ArgumentOutOfRangeException();
 
-            List<int> J1 = elements.Where(e => e > c - alpha).ToList();
-            List<int> J2 = elements.Where(e => (c - alpha >= e) && (2 * e > c)).ToList();
-            List<int> J3 = elements.Where(e => (c >= 2 * e) && (e >= alpha)).ToList();
-
-            return J1.Count + J2.Count + Math.Max(0, (int)Math.Ceiling((double)(J3.Sum() - (J2.Count * c - J2.Sum())) / c));
+            IEnumerable<int> J1 = elements.Where(e => e > c - alpha);
+            IEnumerable<int> J2 = elements.Where(e => (c - alpha >= e) && (2 * e > c));
+            IEnumerable<int> J3 = elements.Where(e => (c >= 2 * e) && (e >= alpha));
+            
+            return J1.Count() + J2.Count() + Math.Max(0, (int)Math.Ceiling((double)(J3.Sum() - (J2.Count() * c - J2.Sum())) / c));
         }
     }
 }

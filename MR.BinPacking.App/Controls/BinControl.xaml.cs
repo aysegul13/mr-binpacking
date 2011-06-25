@@ -30,7 +30,18 @@ namespace MR.BinPacking.App.Controls
         }
 
         public bool AutoRefresh = true;
-        public bool ShowScaled = false;
+
+        public bool showScaled = true;
+        public bool ShowScaled
+        {
+            get { return showScaled; }
+            set
+            {
+                showScaled = value;
+                UpdateLabels();
+            }
+        }
+
         public bool ShowFiller = true;
 
         public static DependencyProperty FreeSpaceProperty = DependencyProperty.Register(
@@ -60,7 +71,7 @@ namespace MR.BinPacking.App.Controls
                 bin = value;
 
                 if (ShowScaled)
-                    FreeSpace = (bin != null) ? ((double)bin.FreeSpace() / bin.Size).ToString("0.000") : "";
+                    FreeSpace = (bin != null) ? ((double)bin.FreeSpace() / bin.Size).ToString("0.00") : "";
                 else
                     FreeSpace = (bin != null) ? bin.FreeSpace().ToString() : "";
 
@@ -72,6 +83,7 @@ namespace MR.BinPacking.App.Controls
                 }
 
                 //UpdateSizes();
+                UpdateLabels();
             }
         }
 
@@ -115,14 +127,14 @@ namespace MR.BinPacking.App.Controls
         public void UpdateLabels()
         {
             if (ShowScaled)
-                FreeSpace = (Bin != null) ? ((double)Bin.FreeSpace() / Bin.Size).ToString("0.000") : "";
+                FreeSpace = (Bin != null) ? ((double)Bin.FreeSpace() / Bin.Size).ToString("0.00") : "";
             else
                 FreeSpace = (Bin != null) ? Bin.FreeSpace().ToString() : "";
 
             foreach (var elem in dataItems)
             {
                 if (ShowScaled)
-                    elem.Message = ((double)elem.Size / Bin.Size).ToString("0.000");
+                    elem.Message = ((double)elem.Size / Bin.Size).ToString("0.00");
                 else
                     elem.Message = Bin.Size.ToString();
             }
@@ -179,12 +191,12 @@ namespace MR.BinPacking.App.Controls
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            StartAnimation();         
+            //StartAnimation();         
         }
 
         private void Border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            StopAnimation();
+            //StopAnimation();
         }
     }
 }
