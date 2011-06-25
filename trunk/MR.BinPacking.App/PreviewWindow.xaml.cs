@@ -31,6 +31,8 @@ namespace MR.BinPacking.App
         private List<BinControl> previewBins = new List<BinControl>();
         private List<BinControl> algorithmBins = new List<BinControl>();
 
+        private Stopwatch stopWatch = new Stopwatch();
+
         public PreviewWindow(ListAlgorithm algorithm, List<int> elements, int binSize)
         {
             InitializeComponent();
@@ -85,7 +87,10 @@ namespace MR.BinPacking.App
 
         public void DoWork()
         {
+            stopWatch.Reset();
+            stopWatch.Start();
             result = Algorithm.Execute(Elements, BinSize);
+            stopWatch.Stop();
         }
 
         public void GoAhead()
@@ -259,8 +264,20 @@ namespace MR.BinPacking.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            DrawPreview();
-            Execute();
+            if (Algorithm.IsPresentation)
+            {
+                DrawPreview();
+                Execute();
+            }
+            else
+            {
+                DoWork();
+                Elements = Algorithm.ActualResult.Elements;
+
+                DrawPreview();
+                Draw(result);
+                ShowInfo();
+            }
         }
 
         private bool first = true;
@@ -312,6 +329,10 @@ namespace MR.BinPacking.App
             GoAhead();
 
             workerThread.Join();
+
+            Elements = Algorithm.ActualResult.Elements;
+
+            DrawPreview();
             Draw(result);
             ShowInfo();
         }
@@ -327,9 +348,39 @@ namespace MR.BinPacking.App
             if (!Algorithm.IsPresentation)
                 laExecutionTime.Visibility = Visibility.Visible;
 
-            tblMessage.Visibility = Visibility.Hidden;
-            bNext.Visibility = Visibility.Hidden;
-            bEnd.Visibility = Visibility.Hidden;
+            tblMessage.Visibility = Visibility.Collapsed;
+            bNext.Visibility = Visibility.Collapsed;
+            bEnd.Visibility = Visibility.Collapsed;
+
+
+            laBinCount.Content = "Liczba pudełek: " + result.Bins.Count;
+            laExecutionTime.Content = "Czas obliczeń [ms]: " + stopWatch.ElapsedMilliseconds;
+
+            int LB = Bounds.LowerBound(Elements, BinSize);
+            int SLB = Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
+
+            laLowerBounds.Content = String.Format("LB/SLB: {0}/{1}", LB, SLB);
+            tblQualityEstimations.Text = String.Format("Oszac. jakości LB/SLB: {0:0.00}/{1:0.00}",
+                (result.Bins.Count / (double)LB), (result.Bins.Count / (double)SLB));
+
+            tblErrorEstimations.Text = String.Format("Oszac. błędu LB/SLB [%]: {0:0.00}/{1:0.00}",
+                (100.0 * (result.Bins.Count - LB) / (double)LB),
+                (100.0 * (result.Bins.Count - SLB) / (double)SLB));
+
+            //int minBound = Math.Min(Bounds.LowerBound(Elements, BinSize), Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1));
+            //laQualityEstimation.Content = "Oszacowanie jakości: " + (result.Bins.Count / (double)minBound).ToString("0.000");
+            //laErrorEstimation.Content = "Oszacowanie błędu: " + (100.0 * (result.Bins.Count - minBound) / (double)minBound).ToString("0.000");
+
+
+            //laLowerBound.Content = "LB: " + Bounds.LowerBound(Elements, BinSize);
+            //laStrongerLowerBound.Content = "SLB: " + Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
+
+
+            //<Label x:Name="laBinCount" Content="Liczba pudełek: " Visibility="Collapsed" />
+            //            <Label x:Name="laExecutionTime" Content="Czas obliczeń: " Visibility="Collapsed" />
+            //            <Label x:Name="laLowerBounds" Content="LB/SLB: " Visibility="Collapsed" />
+            //            <Label x:Name="laQualityEstimations" Content="Oszac. jakości LB/SLB: " Visibility="Collapsed" />
+            //            <Label x:Name="laErrorEstimations" Content="Oszac. błędu LB/SLB: " Visibility="Collapsed" />
         }
     }
 }

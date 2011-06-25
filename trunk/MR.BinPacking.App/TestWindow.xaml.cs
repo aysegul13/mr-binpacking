@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MR.BinPacking.Library;
+using MR.BinPacking.Library.Experiment;
 
 namespace MR.BinPacking.App
 {

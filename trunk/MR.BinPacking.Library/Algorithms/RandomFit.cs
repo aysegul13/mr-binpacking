@@ -5,7 +5,7 @@ using System.Text;
 using MR.BinPacking.Library.Base;
 using System.Threading;
 
-namespace MR.BinPacking.Library
+namespace MR.BinPacking.Library.Algorithms
 {
     public class RandomFit : ListAlgorithm
     {

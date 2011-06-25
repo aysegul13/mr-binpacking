@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MR.BinPacking.Library
+namespace MR.BinPacking.Library.Utils
 {
     public class Probability
     {

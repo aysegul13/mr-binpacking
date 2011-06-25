@@ -13,6 +13,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MR.BinPacking.Library;
 using MR.BinPacking.Library.Base;
+using MR.BinPacking.Library.Experiment;
+using MR.BinPacking.Library.Utils;
+using MR.BinPacking.Library.Algorithms;
 
 namespace MR.BinPacking.App.Controls
 {
@@ -366,8 +369,8 @@ namespace MR.BinPacking.App.Controls
                 Repeat = 2
             };
 
-            prms.Algorithms.Add(new BestFitDecreasing());
-            prms.Algorithms.Add(new BestFit());
+            prms.Algorithms.Add(new BestFitDecreasing() { IsPresentation = false });
+            prms.Algorithms.Add(new BestFit() { IsPresentation = false });
 
 
             DataSeries = new List<List<Point2D>>();
