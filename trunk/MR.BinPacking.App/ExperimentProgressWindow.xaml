@@ -1,0 +1,18 @@
+﻿<Window x:Class="MR.BinPacking.App.ExperimentProgressWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gui="clr-namespace:MR.BinPacking.App.Controls"
+        Title="ExperimentProgressWindow" Width="300"
+        Loaded="Window_Loaded">
+    <StackPanel>
+        <Label x:Name="laRepeat" Content="Powtórzenia: 1 z P" Margin="0"/>
+        <ProgressBar x:Name="pbRepeat" Height="20" Margin="4,2"/>
+        <Label x:Name="laStep" Content="Liczba elementów: N" Margin="0"/>
+        <ProgressBar x:Name="pbStep" Height="20" Margin="4,2"/>
+        <Label x:Name="laAlgorithm" Content="Algorytm: 1 z A [NextFit]" Margin="0"/>
+        <ProgressBar x:Name="pbAlgorithm" Height="20" Margin="4,2"/>
+        <Button x:Name="bCancel" Content="Anuluj" MinWidth="75" Margin="4" HorizontalAlignment="Right" Click="bCancel_Click" />
+        <Button x:Name="bRun" Content="Run" MinWidth="75" Margin="4" HorizontalAlignment="Right" Click="bRun_Click" />
+        <gui:ChartControl x:Name="guiChart" MinWidth="400" MinHeight="350"/>
+    </StackPanel>
+</Window>

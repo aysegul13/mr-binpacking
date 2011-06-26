@@ -47,6 +47,7 @@
     <Compile Include="Experiment\Experiment.cs" />
     <Compile Include="Experiment\ExperimentParams.cs" />
     <Compile Include="Experiment\ExperimentResult.cs" />
+    <Compile Include="Experiment\ExperimentState.cs" />
     <Compile Include="Experiment\Point2D.cs" />
     <Compile Include="Experiment\StatField.cs" />
     <Compile Include="Experiment\Statistics.cs" />

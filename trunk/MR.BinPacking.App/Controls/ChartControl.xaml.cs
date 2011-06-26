@@ -29,12 +29,12 @@ namespace MR.BinPacking.App.Controls
             InitializeComponent();
         }
 
-        List<List<Point2D>> DataSeries;
+        public List<List<Point2D>> DataSeries;
         double AxisYMax = 0.0;
         int AxisYIntervals = 10;
 
-        double AxisXMin = 0;
-        int AxisXIntervalWidth = 1;
+        public double AxisXMin = 0;
+        public int AxisXIntervalWidth = 1;
 
         bool logScale = false;
         bool barChart = true;
@@ -70,10 +70,16 @@ namespace MR.BinPacking.App.Controls
             return chartOffsetY + chartHeight * (1 - h);
         }
 
-        public void DrawRect(double x, double y, Brush brush)
+        public void DrawRect(double x, double y, Brush brush, int number, int count)
         {
-            double X1 = ConvertX(x + 0.1 * AxisXIntervalWidth);
-            double X2 = ConvertX(x + 0.9 * AxisXIntervalWidth);
+            double barWidth = 0.9 * AxisXIntervalWidth / count;
+            double barOffset = 0.05 * AxisXIntervalWidth + number * barWidth;
+
+            double X1 = ConvertX(x + barOffset);
+            double X2 = ConvertX(x + barOffset + barWidth);
+
+            //double X1 = ConvertX(x + 0.1 * AxisXIntervalWidth);
+            //double X2 = ConvertX(x + 0.9 * AxisXIntervalWidth);
             double Y1 = ConvertY(0);
             double Y2 = ConvertY(y);
 
@@ -138,10 +144,21 @@ namespace MR.BinPacking.App.Controls
             for (int i = 0; i < DataSeries.Count; i++)
             {
                 Brush brush;
-                if (i == 0)
-                    brush = Brushes.YellowGreen;
-                else
-                    brush = Brushes.Purple;
+                switch (i)
+                {
+                    case 0:
+                        brush = Brushes.YellowGreen;
+                        break;
+                    case 1:
+                        brush = Brushes.Purple;
+                        break;
+                    case 2:
+                        brush = Brushes.OrangeRed;
+                        break;
+                    default:
+                        brush = Brushes.RoyalBlue;
+                        break;
+                }
 
                 for (int j = 0; j < DataSeries[i].Count; j++)
                 {
@@ -165,7 +182,7 @@ namespace MR.BinPacking.App.Controls
                     }
                     else
                     {
-                        DrawRect(DataSeries[i][j].X, DataSeries[i][j].Y, brush);
+                        DrawRect(DataSeries[i][j].X, DataSeries[i][j].Y, brush, i, DataSeries.Count);
                     }
                 }
             }
