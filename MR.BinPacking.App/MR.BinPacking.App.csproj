@@ -54,6 +54,9 @@
       <DependentUpon>ChartControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NumberTextBox.cs" />
+    <Compile Include="ExperimentProgressWindow.xaml.cs">
+      <DependentUpon>ExperimentProgressWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PreviewWindow.xaml.cs">
       <DependentUpon>PreviewWindow.xaml</DependentUpon>
     </Compile>
@@ -74,6 +77,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\TestControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExperimentProgressWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

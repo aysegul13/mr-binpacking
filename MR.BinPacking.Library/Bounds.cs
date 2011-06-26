@@ -11,6 +11,8 @@ namespace MR.BinPacking.Library
         //lower bound from 8.14
         public static int LowerBound(List<int> elements, int c)
         {
+            double test = elements.Sum(el => (double)el);
+
             return (int)Math.Ceiling((double)elements.Sum() / c);
         }
 

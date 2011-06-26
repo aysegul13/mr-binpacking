@@ -205,7 +205,7 @@ namespace MR.BinPacking.App
             RefreshPreview();
         }
 
-        private void ToggleButton_Click(object sender, RoutedEventArgs e)
+        private void bExperiment_Click(object sender, RoutedEventArgs e)
         {
             //List<ListAlgorithm> algorithms = new List<ListAlgorithm>() { new NextFit(), new FirstFit() };
 
@@ -222,7 +222,10 @@ namespace MR.BinPacking.App
             //    Repeat = 2
             //};
 
-            TestWindow test = new TestWindow(null);
+            //TestWindow test = new TestWindow(null);
+            //test.Show();
+
+            ExperimentProgressWindow test = new ExperimentProgressWindow(null);
             test.Show();
         }
 
