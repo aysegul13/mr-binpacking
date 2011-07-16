@@ -30,7 +30,19 @@ namespace MR.BinPacking.Library.Experiment
                 {
                     int min = (int)Math.Ceiling(prms.MinVal * currN);
                     int max = (int)Math.Ceiling(prms.MaxVal * currN);
-                    List<int> elements = Generator.GenerateData(currN, min, max, prms.Dist);
+                    //TODO: wybieranie wszystkich rozkładów, a nie tylko pierwszego
+                    //List<int> elements = Generator.GenerateData(currN, min, max, prms.Dist);
+                    List<int> elements = Generator.GenerateData(currN, min, max, prms.Distributions.First());
+                    if (prms.Sorting == Sorting.Ascending)
+                    {
+                        elements.Sort();
+                    }
+                    else if (prms.Sorting == Sorting.Descending)
+                    {
+                        List<int> elementsSorted = new List<int>(elements);
+                        elementsSorted.Sort((x, y) => y.CompareTo(x));
+                        elements = elementsSorted;
+                    }
 
                     Stopwatch sw = new Stopwatch();
 

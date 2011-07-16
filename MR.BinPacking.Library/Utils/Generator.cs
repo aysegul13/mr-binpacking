@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MR.BinPacking.Library.Experiment;
 
 namespace MR.BinPacking.Library.Utils
 {
-    public enum Distribution { Uniform, Gauss, Exponential };
-
     public static class Generator
     {
         public static List<int> GenerateData(int n, int min, int max, Distribution distribution)

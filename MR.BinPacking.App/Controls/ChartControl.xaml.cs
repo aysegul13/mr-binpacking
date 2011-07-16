@@ -377,7 +377,7 @@ namespace MR.BinPacking.App.Controls
             {
                 Algorithms = new List<ListAlgorithm>(),
                 BinSize = 100,
-                Dist = Distribution.Uniform,
+                Distributions = new List<Distribution>(),
                 MinN = 100,
                 MaxN = 1000,
                 Step = 100,
@@ -386,9 +386,11 @@ namespace MR.BinPacking.App.Controls
                 Repeat = 2
             };
 
+            List<ListAlgorithm> algorithms = new List<ListAlgorithm>();
             prms.Algorithms.Add(new BestFitDecreasing() { IsPresentation = false });
             prms.Algorithms.Add(new BestFit() { IsPresentation = false });
 
+            prms.Distributions.Add(Distribution.Uniform);
 
             DataSeries = new List<List<Point2D>>();
 

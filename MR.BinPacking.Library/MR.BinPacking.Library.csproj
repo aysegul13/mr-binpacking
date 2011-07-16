@@ -37,6 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\AAS.cs" />
     <Compile Include="Base\Bin.cs" />
     <Compile Include="Base\ListAlgorithm.cs" />
     <Compile Include="Base\Instance.cs" />
