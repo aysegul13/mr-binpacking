@@ -38,63 +38,7 @@ namespace MR.BinPacking.App
 
         List<int> Elements = new List<int>();
         int BinSize = 10;
-
-
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-            HwndSource source = HwndSource.FromVisual(this) as HwndSource;
-            if (source != null)
-            {
-                source.AddHook(new HwndSourceHook(WinProc));
-            }
-        }
-
-        public const Int32 WM_EXITSIZEMOVE = 0x0232;
-        private IntPtr WinProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, ref Boolean handled)
-        {
-            IntPtr result = IntPtr.Zero;
-            switch (msg)
-            {
-                case WM_EXITSIZEMOVE:
-                    {
-                        //Refresh();
-                        break;
-                    }
-            }
-
-            return result;
-        }
-
-        private void bNextFit_Click(object sender, RoutedEventArgs e)
-        {
-            PreviewWindow prev = new PreviewWindow(new NextFit(), Elements, BinSize);
-            prev.Show();
-        }
-
-        private void bFirstFit_Click(object sender, RoutedEventArgs e)
-        {
-            PreviewWindow prev = new PreviewWindow(new FirstFit(), Elements, BinSize);
-            prev.Show();
-        }
-
-        private void bBestFit_Click(object sender, RoutedEventArgs e)
-        {
-            PreviewWindow prev = new PreviewWindow(new BestFit(), Elements, BinSize);
-            prev.Show();
-        }
-
-        private void bFirstFitD_Click(object sender, RoutedEventArgs e)
-        {
-            PreviewWindow prev = new PreviewWindow(new FirstFitDecreasing(), Elements, BinSize);
-            prev.Show();
-        }
-
-        private void bBestFitD_Click(object sender, RoutedEventArgs e)
-        {
-            PreviewWindow prev = new PreviewWindow(new BestFitDecreasing(), Elements, BinSize);
-            prev.Show();
-        }
+        List<Window> ChildWindows = new List<Window>();
 
         private void bUniformDist_Click(object sender, RoutedEventArgs e)
         {
@@ -137,20 +81,6 @@ namespace MR.BinPacking.App
 
         private void RefreshPreview()
         {
-            ////Bin bin = new Bin(BinSize);
-            ////bin.Insert(4);
-            //BinControl newBin = (spPreview.Children[2] as BinControl);
-            //newBin.AutoRefresh = false;
-            ////newBin.Bin = bin;
-            ////newBin.Bin = (spPreview.Children[5] as BinControl).Bin;
-            //newBin.bFiller.Visibility = Visibility.Collapsed;
-            //spPreview.Children.Insert(2, newBin);
-
-            ////UIElement el = spPreview.Children[4];
-            ////spPreview.Children.RemoveAt(4);
-            ////spPreview.Children.Insert(4, el);
-            //--------------------------------------------------------------------
-
             spPreview.Children.Clear();
 
             foreach (var elem in Elements)
@@ -226,6 +156,7 @@ namespace MR.BinPacking.App
             //test.Show();
 
             ExperimentProgressWindow test = new ExperimentProgressWindow(null);
+            ChildWindows.Add(test);
             test.Show();
         }
 
@@ -258,37 +189,26 @@ namespace MR.BinPacking.App
             }
         }
 
-        private void bRandomFit_Click(object sender, RoutedEventArgs e)
-        {
-            PreviewWindow prev = new PreviewWindow(new RandomFit(), Elements, BinSize);
-            prev.Show();
-        }
-
         private void bPresentation_Click(object sender, RoutedEventArgs e)
         {
             List<ListAlgorithm> algorithms = new List<ListAlgorithm>();
-
             if (cbNextFit.IsChecked == true)
                 algorithms.Add(new NextFit());
-
             if (cbFirstFit.IsChecked == true)
                 algorithms.Add(new FirstFit());
-
             if (cbBestFit.IsChecked == true)
                 algorithms.Add(new BestFit());
-
             if (cbFirstFitD.IsChecked == true)
                 algorithms.Add(new FirstFitDecreasing());
-
             if (cbBestFitD.IsChecked == true)
                 algorithms.Add(new BestFitDecreasing());
-
             if (cbRandomFit.IsChecked == true)
                 algorithms.Add(new RandomFit());
 
             foreach (var alg in algorithms)
             {
                 PreviewWindow prev = new PreviewWindow(alg, Elements, BinSize);
+                ChildWindows.Add(prev);
                 prev.Show();
             }
         }
@@ -296,22 +216,16 @@ namespace MR.BinPacking.App
         private void bResult_Click(object sender, RoutedEventArgs e)
         {
             List<ListAlgorithm> algorithms = new List<ListAlgorithm>();
-
             if (cbNextFit.IsChecked == true)
                 algorithms.Add(new NextFit());
-
             if (cbFirstFit.IsChecked == true)
                 algorithms.Add(new FirstFit());
-
             if (cbBestFit.IsChecked == true)
                 algorithms.Add(new BestFit());
-
             if (cbFirstFitD.IsChecked == true)
                 algorithms.Add(new FirstFitDecreasing());
-
             if (cbBestFitD.IsChecked == true)
                 algorithms.Add(new BestFitDecreasing());
-
             if (cbRandomFit.IsChecked == true)
                 algorithms.Add(new RandomFit());
 
@@ -320,7 +234,110 @@ namespace MR.BinPacking.App
                 alg.IsPresentation = false;
                 alg.IsWaiting = false;
                 PreviewWindow prev = new PreviewWindow(alg, Elements, BinSize);
+                ChildWindows.Add(prev);
                 prev.Show();
+            }
+        }
+
+        private void SetParamsToUI(ExperimentParamsFile experimentParams)
+        {
+            ntbExpMinN.Text = experimentParams.MinN.ToString();
+            ntbExpMaxN.Text = experimentParams.MaxN.ToString();
+            ntbExpStep.Text = experimentParams.Step.ToString();
+            ntbExpBinSize.Text = experimentParams.BinSize.ToString();
+            ntbExpMinVal.Text = experimentParams.MinVal.ToString();
+            ntbExpMaxVal.Text = experimentParams.MaxVal.ToString();
+            ntbExpRepeat.Text = experimentParams.Repeat.ToString();
+
+            cbExpDistUniform.IsChecked = experimentParams.Distributions.Contains(Distribution.Uniform);
+            cbExpDistGauss.IsChecked = experimentParams.Distributions.Contains(Distribution.Gauss);
+            cbExpDistExp.IsChecked = experimentParams.Distributions.Contains(Distribution.Exponential);
+
+            rbExpSortNone.IsChecked = (experimentParams.Sorting == Sorting.None);
+            rbExpSortAsc.IsChecked = (experimentParams.Sorting == Sorting.Ascending);
+            rbExpSortDesc.IsChecked = (experimentParams.Sorting == Sorting.Descending);
+
+            cbExpNF.IsChecked = experimentParams.Algs.Contains(Algorithm.NextFit);
+            cbExpFF.IsChecked = experimentParams.Algs.Contains(Algorithm.FirstFit);
+            cbExpBF.IsChecked = experimentParams.Algs.Contains(Algorithm.BestFit);
+            cbExpFFD.IsChecked = experimentParams.Algs.Contains(Algorithm.FirstFitDecreasing);
+            cbExpBFD.IsChecked = experimentParams.Algs.Contains(Algorithm.BestFitDecreasing);
+            cbExpRF.IsChecked = experimentParams.Algs.Contains(Algorithm.RandomFit);
+        }
+
+        private void bExpLoadParams_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openDialog = new OpenFileDialog();
+            if (openDialog.ShowDialog() == true)
+            {
+                ExperimentParamsFile experimentParams = Loader.LoadExperimentParams(openDialog.FileName);
+                SetParamsToUI(experimentParams);
+            }
+        }
+
+        private ExperimentParamsFile GetExpParamsFromUI()
+        {
+            ExperimentParamsFile experimentParams = new ExperimentParamsFile()
+            {
+                MinN = Int32.Parse(ntbExpMinN.Text),
+                MaxN = Int32.Parse(ntbExpMaxN.Text),
+                Step = Int32.Parse(ntbExpStep.Text),
+                BinSize = Int32.Parse(ntbExpBinSize.Text),
+                MinVal = Double.Parse(ntbExpMinVal.Text),
+                MaxVal = Double.Parse(ntbExpMaxVal.Text),
+                Repeat = Int32.Parse(ntbExpRepeat.Text)
+            };
+
+            List<Distribution> distributions = new List<Distribution>();
+            if (cbExpDistGauss.IsChecked == true)
+                distributions.Add(Distribution.Gauss);
+            if (cbExpDistExp.IsChecked == true)
+                distributions.Add(Distribution.Exponential);
+            if ((cbExpDistUniform.IsChecked == true) || (distributions.Count == 0))
+                distributions.Add(Distribution.Uniform);
+            experimentParams.Distributions = distributions;
+
+            if (rbExpSortAsc.IsChecked == true)
+                experimentParams.Sorting = Sorting.Ascending;
+            else if (rbExpSortDesc.IsChecked == true)
+                experimentParams.Sorting = Sorting.Descending;
+            else
+                experimentParams.Sorting = Sorting.None;
+
+            List<Algorithm> algorithms = new List<Algorithm>();
+            if (cbExpNF.IsChecked == true)
+                algorithms.Add(Algorithm.NextFit);
+            if (cbExpFF.IsChecked == true)
+                algorithms.Add(Algorithm.FirstFit);
+            if (cbExpBF.IsChecked == true)
+                algorithms.Add(Algorithm.BestFit);
+            if (cbExpFFD.IsChecked == true)
+                algorithms.Add(Algorithm.FirstFitDecreasing);
+            if (cbExpBFD.IsChecked == true)
+                algorithms.Add(Algorithm.BestFitDecreasing);
+            if (cbExpRF.IsChecked == true)
+                algorithms.Add(Algorithm.RandomFit);
+            experimentParams.Algs = algorithms;
+
+            return experimentParams;
+        }
+
+        private void bExpSaveParams_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            if (saveDialog.ShowDialog() == true)
+            {
+                ExperimentParamsFile experimentParams = GetExpParamsFromUI();
+                Loader.SaveExperimentParams(experimentParams, saveDialog.FileName);
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            foreach (var childWindow in ChildWindows)
+            {
+                if (childWindow.IsVisible)
+                    childWindow.Close();
             }
         }
     }

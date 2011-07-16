@@ -17,35 +17,44 @@ namespace MR.BinPacking.Library.Algorithms
 
         public override Instance Execute(List<int> elements, int binSize)
         {
-            Instance result = new Instance(binSize);
-            result.Elements = elements;
+            //Instance result = new Instance(binSize);
+            //result.Elements = elements;
+            ActualResult = new Instance(binSize);
+            ActualResult.Elements = elements;
+
+            List<int> elemIndexes = new List<int>();
+            for (int i = 0; i < elements.Count; i++)
+                elemIndexes.Add(i);
 
             Random random = new Random();
 
-            foreach (var elem in result.Elements)
+            while (elemIndexes.Count > 0)
             {
+                int elemIndex = random.Next(elemIndexes.Count);
+
                 List<int> binsIndexes = new List<int>();
-                for (int i = 0; i < result.Bins.Count; i++)
+                for (int i = 0; i < ActualResult.Bins.Count; i++)
                 {
-                    if (result.Bins[i].FreeSpace() >= elem)
+                    if (ActualResult.Bins[i].FreeSpace() >= elements[elemIndexes[elemIndex]])
                         binsIndexes.Add(i);
                 }
 
                 int index;
                 if (binsIndexes.Count == 0)
                 {
-                    result.Bins.Add(new Bin(result.BinSize));
-                    index = result.Bins.Count - 1;
+                    ActualResult.Bins.Add(new Bin(ActualResult.BinSize));
+                    index = ActualResult.Bins.Count - 1;
                 }
                 else
                 {
                     index = binsIndexes[random.Next(binsIndexes.Count)];
                 }
 
-                result.Bins[index].Insert(elem);
+                ActualResult.Bins[index].Insert(elements[elemIndexes[elemIndex]]);
+                elemIndexes.RemoveAt(elemIndex);
             }
 
-            return result;
+            return ActualResult;
         }
     }
 }

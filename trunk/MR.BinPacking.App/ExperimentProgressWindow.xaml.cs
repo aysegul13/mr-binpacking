@@ -87,7 +87,9 @@ namespace MR.BinPacking.App
                 {
                     int min = Math.Max((int)Math.Ceiling(prms.MinVal * prms.BinSize), 1);
                     int max = (int)Math.Ceiling(prms.MaxVal * prms.BinSize);
-                    List<int> elements = Generator.GenerateData(currN, min, max, prms.Dist);
+                    //TODO: wybieranie wszystkich rozkładów, a nie tylko pierwszego
+                    //List<int> elements = Generator.GenerateData(currN, min, max, prms.Dist);
+                    List<int> elements = Generator.GenerateData(currN, min, max, prms.Distributions.First());
 
                     Stopwatch sw = new Stopwatch();
 
@@ -201,7 +203,7 @@ namespace MR.BinPacking.App
                 {
                     Algorithms = new List<ListAlgorithm>(),
                     BinSize = 100,
-                    Dist = Distribution.Exponential,
+                    Distributions = new List<Distribution>(),
                     MinN = 100,
                     MaxN = 1000,
                     Step = 100,
@@ -214,6 +216,8 @@ namespace MR.BinPacking.App
                 prms.Algorithms.Add(new FirstFit() { IsPresentation = false });
                 prms.Algorithms.Add(new BestFit() { IsPresentation = false });
                 prms.Algorithms.Add(new BestFitDecreasing() { IsPresentation = false });
+
+                prms.Distributions.Add(Distribution.Uniform);
 
                 bw.RunWorkerAsync(prms);
             }
