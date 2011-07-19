@@ -5,14 +5,21 @@
         Title="ExperimentProgressWindow" Width="300"
         Loaded="Window_Loaded">
     <StackPanel>
-        <Label x:Name="laRepeat" Content="Powtórzenia: 1 z P" Margin="0"/>
-        <ProgressBar x:Name="pbRepeat" Height="20" Margin="4,2"/>
-        <Label x:Name="laStep" Content="Liczba elementów: N" Margin="0"/>
-        <ProgressBar x:Name="pbStep" Height="20" Margin="4,2"/>
-        <Label x:Name="laAlgorithm" Content="Algorytm: 1 z A [NextFit]" Margin="0"/>
-        <ProgressBar x:Name="pbAlgorithm" Height="20" Margin="4,2"/>
-        <Button x:Name="bCancel" Content="Anuluj" MinWidth="75" Margin="4" HorizontalAlignment="Right" Click="bCancel_Click" />
+        <Label x:Name="laRepeat" Content="Powtórzenie: [numer]" Margin="0"/>
+        <Label x:Name="laStep" Content="Liczba elementów: [liczba]" Margin="0"/>
+        <Label x:Name="laDistribution" Content="Rozkład: [nazwa]" Margin="0"/>
+        <Label x:Name="laSorting" Content="Sortowanie: [nazwa]" Margin="0"/>
+        <Label x:Name="laAlgorithm" Content="Algorytm: [nazwa]" Margin="0"/>
+
+        <Label x:Name="laPart" Content="Krok: [numer] z [numer]" Margin="0" FontWeight="Bold"/>
+        <ProgressBar x:Name="pbPart" Height="20" Margin="4,2"/>
+        
         <Button x:Name="bRun" Content="Run" MinWidth="75" Margin="4" HorizontalAlignment="Right" Click="bRun_Click" />
-        <gui:ChartControl x:Name="guiChart" MinWidth="400" MinHeight="350"/>
+        <Button x:Name="bCancel" Content="Anuluj" MinWidth="75" Margin="4" HorizontalAlignment="Right" Click="bCancel_Click" />
+        <gui:ChartControl x:Name="guiChart" MinWidth="400" MinHeight="250"/>
+        <Button x:Name="bTable" Content="Table" MinWidth="75" HorizontalAlignment="Left" Click="bTable_Click"/>
+        <Grid x:Name="gTable">
+            
+        </Grid>
     </StackPanel>
 </Window>
