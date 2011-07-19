@@ -7,14 +7,14 @@ namespace MR.BinPacking.Library.Experiment
 {
     public class AlgorithmResult
     {
-        public List<Statistics> Result { get; set; }
+        public List<Sample> Result { get; set; }
 
         public AlgorithmResult()
         {
-            Result = new List<Statistics>();
+            Result = new List<Sample>();
         }
 
-        public Statistics this[int index]
+        public Sample this[int index]
         {
             get { return Result[index]; }
             set { Result[index] = value; }

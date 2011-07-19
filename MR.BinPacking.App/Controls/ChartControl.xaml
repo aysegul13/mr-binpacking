@@ -13,10 +13,16 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
-        <ScrollViewer x:Name="svScroll" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <StackPanel Orientation="Horizontal">
+            <ComboBox x:Name="cbDataType" MinWidth="100" Margin="2,4" SelectionChanged="cbDataType_SelectionChanged"/>
+            <ComboBox x:Name="cbField" MinWidth="100" Margin="2,4" SelectionChanged="cbField_SelectionChanged"/>
+            <Button x:Name="bType" MinWidth="75" Content="słupkowy" Margin="2,4" Click="bType_Click"/>
+            <Button x:Name="bScale" MinWidth="75" Content="liniowa" Margin="2,4" Click="bScale_Click"/>
+        </StackPanel>
+        <ScrollViewer x:Name="svScroll" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Canvas x:Name="Canvas" Background="White">
                 <!--<Line X1="60" Y1="20" X2="60" Y2="265" Style="{StaticResource axisStyle}"/>
                 <Line X1="55" Y1="260" X2="480" Y2="260" Style="{StaticResource axisStyle}"/>
@@ -24,11 +30,5 @@
                 <Label Canvas.Left="60" Canvas.Top="260" Width="40" Content="10" FontWeight="Bold" HorizontalContentAlignment="Center"/>-->
             </Canvas>
         </ScrollViewer>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <ToggleButton x:Name="tgbType" Content="Type" MinWidth="75" Click="tgbType_Click"/>
-            <ToggleButton x:Name="tgbScale" Content="Scale" MinWidth="75" Click="tgbScale_Click"/>
-            <ToggleButton x:Name="tgbLines" Content="Lines" MinWidth="75" Click="tgbLines_Click"/>
-            <Button Content="Generate data" MinWidth="75" Click="Button_Click_3"/>
-        </StackPanel>
     </Grid>
 </UserControl>

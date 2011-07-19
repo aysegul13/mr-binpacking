@@ -19,6 +19,8 @@ using MR.BinPacking.Library.Algorithms;
 
 namespace MR.BinPacking.App.Controls
 {
+    public enum ChartType { Bars, Lines, Points };
+
     /// <summary>
     /// Interaction logic for ChartControl.xaml
     /// </summary>
@@ -29,17 +31,15 @@ namespace MR.BinPacking.App.Controls
             InitializeComponent();
         }
 
-        public List<List<Point2D>> DataSeries;
+        public List<DataSerie> DataSeries;
         double AxisYMax = 0.0;
         int AxisYIntervals = 10;
 
         public double AxisXMin = 0;
         public int AxisXIntervalWidth = 1;
 
+        ChartType chartType = ChartType.Bars;
         bool logScale = false;
-        bool barChart = true;
-        bool drawLine = true;
-        bool showLabels = true;
 
 
         double chartWidth, chartHeight;
@@ -49,8 +49,8 @@ namespace MR.BinPacking.App.Controls
 
         public double ConvertX(double x)
         {
-            int count = DataSeries[0].Count;
-            if (barChart)
+            int count = DataSeries[0].Points.Count;
+            if (chartType == ChartType.Bars)
                 count++;
 
             x = (x - AxisXMin) / AxisXIntervalWidth;
@@ -70,7 +70,7 @@ namespace MR.BinPacking.App.Controls
             return chartOffsetY + chartHeight * (1 - h);
         }
 
-        public void DrawRect(double x, double y, Brush brush, int number, int count)
+        public void DrawRect(double x, double y, Brush brush, int number, int count, string name)
         {
             double barWidth = 0.9 * AxisXIntervalWidth / count;
             double barOffset = 0.05 * AxisXIntervalWidth + number * barWidth;
@@ -88,7 +88,7 @@ namespace MR.BinPacking.App.Controls
                 Width = X2 - X1,
                 Height = Y1 - Y2,
                 Fill = brush,
-                ToolTip = String.Format("({0}; {1})", x, y)
+                ToolTip = String.Format("{0} ({1}; {2})", name, x, y)
             };
 
             Canvas.SetLeft(rect, X1);
@@ -97,7 +97,7 @@ namespace MR.BinPacking.App.Controls
             Canvas.Children.Add(rect);
         }
 
-        public void DrawPoint(double x, double y, Brush brush)
+        public void DrawPoint(double x, double y, Brush brush, string name)
         {
             double newX = ConvertX(x);
             double newY = ConvertY(y);
@@ -109,13 +109,15 @@ namespace MR.BinPacking.App.Controls
                 Width = d,
                 Height = d,
                 Stroke = brush,
-                ToolTip = String.Format("({0}; {1})", x, y)
+                ToolTip = String.Format("{0} ({1}; {2})", name, x, y)
             };
 
             Canvas.SetLeft(ellipse, newX - d / 2);
             Canvas.SetTop(ellipse, newY - d / 2);
             Canvas.Children.Add(ellipse);
         }
+
+        private SolidColorBrush[] brushes = { Brushes.YellowGreen, Brushes.OrangeRed, Brushes.Purple, Brushes.RoyalBlue, Brushes.Red };
 
         public void Refresh()
         {
@@ -125,9 +127,9 @@ namespace MR.BinPacking.App.Controls
             foreach (var series in DataSeries)
             {
                 if (logScale)
-                    AxisYMax = Math.Max(AxisYMax, series.Select(p => Math.Log(Math.Max(p.Y, 1), 2)).Max());
+                    AxisYMax = Math.Max(AxisYMax, series.Points.Select(p => Math.Log(Math.Max(p.Y, 1), 2)).Max());
                 else
-                    AxisYMax = Math.Max(AxisYMax, series.Select(p => p.Y).Max());
+                    AxisYMax = Math.Max(AxisYMax, series.Points.Select(p => p.Y).Max());
             }
 
             //int factor = 1;
@@ -144,45 +146,35 @@ namespace MR.BinPacking.App.Controls
             for (int i = 0; i < DataSeries.Count; i++)
             {
                 Brush brush;
-                switch (i)
-                {
-                    case 0:
-                        brush = Brushes.YellowGreen;
-                        break;
-                    case 1:
-                        brush = Brushes.Purple;
-                        break;
-                    case 2:
-                        brush = Brushes.OrangeRed;
-                        break;
-                    default:
-                        brush = Brushes.RoyalBlue;
-                        break;
-                }
+                if (i < brushes.Length)
+                    brush = brushes[i];
+                else
+                    brush = brushes.Last();
 
-                for (int j = 0; j < DataSeries[i].Count; j++)
+                for (int j = 0; j < DataSeries[i].Points.Count; j++)
                 {
-                    if (!barChart)
+                    if (chartType != ChartType.Bars)
                     {
-                        if (drawLine && (j > 0))
+                        if ((chartType == ChartType.Lines) && (j > 0))
                         {
                             Line newLine = new Line()
                             {
-                                X1 = ConvertX(DataSeries[i][j - 1].X),
-                                X2 = ConvertX(DataSeries[i][j].X),
-                                Y1 = ConvertY(DataSeries[i][j - 1].Y),
-                                Y2 = ConvertY(DataSeries[i][j].Y),
+                                X1 = ConvertX(DataSeries[i].Points[j - 1].X),
+                                X2 = ConvertX(DataSeries[i].Points[j].X),
+                                Y1 = ConvertY(DataSeries[i].Points[j - 1].Y),
+                                Y2 = ConvertY(DataSeries[i].Points[j].Y),
                                 Stroke = brush,
-                                StrokeThickness = 2.0
+                                StrokeThickness = 2.0,
+                                ToolTip = DataSeries[i].Name
                             };
                             Canvas.Children.Add(newLine);
                         }
 
-                        DrawPoint(DataSeries[i][j].X, DataSeries[i][j].Y, brush);
+                        DrawPoint(DataSeries[i].Points[j].X, DataSeries[i].Points[j].Y, brush, DataSeries[i].Name);
                     }
                     else
                     {
-                        DrawRect(DataSeries[i][j].X, DataSeries[i][j].Y, brush, i, DataSeries.Count);
+                        DrawRect(DataSeries[i].Points[j].X, DataSeries[i].Points[j].Y, brush, i, DataSeries.Count, DataSeries[i].Name);
                     }
                 }
             }
@@ -207,10 +199,10 @@ namespace MR.BinPacking.App.Controls
 
             double max = 0.01;
             foreach (var series in DataSeries)
-                max = Math.Max(max, series.Select(p => p.Y).Max());
+                max = Math.Max(max, series.Points.Select(p => p.Y).Max());
 
-            int count = DataSeries[0].Count * 4;
-            if (barChart)
+            int count = DataSeries[0].Points.Count * 4;
+            if (chartType == ChartType.Bars)
                 count += 4;
 
             for (int i = 1; i < count; i++)
@@ -285,8 +277,8 @@ namespace MR.BinPacking.App.Controls
             Canvas.Children.Add(axisX);
 
 
-            int count = DataSeries[0].Count;
-            if (barChart)
+            int count = DataSeries[0].Points.Count;
+            if (chartType == ChartType.Bars)
                 count++;
 
             for (int i = 0; i < count; i++)
@@ -371,60 +363,46 @@ namespace MR.BinPacking.App.Controls
             }
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void cbDataType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ExperimentParams prms = new ExperimentParams()
-            {
-                Algorithms = new List<ListAlgorithm>(),
-                BinSize = 100,
-                Distributions = new List<Distribution>(),
-                MinN = 100,
-                MaxN = 1000,
-                Step = 100,
-                MinVal = 0.0,
-                MaxVal = 1.0,
-                Repeat = 2
-            };
-
-            List<ListAlgorithm> algorithms = new List<ListAlgorithm>();
-            prms.Algorithms.Add(new BestFitDecreasing() { IsPresentation = false });
-            prms.Algorithms.Add(new BestFit() { IsPresentation = false });
-
-            prms.Distributions.Add(Distribution.Uniform);
-
-            DataSeries = new List<List<Point2D>>();
-
-            ExperimentResult stats = Experiment.ExecuteExperiment(prms);
-            for (int i = 0; i < stats.DataSeries.Count; i++)
-                DataSeries.Add(Experiment.GetCoordinates(stats[i], StatField.ExecutionTime));
-
-
-            AxisXIntervalWidth = prms.Step;
-            AxisXMin = prms.MinN;
-
-            //DataSeries = new List<Point2D>();
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    DataSeries.Add(new Point2D(i + 1, (i + 1) * 10));
-            //    //Points.Add(new Point2D(i + 1, Math.Pow(2, i)));
-            //}
+            
         }
 
-        private void tgbType_Click(object sender, RoutedEventArgs e)
+        private void cbField_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            barChart = !barChart;
+
+        }
+
+        private void bType_Click(object sender, RoutedEventArgs e)
+        {
+            switch (chartType)
+            {
+                case ChartType.Bars:
+                    chartType = ChartType.Lines;
+                    bType.Content = "liniowy";
+                    break;
+                case ChartType.Lines:
+                    chartType = ChartType.Points;
+                    bType.Content = "punktowy";
+                    break;
+                case ChartType.Points:
+                    chartType = ChartType.Bars;
+                    bType.Content = "słupkowy";
+                    break;
+            }
+
             Refresh();
         }
 
-        private void tgbScale_Click(object sender, RoutedEventArgs e)
+        private void bScale_Click(object sender, RoutedEventArgs e)
         {
             logScale = !logScale;
-            Refresh();
-        }
 
-        private void tgbLines_Click(object sender, RoutedEventArgs e)
-        {
-            drawLine = !drawLine;
+            if (logScale)
+                bScale.Content = "logarytmiczna";
+            else
+                bScale.Content = "liniowa";
+
             Refresh();
         }
     }

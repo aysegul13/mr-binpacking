@@ -31,14 +31,14 @@ namespace MR.BinPacking.Library.Experiment
         public double MaxVal { get; set; }
 
         public int Repeat { get; set; }
-        public Sorting Sorting { get; set; }
 
-        public List<Algorithm> Algs { get; set; }
+        public List<Algorithm> Algorithms { get; set; }
         public List<Distribution> Distributions { get; set; }
+        public List<Sorting> Sortings { get; set; }
     }
 
     public class ExperimentParams : ExperimentParamsFile
     {
-        public List<ListAlgorithm> Algorithms { get; set; }
+        public List<ListAlgorithm> Algs { get; set; }
     }
 }

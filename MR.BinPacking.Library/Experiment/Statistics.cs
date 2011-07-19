@@ -5,9 +5,15 @@ using System.Text;
 
 namespace MR.BinPacking.Library.Experiment
 {
-    public class Statistics
+    public class Sample
     {
+        public int ID { get; set; }
+
         public int N { get; set; }
+        public Distribution Distribution { get; set; }
+        public Sorting Sorting { get; set; }
+        public Algorithm Algorithm { get; set; }
+
         public int LowerBound { get; set; }
         public int StrongerLowerBound { get; set; }
         public int Result { get; set; }
@@ -34,7 +40,7 @@ namespace MR.BinPacking.Library.Experiment
             private set { }
         }
 
-        public void Add(Statistics stats)
+        public void Add(Sample stats)
         {
             LowerBound += stats.LowerBound;
             StrongerLowerBound += stats.StrongerLowerBound;
