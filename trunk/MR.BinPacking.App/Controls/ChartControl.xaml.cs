@@ -31,16 +31,19 @@ namespace MR.BinPacking.App.Controls
             InitializeComponent();
         }
 
+        public ExperimentResult DataSource { get; set; }
         public List<DataSerie> DataSeries;
+
         double AxisYMax = 0.0;
         int AxisYIntervals = 10;
 
         public double AxisXMin = 0;
         public int AxisXIntervalWidth = 1;
 
+        ChartDataType chartDataType = ChartDataType.Algorithm;
+        StatField fieldType = StatField.ExecutionTime;
         ChartType chartType = ChartType.Bars;
         bool logScale = false;
-
 
         double chartWidth, chartHeight;
         const double chartOffsetX = 40;
@@ -365,12 +368,30 @@ namespace MR.BinPacking.App.Controls
 
         private void cbDataType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+            chartDataType = (ChartDataType)cbDataType.SelectedValue;
+
+            if (DataSource != null)
+            {
+                DataSeries = DataSource.GetDataSeries(chartDataType, fieldType);
+                AxisXIntervalWidth = DataSource.Params.Step;
+                AxisXMin = DataSource.Params.MinN;
+
+                Refresh();
+            }
         }
 
         private void cbField_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            fieldType = (StatField)cbField.SelectedValue;
 
+            if (DataSource != null)
+            {
+                DataSeries = DataSource.GetDataSeries(chartDataType, fieldType);
+                AxisXIntervalWidth = DataSource.Params.Step;
+                AxisXMin = DataSource.Params.MinN;
+
+                Refresh();
+            }
         }
 
         private void bType_Click(object sender, RoutedEventArgs e)
@@ -404,6 +425,46 @@ namespace MR.BinPacking.App.Controls
                 bScale.Content = "liniowa";
 
             Refresh();
+        }
+
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            //fill chart data types combo box
+            ComboBoxItem item = new ComboBoxItem() { Content = "Algorytm", Tag = ChartDataType.Algorithm };
+            cbDataType.Items.Add(item);
+
+            item = new ComboBoxItem() { Content = "Rozkład", Tag = ChartDataType.Distribution };
+            cbDataType.Items.Add(item);
+
+            item = new ComboBoxItem() { Content = "Sortowanie", Tag = ChartDataType.Sorting };
+            cbDataType.Items.Add(item);
+
+            item = new ComboBoxItem() { Content = "Algorytm/rozkład", Tag = ChartDataType.AlgorithmDistribution };
+            cbDataType.Items.Add(item);
+
+            item = new ComboBoxItem() { Content = "Algorytm/sortowanie", Tag = ChartDataType.AlgorithmSorting };
+            cbDataType.Items.Add(item);
+
+            item = new ComboBoxItem() { Content = "Rozkład/sortowanie", Tag = ChartDataType.DistributionSorting };
+            cbDataType.Items.Add(item);
+
+            cbDataType.SelectedIndex = 0;
+
+            //fill stat fields combo box
+            item = new ComboBoxItem() { Content = "czas działania", Tag = StatField.ExecutionTime };
+            cbField.Items.Add(item);
+
+            item = new ComboBoxItem() { Content = "wynik", Tag = StatField.Result };
+            cbField.Items.Add(item);
+
+            item = new ComboBoxItem() { Content = "dolne ograniczenie", Tag = StatField.LowerBound };
+            cbField.Items.Add(item);
+
+            item = new ComboBoxItem() { Content = "silniejsze dolne ograniczenie", Tag = StatField.StrongerLowerBound };
+            cbField.Items.Add(item);
+
+            cbField.SelectedIndex = 0;
         }
     }
 }

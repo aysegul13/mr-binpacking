@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="320" d:DesignWidth="400">
+             d:DesignHeight="320" d:DesignWidth="400"
+             Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <Style x:Key="axisStyle" TargetType="Line">
             <Setter Property="Stroke" Value="Black"/>
@@ -17,8 +18,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <ComboBox x:Name="cbDataType" MinWidth="100" Margin="2,4" SelectionChanged="cbDataType_SelectionChanged"/>
-            <ComboBox x:Name="cbField" MinWidth="100" Margin="2,4" SelectionChanged="cbField_SelectionChanged"/>
+            <ComboBox x:Name="cbDataType" MinWidth="100" Margin="2,4" SelectedValuePath="Tag"  SelectionChanged="cbDataType_SelectionChanged"/>
+            <ComboBox x:Name="cbField" MinWidth="100" Margin="2,4" SelectedValuePath="Tag" SelectionChanged="cbField_SelectionChanged"/>
             <Button x:Name="bType" MinWidth="75" Content="słupkowy" Margin="2,4" Click="bType_Click"/>
             <Button x:Name="bScale" MinWidth="75" Content="liniowa" Margin="2,4" Click="bScale_Click"/>
         </StackPanel>
