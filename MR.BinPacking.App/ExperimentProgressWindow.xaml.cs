@@ -178,17 +178,18 @@ namespace MR.BinPacking.App
                 ExperimentResult result = e.Result as ExperimentResult;
                 //result.GetDataSeries();
 
-                //result.
+
+                guiChart.DataSource = result;
 
                 List<DataSerie> dataSeries = result.GetDataSeries(ChartDataType.AlgorithmDistribution, StatField.ExecutionTime);
-                guiChart.DataSeries = dataSeries;
+                //guiChart.DataSeries = dataSeries;
 
-                //for (int i = 0; i < stats.DataSeries.Count; i++)
-                //    guiChart.DataSeries.Add(Experiment.GetCoordinates(stats[i], StatField.ExecutionTime));
+                ////for (int i = 0; i < stats.DataSeries.Count; i++)
+                ////    guiChart.DataSeries.Add(Experiment.GetCoordinates(stats[i], StatField.ExecutionTime));
 
-                guiChart.AxisXIntervalWidth = result.Params.Step;
-                guiChart.AxisXMin = result.Params.MinN;
-                guiChart.Refresh();
+                //guiChart.AxisXIntervalWidth = result.Params.Step;
+                //guiChart.AxisXMin = result.Params.MinN;
+                //guiChart.Refresh();
 
                 res = dataSeries;
                 expRes = result;
@@ -220,14 +221,14 @@ namespace MR.BinPacking.App
                     Repeat = 1
                 };
 
-                //prms.Algorithms.Add(Algorithm.NextFit);
+                prms.Algorithms.Add(Algorithm.NextFit);
                 prms.Algorithms.Add(Algorithm.FirstFit);
-                prms.Algorithms.Add(Algorithm.BestFit);
+                //prms.Algorithms.Add(Algorithm.BestFit);
                 prms.Algorithms.Add(Algorithm.BestFitDecreasing);
 
-                //prms.Algs.Add(new NextFit() { IsPresentation = false });
+                prms.Algs.Add(new NextFit() { IsPresentation = false });
                 prms.Algs.Add(new FirstFit() { IsPresentation = false });
-                prms.Algs.Add(new BestFit() { IsPresentation = false });
+                //prms.Algs.Add(new BestFit() { IsPresentation = false });
                 prms.Algs.Add(new BestFitDecreasing() { IsPresentation = false });
 
                 prms.Distributions.Add(Distribution.Uniform);
