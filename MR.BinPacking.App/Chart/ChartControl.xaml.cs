@@ -17,7 +17,7 @@ using MR.BinPacking.Library.Experiment;
 using MR.BinPacking.Library.Utils;
 using MR.BinPacking.Library.Algorithms;
 
-namespace MR.BinPacking.App.Controls
+namespace MR.BinPacking.App.Chart
 {
     public enum ChartType { Bars, Lines, Points };
 
@@ -31,12 +31,13 @@ namespace MR.BinPacking.App.Controls
             InitializeComponent();
         }
 
+        private SolidColorBrush[] brushes = { Brushes.YellowGreen, Brushes.OrangeRed, Brushes.Purple, Brushes.RoyalBlue, Brushes.Plum, Brushes.Red };
+
         public ExperimentResult DataSource { get; set; }
         public List<DataSerie> DataSeries;
 
         double AxisYMax = 0.0;
         int AxisYIntervals = 10;
-
         public double AxisXMin = 0;
         public int AxisXIntervalWidth = 1;
 
@@ -50,7 +51,7 @@ namespace MR.BinPacking.App.Controls
         const double chartOffsetY = 40;
 
 
-        public double ConvertX(double x)
+        private double ConvertX(double x)
         {
             int count = DataSeries[0].Points.Count;
             if (chartType == ChartType.Bars)
@@ -61,7 +62,7 @@ namespace MR.BinPacking.App.Controls
             return chartOffsetX + chartWidth * x / count;
         }
 
-        public double ConvertY(double y)
+        private double ConvertY(double y)
         {
             double h;
             if (logScale)
@@ -73,7 +74,7 @@ namespace MR.BinPacking.App.Controls
             return chartOffsetY + chartHeight * (1 - h);
         }
 
-        public void DrawRect(double x, double y, Brush brush, int number, int count, string name)
+        private void DrawRect(double x, double y, Brush brush, int number, int count, string name)
         {
             double barWidth = 0.9 * AxisXIntervalWidth / count;
             double barOffset = 0.05 * AxisXIntervalWidth + number * barWidth;
@@ -100,7 +101,7 @@ namespace MR.BinPacking.App.Controls
             Canvas.Children.Add(rect);
         }
 
-        public void DrawPoint(double x, double y, Brush brush, string name)
+        private void DrawPoint(double x, double y, Brush brush, string name)
         {
             double newX = ConvertX(x);
             double newY = ConvertY(y);
@@ -120,75 +121,7 @@ namespace MR.BinPacking.App.Controls
             Canvas.Children.Add(ellipse);
         }
 
-        private SolidColorBrush[] brushes = { Brushes.YellowGreen, Brushes.OrangeRed, Brushes.Purple, Brushes.RoyalBlue, Brushes.Red };
-
-        public void Refresh()
-        {
-            Canvas.Children.Clear();
-            AxisYMax = 0.01;
-
-            foreach (var series in DataSeries)
-            {
-                if (logScale)
-                    AxisYMax = Math.Max(AxisYMax, series.Points.Select(p => Math.Log(Math.Max(p.Y, 1), 2)).Max());
-                else
-                    AxisYMax = Math.Max(AxisYMax, series.Points.Select(p => p.Y).Max());
-            }
-
-            //int factor = 1;
-            //while (AxisYMax > 1.0)
-            //{
-            //    AxisYMax /= 10.0;
-            //    factor *= 10;
-            //}
-            //AxisYMax = factor;
-
-            chartWidth = Canvas.ActualWidth - 2 * chartOffsetX;
-            chartHeight = Canvas.ActualHeight - 2 * chartOffsetY;
-
-            for (int i = 0; i < DataSeries.Count; i++)
-            {
-                Brush brush;
-                if (i < brushes.Length)
-                    brush = brushes[i];
-                else
-                    brush = brushes.Last();
-
-                for (int j = 0; j < DataSeries[i].Points.Count; j++)
-                {
-                    if (chartType != ChartType.Bars)
-                    {
-                        if ((chartType == ChartType.Lines) && (j > 0))
-                        {
-                            Line newLine = new Line()
-                            {
-                                X1 = ConvertX(DataSeries[i].Points[j - 1].X),
-                                X2 = ConvertX(DataSeries[i].Points[j].X),
-                                Y1 = ConvertY(DataSeries[i].Points[j - 1].Y),
-                                Y2 = ConvertY(DataSeries[i].Points[j].Y),
-                                Stroke = brush,
-                                StrokeThickness = 2.0,
-                                ToolTip = DataSeries[i].Name
-                            };
-                            Canvas.Children.Add(newLine);
-                        }
-
-                        DrawPoint(DataSeries[i].Points[j].X, DataSeries[i].Points[j].Y, brush, DataSeries[i].Name);
-                    }
-                    else
-                    {
-                        DrawRect(DataSeries[i].Points[j].X, DataSeries[i].Points[j].Y, brush, i, DataSeries.Count, DataSeries[i].Name);
-                    }
-                }
-            }
-
-            DrawFunction();
-
-            DrawXAxis();
-            DrawYAxis();
-        }
-
-        public void DrawFunction()
+        private void DrawFunction()
         {
             double X = AxisXMin;
             //double Y = Math.Log(X, 2);
@@ -224,7 +157,6 @@ namespace MR.BinPacking.App.Controls
                     break;
             }
 
-
             myPathFigure.Segments = myPathSegmentCollection;
             PathFigureCollection myPathFigureCollection = new PathFigureCollection();
             myPathFigureCollection.Add(myPathFigure);
@@ -240,7 +172,7 @@ namespace MR.BinPacking.App.Controls
         }
 
 
-        public void DrawXAxis()
+        private void DrawXAxis()
         {
             double Y = Canvas.ActualHeight - chartOffsetY;
 
@@ -300,7 +232,7 @@ namespace MR.BinPacking.App.Controls
             }
         }
 
-        public void DrawYAxis()
+        private void DrawYAxis()
         {
             //axis line
             Line axisY = new Line()
@@ -372,11 +304,12 @@ namespace MR.BinPacking.App.Controls
 
             if (DataSource != null)
             {
-                DataSeries = DataSource.GetDataSeries(chartDataType, fieldType);
+                DataSeries = GetDataSeries(chartDataType, fieldType);
                 AxisXIntervalWidth = DataSource.Params.Step;
                 AxisXMin = DataSource.Params.MinN;
 
-                Refresh();
+                RefreshChart();
+                lbLegend.ItemsSource = DataSeries;
             }
         }
 
@@ -386,11 +319,12 @@ namespace MR.BinPacking.App.Controls
 
             if (DataSource != null)
             {
-                DataSeries = DataSource.GetDataSeries(chartDataType, fieldType);
+                DataSeries = GetDataSeries(chartDataType, fieldType);
                 AxisXIntervalWidth = DataSource.Params.Step;
                 AxisXMin = DataSource.Params.MinN;
 
-                Refresh();
+                RefreshChart();
+                lbLegend.ItemsSource = DataSeries;
             }
         }
 
@@ -412,7 +346,7 @@ namespace MR.BinPacking.App.Controls
                     break;
             }
 
-            Refresh();
+            RefreshChart();
         }
 
         private void bScale_Click(object sender, RoutedEventArgs e)
@@ -424,7 +358,7 @@ namespace MR.BinPacking.App.Controls
             else
                 bScale.Content = "liniowa";
 
-            Refresh();
+            RefreshChart();
         }
 
 
@@ -465,6 +399,230 @@ namespace MR.BinPacking.App.Controls
             cbField.Items.Add(item);
 
             cbField.SelectedIndex = 0;
+        }
+
+        public void RefreshChart()
+        {
+            Canvas.Children.Clear();
+            AxisYMax = 0.01;
+
+            foreach (var series in DataSeries)
+            {
+                if (logScale)
+                    AxisYMax = Math.Max(AxisYMax, series.Points.Select(p => Math.Log(Math.Max(p.Y, 1), 2)).Max());
+                else
+                    AxisYMax = Math.Max(AxisYMax, series.Points.Select(p => p.Y).Max());
+            }
+
+            //int factor = 1;
+            //while (AxisYMax > 1.0)
+            //{
+            //    AxisYMax /= 10.0;
+            //    factor *= 10;
+            //}
+            //AxisYMax = factor;
+
+            chartWidth = Canvas.ActualWidth - 2 * chartOffsetX;
+            chartHeight = Canvas.ActualHeight - 2 * chartOffsetY;
+
+            for (int i = 0; i < DataSeries.Count; i++)
+            {
+                for (int j = 0; j < DataSeries[i].Points.Count; j++)
+                {
+                    if (chartType != ChartType.Bars)
+                    {
+                        if ((chartType == ChartType.Lines) && (j > 0))
+                        {
+                            Line newLine = new Line()
+                            {
+                                X1 = ConvertX(DataSeries[i].Points[j - 1].X),
+                                X2 = ConvertX(DataSeries[i].Points[j].X),
+                                Y1 = ConvertY(DataSeries[i].Points[j - 1].Y),
+                                Y2 = ConvertY(DataSeries[i].Points[j].Y),
+                                Stroke = DataSeries[i].Color,
+                                StrokeThickness = 2.0,
+                                ToolTip = DataSeries[i].Name
+                            };
+                            Canvas.Children.Add(newLine);
+                        }
+
+                        DrawPoint(DataSeries[i].Points[j].X, DataSeries[i].Points[j].Y, DataSeries[i].Color, DataSeries[i].Name);
+                    }
+                    else
+                    {
+                        DrawRect(DataSeries[i].Points[j].X, DataSeries[i].Points[j].Y, DataSeries[i].Color, i, DataSeries.Count, DataSeries[i].Name);
+                    }
+                }
+            }
+
+            DrawFunction();
+
+            DrawXAxis();
+            DrawYAxis();
+        }
+
+        private void RefreshTable()
+        {
+            gTable.Children.Clear();
+            gTable.RowDefinitions.Clear();
+            gTable.ColumnDefinitions.Clear();
+
+            for (int i = 0; i < DataSeries.Count + 1; i++)
+            {
+                gTable.RowDefinitions.Add(new RowDefinition());
+
+                for (int j = 0; j < DataSeries[0].Points.Count + 1; j++)
+                {
+                    Border border = new Border()
+                    {
+                        BorderBrush = Brushes.Black
+                    };
+
+                    TextBlock textBlock = new TextBlock();
+                    textBlock.Margin = new Thickness(2.0);
+                    border.Child = textBlock;
+
+                    if (i == 0)
+                    {
+                        gTable.ColumnDefinitions.Add(new ColumnDefinition() { MaxWidth = 100.0 });
+                        border.BorderThickness = new Thickness(2.0);
+                        textBlock.FontWeight = FontWeights.Bold;
+
+                        if (j == 0)
+                        {
+                            gTable.ColumnDefinitions.Last().Width = new GridLength(1.0, GridUnitType.Auto);
+                            textBlock.Text = "Seria danych \\ N";
+                        }
+                        else
+                        {
+                            int N = DataSource.Params.MinN + (j - 1) * DataSource.Params.Step;
+                            textBlock.Text = N.ToString();
+                            textBlock.HorizontalAlignment = HorizontalAlignment.Right;
+                        }
+                    }
+                    else
+                    {
+                        if (j == 0)
+                        {
+                            border.BorderThickness = new Thickness(2.0);
+                            textBlock.FontWeight = FontWeights.Bold;
+                            textBlock.Text = DataSeries[i - 1].Name;
+                        }
+                        else
+                        {
+                            border.BorderThickness = new Thickness(1.0);
+                            textBlock.Text = DataSeries[i - 1].Points[j - 1].Y.ToString();
+                            textBlock.HorizontalAlignment = HorizontalAlignment.Right;
+                        }
+                    }
+
+                    Grid.SetRow(border, i);
+                    Grid.SetColumn(border, j);
+                    gTable.Children.Add(border);
+                }
+            }
+
+            RefreshChart();
+        }
+
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            RefreshTable();
+        }
+
+        private Sample GetAvg(IGrouping<int, Sample> group)
+        {
+            Sample first = group.First();
+
+            Sample avgSample = new Sample()
+            {
+                ID = first.ID,
+                Algorithm = first.Algorithm,
+                Distribution = first.Distribution,
+                N = first.N,
+                Sorting = first.Sorting,
+                ExecutionTime = group.Sum(s => s.ExecutionTime) / group.Count(),
+                LowerBound = (int)Math.Ceiling(group.Average(s => s.LowerBound)),
+                Result = (int)Math.Ceiling(group.Average(s => s.Result)),
+                StrongerLowerBound = (int)Math.Ceiling(group.Average(s => s.StrongerLowerBound))
+            };
+
+            return avgSample;
+        }
+
+        private IEnumerable<Sample> GetAvgSamples()
+        {
+            return from s in DataSource.Samples
+                   group s by s.ID % (DataSource.Samples.Count / DataSource.Params.Repeat) into g
+                   select GetAvg(g);
+        }
+
+        private object GetGroupingKey(Sample sample, ChartDataType type)
+        {
+            switch (type)
+            {
+                case ChartDataType.Distribution:
+                    return sample.Distribution;
+                case ChartDataType.Sorting:
+                    return sample.Sorting;
+                case ChartDataType.AlgorithmDistribution:
+                    return new { sample.Algorithm, sample.Distribution };
+                case ChartDataType.AlgorithmSorting:
+                    return new { sample.Algorithm, sample.Sorting };
+                case ChartDataType.DistributionSorting:
+                    return new { sample.Distribution, sample.Sorting };
+                default:
+                    return sample.Algorithm;
+            }
+        }
+
+        private string GetSerieName(IEnumerable<Sample> serie, ChartDataType type)
+        {
+            Sample first = serie.First();
+            switch (type)
+            {
+                case ChartDataType.Distribution:
+                    return first.Distribution.ToString();
+                case ChartDataType.Sorting:
+                    return first.Sorting.ToString();
+                case ChartDataType.AlgorithmDistribution:
+                    return first.Algorithm.ToString() + ", " + first.Distribution.ToString();
+                case ChartDataType.AlgorithmSorting:
+                    return first.Algorithm.ToString() + ", " + first.Sorting.ToString();
+                case ChartDataType.DistributionSorting:
+                    return first.Distribution.ToString() + ", " + first.Sorting.ToString();
+                default:
+                    return first.Algorithm.ToString();
+            }
+        }
+
+        private List<DataSerie> GetDataSeries(ChartDataType type, StatField field)
+        {
+            IEnumerable<Sample> avgSamples = GetAvgSamples();
+
+            var rawSeries = from s in avgSamples
+                            group s by GetGroupingKey(s, type) into g
+                            select (from n in g
+                                    group n by n.N into ng
+                                    select GetAvg(ng));
+
+
+
+            List<DataSerie> result = new List<DataSerie>();
+            for (int i = 0; i < rawSeries.Count(); i++)
+            {
+                IEnumerable<Sample> serie = rawSeries.ElementAt(i);
+                DataSerie newSerie = new DataSerie()
+                {
+                    Color = brushes[i % brushes.Length],
+                    Name = GetSerieName(serie, type),
+                    Points = serie.Select(r => new Point2D(r.N, r[field])).ToList()
+                };
+
+                result.Add(newSerie);
+            }
+
+            return result;
         }
     }
 }
