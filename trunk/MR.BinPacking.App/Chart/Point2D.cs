@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MR.BinPacking.Library.Experiment
+namespace MR.BinPacking.App.Chart
 {
     public class Point2D
     {

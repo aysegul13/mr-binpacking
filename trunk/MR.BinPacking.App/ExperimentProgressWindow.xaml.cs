@@ -19,6 +19,7 @@ using MR.BinPacking.Library;
 using MR.BinPacking.Library.Algorithms;
 using System.IO;
 using Microsoft.Win32;
+using MR.BinPacking.App.Controls;
 
 namespace MR.BinPacking.App
 {
@@ -176,23 +177,14 @@ namespace MR.BinPacking.App
             if (!e.Cancelled && (e.Error == null))
             {
                 ExperimentResult result = e.Result as ExperimentResult;
-                //result.GetDataSeries();
-
-
                 guiChart.DataSource = result;
 
-                List<DataSerie> dataSeries = result.GetDataSeries(ChartDataType.AlgorithmDistribution, StatField.ExecutionTime);
-                //guiChart.DataSeries = dataSeries;
+                //List<DataSerie> dataSeries = result.GetDataSeries(ChartDataType.AlgorithmDistribution, StatField.ExecutionTime);
+                //res = dataSeries;
+                //expRes = result;
 
-                ////for (int i = 0; i < stats.DataSeries.Count; i++)
-                ////    guiChart.DataSeries.Add(Experiment.GetCoordinates(stats[i], StatField.ExecutionTime));
-
-                //guiChart.AxisXIntervalWidth = result.Params.Step;
-                //guiChart.AxisXMin = result.Params.MinN;
-                //guiChart.Refresh();
-
-                res = dataSeries;
-                expRes = result;
+                spExperimentProgress.Visibility = Visibility.Collapsed;
+                guiChart.Visibility = Visibility.Visible;
             }
         }
 
@@ -241,141 +233,83 @@ namespace MR.BinPacking.App
             }
         }
 
-        private string GetTableName(ChartDataType type, StatField field)
-        {
-            string name = "";
-            switch (type)
-            {
-                case ChartDataType.Distribution:
-                    name = "PORÓWNANIE ROZKŁADÓW";
-                    break;
-                case ChartDataType.Sorting:
-                    name = "PORÓWNANIE SORTOWANIA";
-                    break;
-                case ChartDataType.AlgorithmDistribution:
-                    name = "PORÓWNANIE ALGORYTMÓW I ROZKŁADÓW";
-                    break;
-                case ChartDataType.AlgorithmSorting:
-                    name = "PORÓWNANIE ALGORYTMÓW I SORTOWANIA";
-                    break;
-                case ChartDataType.DistributionSorting:
-                    name = "PORÓWNANIE ROZKŁADÓW I SORTOWANIA";
-                    break;
-                default:
-                    name = "PORÓWNANIE ALGORYTMÓW";
-                    break;
-            }
+        //private string GetTableName(ChartDataType type, StatField field)
+        //{
+        //    string name = "";
+        //    switch (type)
+        //    {
+        //        case ChartDataType.Distribution:
+        //            name = "PORÓWNANIE ROZKŁADÓW";
+        //            break;
+        //        case ChartDataType.Sorting:
+        //            name = "PORÓWNANIE SORTOWANIA";
+        //            break;
+        //        case ChartDataType.AlgorithmDistribution:
+        //            name = "PORÓWNANIE ALGORYTMÓW I ROZKŁADÓW";
+        //            break;
+        //        case ChartDataType.AlgorithmSorting:
+        //            name = "PORÓWNANIE ALGORYTMÓW I SORTOWANIA";
+        //            break;
+        //        case ChartDataType.DistributionSorting:
+        //            name = "PORÓWNANIE ROZKŁADÓW I SORTOWANIA";
+        //            break;
+        //        default:
+        //            name = "PORÓWNANIE ALGORYTMÓW";
+        //            break;
+        //    }
 
-            name += " - ";
+        //    name += " - ";
 
-            switch (field)
-            {
-                case StatField.LowerBound:
-                    return name + "dolne ograniczenie [liczba elementów]";
-                case StatField.StrongerLowerBound:
-                    return name + "silniejsze dolne ograniczenie [liczba elementów]";
-                case StatField.Result:
-                    return name + "wynik [liczba elementów]";
-                default:
-                    return name + "czas działania [ms]";
-            }
-        }
+        //    switch (field)
+        //    {
+        //        case StatField.LowerBound:
+        //            return name + "dolne ograniczenie [liczba elementów]";
+        //        case StatField.StrongerLowerBound:
+        //            return name + "silniejsze dolne ograniczenie [liczba elementów]";
+        //        case StatField.Result:
+        //            return name + "wynik [liczba elementów]";
+        //        default:
+        //            return name + "czas działania [ms]";
+        //    }
+        //}
 
-        List<DataSerie> res;
-        ExperimentResult expRes;
-        private void bTable_Click(object sender, RoutedEventArgs e)
-        {
-            for (int i = 0; i < res.Count + 1; i++)
-            {
-                gTable.RowDefinitions.Add(new RowDefinition());
+        //List<DataSerie> res;
+        //ExperimentResult expRes;
 
-                for (int j = 0; j < res[0].Points.Count + 1; j++)
-                {
-                    Border border = new Border()
-                    {
-                        BorderBrush = Brushes.Black
-                    };
+        //public void SaveResultsToFile(ChartDataType type, StatField field, string filename)
+        //{
+        //    using (StreamWriter sw = new StreamWriter(filename))
+        //    {
+        //        sw.WriteLine(GetTableName(type, field) + ";");
 
-                    TextBlock textBlock = new TextBlock();
-                    border.Child = textBlock;
+        //        for (int i = 0; i < res.Count + 1; i++)
+        //        {
+        //            for (int j = 0; j < res[0].Points.Count; j++)
+        //            {
+        //                if (i == 0)
+        //                {
+        //                    if (j == 0)
+        //                    {
+        //                        sw.Write("Seria danych \\ N;");
+        //                    }
+        //                    else
+        //                    {
+        //                        int N = expRes.Params.MinN + (j - 1) * expRes.Params.Step;
+        //                        sw.Write(N + ";");
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    if (j == 0)
+        //                        sw.Write(res[i - 1].Name + ";");
+        //                    else
+        //                        sw.Write(res[i - 1].Points[j - 1].Y + ";");
+        //                }
+        //            }
 
-                    if (i == 0)
-                    {
-                        gTable.ColumnDefinitions.Add(new ColumnDefinition());
-                        border.BorderThickness = new Thickness(2.0);
-                        textBlock.FontWeight = FontWeights.Bold;
-
-                        if (j == 0)
-                        {
-                            gTable.ColumnDefinitions.Last().Width = new GridLength(1.0, GridUnitType.Auto);
-                            textBlock.Text = "Seria danych \\ N";
-                        }
-                        else
-                        {
-                            int N = expRes.Params.MinN + (j - 1) * expRes.Params.Step;
-                            textBlock.Text = N.ToString();
-                        }
-                    }
-                    else
-                    {
-                        if (j == 0)
-                        {
-                            border.BorderThickness = new Thickness(2.0);
-                            textBlock.FontWeight = FontWeights.Bold;
-                            textBlock.Text = res[i - 1].Name;
-                        }
-                        else
-                        {
-                            border.BorderThickness = new Thickness(1.0);
-                            textBlock.Text = res[i - 1].Points[j - 1].Y.ToString();
-                        }
-                    }
-
-                    Grid.SetRow(border, i);
-                    Grid.SetColumn(border, j);
-                    gTable.Children.Add(border);
-                }
-            }
-
-            SaveFileDialog saveDialog = new SaveFileDialog();
-            if (saveDialog.ShowDialog() == true)
-                SaveResultsToFile(ChartDataType.AlgorithmDistribution, StatField.ExecutionTime, saveDialog.FileName);
-        }
-
-        public void SaveResultsToFile(ChartDataType type, StatField field, string filename)
-        {
-            using (StreamWriter sw = new StreamWriter(filename))
-            {
-                sw.WriteLine(GetTableName(type, field) + ";");
-
-                for (int i = 0; i < res.Count + 1; i++)
-                {
-                    for (int j = 0; j < res[0].Points.Count; j++)
-                    {
-                        if (i == 0)
-                        {
-                            if (j == 0)
-                            {
-                                sw.Write("Seria danych \\ N;");
-                            }
-                            else
-                            {
-                                int N = expRes.Params.MinN + (j - 1) * expRes.Params.Step;
-                                sw.Write(N + ";");
-                            }
-                        }
-                        else
-                        {
-                            if (j == 0)
-                                sw.Write(res[i - 1].Name + ";");
-                            else
-                                sw.Write(res[i - 1].Points[j - 1].Y + ";");
-                        }
-                    }
-
-                    sw.WriteLine();
-                }
-            }
-        }
+        //            sw.WriteLine();
+        //        }
+        //    }
+        //}
     }
 }

@@ -50,25 +50,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\ChartControl.xaml.cs">
+    <Compile Include="Chart\ChartControl.xaml.cs">
       <DependentUpon>ChartControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Chart\ChartDataType.cs" />
+    <Compile Include="Chart\DataSerie.cs" />
     <Compile Include="Controls\NumberTextBox.cs" />
+    <Compile Include="Chart\Point2D.cs" />
     <Compile Include="ExperimentProgressWindow.xaml.cs">
       <DependentUpon>ExperimentProgressWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PreviewWindow.xaml.cs">
       <DependentUpon>PreviewWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TestWindow.xaml.cs">
-      <DependentUpon>TestWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utils\Loader.cs" />
     <Page Include="Controls\BinControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ChartControl.xaml">
+    <Page Include="Chart\ChartControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -108,10 +108,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PreviewWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TestWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

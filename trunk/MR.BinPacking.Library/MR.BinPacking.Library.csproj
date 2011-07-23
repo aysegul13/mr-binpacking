@@ -37,7 +37,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithms\AAS.cs" />
     <Compile Include="Base\Bin.cs" />
     <Compile Include="Base\ListAlgorithm.cs" />
     <Compile Include="Base\Instance.cs" />
@@ -49,9 +48,8 @@
     <Compile Include="Experiment\ExperimentParams.cs" />
     <Compile Include="Experiment\ExperimentResult.cs" />
     <Compile Include="Experiment\ExperimentState.cs" />
-    <Compile Include="Experiment\Point2D.cs" />
     <Compile Include="Experiment\StatField.cs" />
-    <Compile Include="Experiment\Statistics.cs" />
+    <Compile Include="Experiment\Sample.cs" />
     <Compile Include="Algorithms\FirstFit.cs" />
     <Compile Include="Algorithms\FirstFitDecreasing.cs" />
     <Compile Include="Utils\Generator.cs" />
