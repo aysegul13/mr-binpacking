@@ -27,14 +27,10 @@
             <ComboBox x:Name="cbField" MinWidth="100" Margin="2,4" SelectedValuePath="Tag" SelectionChanged="cbField_SelectionChanged"/>
             <Button x:Name="bType" MinWidth="75" Content="słupkowy" Margin="2,4" Click="bType_Click"/>
             <Button x:Name="bScale" MinWidth="75" Content="liniowa" Margin="2,4" Click="bScale_Click"/>
+            <Button x:Name="bSaveImg" MinWidth="75" Content="zapisz" Margin="2,4" Click="bSaveImg_Click"/>
         </StackPanel>
         <ScrollViewer x:Name="svScroll" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Canvas x:Name="Canvas" Background="White">
-                <!--<Line X1="60" Y1="20" X2="60" Y2="265" Style="{StaticResource axisStyle}"/>
-                <Line X1="55" Y1="260" X2="480" Y2="260" Style="{StaticResource axisStyle}"/>
-                <Line X1="100" Y1="260" X2="100" Y2="265" Style="{StaticResource axisStyle}"/>
-                <Label Canvas.Left="60" Canvas.Top="260" Width="40" Content="10" FontWeight="Bold" HorizontalContentAlignment="Center"/>-->
-            </Canvas>
+            <Canvas x:Name="Canvas" Background="White"/>
         </ScrollViewer>
         <Expander Grid.Row="1" Grid.Column="1" ExpandDirection="Left" IsExpanded="True">
             <ListBox x:Name="lbLegend" MinWidth="120">
