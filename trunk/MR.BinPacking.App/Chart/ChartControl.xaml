@@ -50,7 +50,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <CheckBox Content="{Binding Name}" MinWidth="80" Margin="4,2,2,2" IsChecked="{Binding Visible}" />
+                            <CheckBox Content="{Binding Name}" MinWidth="80" Margin="4,2,2,2" IsChecked="{Binding Visible}" Checked="CheckBox_CheckedChanged" Unchecked="CheckBox_CheckedChanged" />
                             <Rectangle Grid.Column="1" Fill="{Binding Color}" Width="12" Height="12" Margin="2,2,4,2" Stroke="Gray" HorizontalAlignment="Right"/>
                         </Grid>
                     </DataTemplate>

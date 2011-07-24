@@ -406,7 +406,8 @@ namespace MR.BinPacking.App.Chart
             Canvas.Children.Clear();
             AxisYMax = 0.01;
 
-            foreach (var series in DataSeries)
+            IEnumerable<DataSerie> VisibleDS = DataSeries.Where(ds => ds.Visible == true);
+            foreach (var series in VisibleDS)
             {
                 if (logScale)
                     AxisYMax = Math.Max(AxisYMax, series.Points.Select(p => Math.Log(Math.Max(p.Y, 1), 2)).Max());
@@ -425,9 +426,10 @@ namespace MR.BinPacking.App.Chart
             chartWidth = Canvas.ActualWidth - 2 * chartOffsetX;
             chartHeight = Canvas.ActualHeight - 2 * chartOffsetY;
 
-            for (int i = 0; i < DataSeries.Count; i++)
+            for (int i = 0; i < VisibleDS.Count(); i++)
             {
-                for (int j = 0; j < DataSeries[i].Points.Count; j++)
+                DataSerie serie = VisibleDS.ElementAt(i);
+                for (int j = 0; j < serie.Points.Count; j++)
                 {
                     if (chartType != ChartType.Bars)
                     {
@@ -435,22 +437,22 @@ namespace MR.BinPacking.App.Chart
                         {
                             Line newLine = new Line()
                             {
-                                X1 = ConvertX(DataSeries[i].Points[j - 1].X),
-                                X2 = ConvertX(DataSeries[i].Points[j].X),
-                                Y1 = ConvertY(DataSeries[i].Points[j - 1].Y),
-                                Y2 = ConvertY(DataSeries[i].Points[j].Y),
-                                Stroke = DataSeries[i].Color,
+                                X1 = ConvertX(serie.Points[j - 1].X),
+                                X2 = ConvertX(serie.Points[j].X),
+                                Y1 = ConvertY(serie.Points[j - 1].Y),
+                                Y2 = ConvertY(serie.Points[j].Y),
+                                Stroke = serie.Color,
                                 StrokeThickness = 2.0,
-                                ToolTip = DataSeries[i].Name
+                                ToolTip = serie.Name
                             };
                             Canvas.Children.Add(newLine);
                         }
 
-                        DrawPoint(DataSeries[i].Points[j].X, DataSeries[i].Points[j].Y, DataSeries[i].Color, DataSeries[i].Name);
+                        DrawPoint(serie.Points[j].X, serie.Points[j].Y, serie.Color, serie.Name);
                     }
                     else
                     {
-                        DrawRect(DataSeries[i].Points[j].X, DataSeries[i].Points[j].Y, DataSeries[i].Color, i, DataSeries.Count, DataSeries[i].Name);
+                        DrawRect(serie.Points[j].X, serie.Points[j].Y, serie.Color, i, VisibleDS.Count(), serie.Name);
                     }
                 }
             }
@@ -623,6 +625,11 @@ namespace MR.BinPacking.App.Chart
             }
 
             return result;
+        }
+
+        private void CheckBox_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            RefreshChart();
         }
     }
 }
