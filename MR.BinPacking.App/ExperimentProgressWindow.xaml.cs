@@ -49,27 +49,6 @@ namespace MR.BinPacking.App
             bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
             bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
             bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-
-            //ExperimentParams prms = new ExperimentParams()
-            //{
-            //    Algorithms = new List<ListAlgorithm>(),
-            //    BinSize = 100,
-            //    Dist = Distribution.Uniform,
-            //    MinN = 100,
-            //    MaxN = 1000,
-            //    Step = 100,
-            //    MinVal = 0.0,
-            //    MaxVal = 1.0,
-            //    Repeat = 2
-            //};
-
-            //prms.Algorithms.Add(new BestFitDecreasing() { IsPresentation = false });
-            //prms.Algorithms.Add(new BestFit() { IsPresentation = false });
-
-
-            //DataSeries = new List<List<Point2D>>();
-
-            //ExperimentResult stats = Experiment.ExecuteExperiment(prms);
         }
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
@@ -185,6 +164,9 @@ namespace MR.BinPacking.App
 
                 spExperimentProgress.Visibility = Visibility.Collapsed;
                 guiChart.Visibility = Visibility.Visible;
+
+                this.Width = 600;
+                this.Height = 450;
             }
         }
 
@@ -205,23 +187,23 @@ namespace MR.BinPacking.App
                     BinSize = 100,
                     Distributions = new List<Distribution>(),
                     Sortings = new List<Sorting>(),
-                    MinN = 500,
+                    MinN = 100,
                     MaxN = 1000,
-                    Step = 100,
+                    Step = 10,
                     MinVal = 0.0,
                     MaxVal = 1.0,
                     Repeat = 1
                 };
 
                 prms.Algorithms.Add(Algorithm.NextFit);
-                prms.Algorithms.Add(Algorithm.FirstFit);
+                //prms.Algorithms.Add(Algorithm.FirstFit);
                 //prms.Algorithms.Add(Algorithm.BestFit);
-                prms.Algorithms.Add(Algorithm.BestFitDecreasing);
+                //prms.Algorithms.Add(Algorithm.BestFitDecreasing);
 
                 prms.Algs.Add(new NextFit() { IsPresentation = false });
-                prms.Algs.Add(new FirstFit() { IsPresentation = false });
+                //prms.Algs.Add(new FirstFit() { IsPresentation = false });
                 //prms.Algs.Add(new BestFit() { IsPresentation = false });
-                prms.Algs.Add(new BestFitDecreasing() { IsPresentation = false });
+                //prms.Algs.Add(new BestFitDecreasing() { IsPresentation = false });
 
                 prms.Distributions.Add(Distribution.Uniform);
                 prms.Distributions.Add(Distribution.Gauss);

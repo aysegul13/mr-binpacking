@@ -31,15 +31,15 @@ namespace MR.BinPacking.App.Chart
             InitializeComponent();
         }
 
-        private SolidColorBrush[] brushes = { Brushes.YellowGreen, Brushes.OrangeRed, Brushes.Purple, Brushes.RoyalBlue, Brushes.Plum, Brushes.Red };
+        SolidColorBrush[] brushes = { Brushes.YellowGreen, Brushes.OrangeRed, Brushes.Purple, Brushes.RoyalBlue, Brushes.Plum, Brushes.Red };
 
         public ExperimentResult DataSource { get; set; }
         public List<DataSerie> DataSeries;
 
-        double AxisYMax = 0.0;
-        int AxisYIntervals = 10;
-        public double AxisXMin = 0;
-        public int AxisXIntervalWidth = 1;
+        double maxY = 0.0;
+        int intervalsY = 10;
+        double minX = 0;
+        int intervalWidthX = 1;
 
         ChartDataType chartDataType = ChartDataType.Algorithm;
         StatField fieldType = StatField.ExecutionTime;
@@ -47,8 +47,8 @@ namespace MR.BinPacking.App.Chart
         bool logScale = false;
 
         double chartWidth, chartHeight;
-        const double chartOffsetX = 40;
-        const double chartOffsetY = 40;
+        const double offsetX = 50;
+        const double offsetY = 40;
 
 
         private double ConvertX(double x)
@@ -57,73 +57,99 @@ namespace MR.BinPacking.App.Chart
             if (chartType == ChartType.Bars)
                 count++;
 
-            x = (x - AxisXMin) / AxisXIntervalWidth;
+            x = (x - minX) / intervalWidthX;
 
-            return chartOffsetX + chartWidth * x / count;
+            return offsetX + chartWidth * x / count;
         }
 
         private double ConvertY(double y)
         {
             double h;
             if (logScale)
-                h = Math.Log(Math.Max(y, 1), 2) / AxisYMax;
+                h = Math.Log(Math.Max(y, 1), 2) / maxY;
             else
-                h = y / AxisYMax;
+                h = y / maxY;
 
-            h = h * AxisYIntervals / (AxisYIntervals + 1);
-            return chartOffsetY + chartHeight * (1 - h);
+            h = h * intervalsY / (intervalsY + 1);
+            return offsetY + chartHeight * (1 - h);
         }
 
-        private void DrawRect(double x, double y, Brush brush, int number, int count, string name)
+        private void DrawValue(double centerX, double width, double Y, Brush brush, string value)
         {
-            double barWidth = 0.9 * AxisXIntervalWidth / count;
-            double barOffset = 0.05 * AxisXIntervalWidth + number * barWidth;
-
-            double X1 = ConvertX(x + barOffset);
-            double X2 = ConvertX(x + barOffset + barWidth);
-
-            //double X1 = ConvertX(x + 0.1 * AxisXIntervalWidth);
-            //double X2 = ConvertX(x + 0.9 * AxisXIntervalWidth);
-            double Y1 = ConvertY(0);
-            double Y2 = ConvertY(y);
-
-            Rectangle rect = new Rectangle()
+            TextBlock tblValue = new TextBlock()
             {
-                Width = X2 - X1,
-                Height = Y1 - Y2,
-                Fill = brush,
-                ToolTip = String.Format("{0} ({1}; {2})", name, x, y)
+                Width = width,
+                Background = Brushes.Transparent,
+                Foreground = brush,
+                FontWeight = FontWeights.Bold,
+                Text = value,
+                TextAlignment = TextAlignment.Center
             };
-
-            Canvas.SetLeft(rect, X1);
-            Canvas.SetTop(rect, Y2);
-
-            Canvas.Children.Add(rect);
+            Canvas.SetLeft(tblValue, centerX - 0.5 * width);
+            Canvas.SetTop(tblValue, Y);
+            Canvas.Children.Add(tblValue);
         }
 
-        private void DrawPoint(double x, double y, Brush brush, string name)
+        private void DrawPoint(Point2D point, Brush brush, string name)
         {
-            double newX = ConvertX(x);
-            double newY = ConvertY(y);
-            double d = 6;
+            double d = 8;
+
+            double X1 = ConvertX(point.X);
+            double Y1 = ConvertY(point.Y);
+
+            double X2 = ConvertX(point.X + intervalWidthX);
+
 
             Ellipse ellipse = new Ellipse()
             {
                 StrokeThickness = 2,
                 Width = d,
                 Height = d,
+                Fill = brush,
                 Stroke = brush,
-                ToolTip = String.Format("{0} ({1}; {2})", name, x, y)
+                ToolTip = String.Format("{0} ({1}; {2})", name, point.X, point.Y)
             };
 
-            Canvas.SetLeft(ellipse, newX - d / 2);
-            Canvas.SetTop(ellipse, newY - d / 2);
+            Canvas.SetLeft(ellipse, X1 - d / 2);
+            Canvas.SetTop(ellipse, Y1 - d / 2);
             Canvas.Children.Add(ellipse);
+
+            double w = 2.0 * (X2 - X1);
+            if (w >= 40.0)
+                DrawValue(X1, w, Y1 - 20.0, brush, point.Y.ToString());
+        }
+
+        private void DrawRect(Point2D point, Brush brush, int number, int count, string name)
+        {
+            double barWidth = 0.9 * intervalWidthX / count;
+            double barOffset = 0.05 * intervalWidthX + number * barWidth;
+
+            double X1 = ConvertX(point.X + barOffset);
+            double Y1 = ConvertY(0);
+
+            double X2 = ConvertX(point.X + barOffset + barWidth);
+            double Y2 = ConvertY(point.Y);
+
+            Rectangle rect = new Rectangle()
+            {
+                Width = X2 - X1,
+                Height = Y1 - Y2,
+                Fill = brush,
+                ToolTip = String.Format("{0} ({1}; {2})", name, point.X, point.Y)
+            };
+
+            Canvas.SetLeft(rect, X1);
+            Canvas.SetTop(rect, Y2);
+            Canvas.Children.Add(rect);
+
+            double w = 2.0 * (X2 - X1);
+            if (w >= 40.0)
+                DrawValue((X2 + X1) / 2.0, w, Y2 - 20.0, brush, point.Y.ToString());
         }
 
         private void DrawFunction()
         {
-            double X = AxisXMin;
+            double X = minX;
             //double Y = Math.Log(X, 2);
             //double Y = X * X;
             //double Y = Math.Pow(2, X);
@@ -143,7 +169,7 @@ namespace MR.BinPacking.App.Chart
 
             for (int i = 1; i < count; i++)
             {
-                X = AxisXMin + i * AxisXIntervalWidth;
+                X = minX + i * intervalWidthX;
                 //Y = Math.Log(X, 2);
                 //Y = X * X;
                 //Y = Math.Pow(2, X);
@@ -174,13 +200,13 @@ namespace MR.BinPacking.App.Chart
 
         private void DrawXAxis()
         {
-            double Y = Canvas.ActualHeight - chartOffsetY;
+            double Y = Canvas.ActualHeight - offsetY;
 
             //axis line
             Line axisX = new Line()
             {
-                X1 = chartOffsetX,
-                X2 = Canvas.ActualWidth - chartOffsetX,
+                X1 = offsetX,
+                X2 = Canvas.ActualWidth - 0.5 * offsetX,
                 Y1 = Y,
                 Y2 = Y,
                 StrokeThickness = 2,
@@ -191,8 +217,8 @@ namespace MR.BinPacking.App.Chart
             //arrow
             axisX = new Line()
             {
-                X1 = Canvas.ActualWidth - chartOffsetX - 10,
-                X2 = Canvas.ActualWidth - chartOffsetX,
+                X1 = Canvas.ActualWidth - 0.5 * offsetX - 10,
+                X2 = Canvas.ActualWidth - 0.5 * offsetX,
                 Y1 = Y - 5,
                 Y2 = Y,
                 StrokeThickness = 2,
@@ -202,8 +228,8 @@ namespace MR.BinPacking.App.Chart
 
             axisX = new Line()
             {
-                X1 = Canvas.ActualWidth - chartOffsetX - 10,
-                X2 = Canvas.ActualWidth - chartOffsetX,
+                X1 = Canvas.ActualWidth - 0.5 * offsetX - 10,
+                X2 = Canvas.ActualWidth - 0.5 * offsetX,
                 Y1 = Y + 5,
                 Y2 = Y,
                 StrokeThickness = 2,
@@ -211,14 +237,25 @@ namespace MR.BinPacking.App.Chart
             };
             Canvas.Children.Add(axisX);
 
+            TextBlock tblUnitX = new TextBlock()
+            {
+                Text = "N",
+                FontWeight = FontWeights.Bold
+            };
+            Canvas.SetLeft(tblUnitX, Canvas.ActualWidth - 0.5 * offsetX + 10);
+            Canvas.SetTop(tblUnitX, Y + 8);
+            Canvas.Children.Add(tblUnitX);
+
 
             int count = DataSeries[0].Points.Count;
+            int gap = count / 10;
             if (chartType == ChartType.Bars)
                 count++;
 
+            int actGap = gap;
             for (int i = 0; i < count; i++)
             {
-                double X = ConvertX(AxisXMin + i * AxisXIntervalWidth);
+                double X = ConvertX(minX + i * intervalWidthX);
                 Line newLine = new Line()
                 {
                     X1 = X,
@@ -229,6 +266,28 @@ namespace MR.BinPacking.App.Chart
                     Stroke = Brushes.Black
                 };
                 Canvas.Children.Add(newLine);
+
+                if (actGap >= gap)
+                {
+                    //double w = ConvertX(intervalWidthX) - ConvertX(0);
+                    if (chartType == ChartType.Bars)
+                    {
+                        double centerX = ConvertX(minX + (i + 0.5) * intervalWidthX);
+                        if (i < count - 1)
+                            DrawValue(centerX, 40.0, Y + 8, Brushes.Black, DataSeries[0].Points[i].X.ToString());
+                    }
+                    else
+                    {
+                        double centerX = X;
+                        DrawValue(centerX, 40.0, Y + 8, Brushes.Black, DataSeries[0].Points[i].X.ToString());
+                    }
+
+                    actGap = 0;
+                }
+                else
+                {
+                    actGap++;
+                }
             }
         }
 
@@ -237,10 +296,10 @@ namespace MR.BinPacking.App.Chart
             //axis line
             Line axisY = new Line()
             {
-                X1 = chartOffsetX,
-                X2 = chartOffsetX,
-                Y1 = chartOffsetY,
-                Y2 = Canvas.ActualHeight - chartOffsetY,
+                X1 = offsetX,
+                X2 = offsetX,
+                Y1 = offsetY,
+                Y2 = Canvas.ActualHeight - offsetY,
                 StrokeThickness = 2,
                 Stroke = Brushes.Black
             };
@@ -249,10 +308,10 @@ namespace MR.BinPacking.App.Chart
             //arrow
             axisY = new Line()
             {
-                X1 = chartOffsetX - 5,
-                X2 = chartOffsetX,
-                Y1 = chartOffsetY + 10,
-                Y2 = chartOffsetY,
+                X1 = offsetX - 5,
+                X2 = offsetX,
+                Y1 = offsetY + 10,
+                Y2 = offsetY,
                 StrokeThickness = 2,
                 Stroke = Brushes.Black
             };
@@ -260,24 +319,34 @@ namespace MR.BinPacking.App.Chart
 
             axisY = new Line()
             {
-                X1 = chartOffsetX + 5,
-                X2 = chartOffsetX,
-                Y1 = chartOffsetY + 10,
-                Y2 = chartOffsetY,
+                X1 = offsetX + 5,
+                X2 = offsetX,
+                Y1 = offsetY + 10,
+                Y2 = offsetY,
                 StrokeThickness = 2,
                 Stroke = Brushes.Black
             };
             Canvas.Children.Add(axisY);
 
-
-            double h = chartHeight / (AxisYIntervals + 1);
-            for (int i = 0; i < AxisYIntervals + 1; i++)
+            TextBlock tblUnitY = new TextBlock()
             {
-                double Y = Canvas.ActualHeight - chartOffsetY - i * h;
+                Width = offsetX - 8,
+                Text = ((StatField)cbField.SelectedValue).ToString(),
+                FontWeight = FontWeights.Bold,
+                TextAlignment = TextAlignment.Right
+            };
+            Canvas.SetLeft(tblUnitY, 0);
+            Canvas.SetTop(tblUnitY, offsetY - 10.0);
+            Canvas.Children.Add(tblUnitY);
+
+            double h = chartHeight / (intervalsY + 1);
+            for (int i = 0; i < intervalsY + 1; i++)
+            {
+                double Y = Canvas.ActualHeight - offsetY - i * h;
                 Line newLine = new Line()
                 {
-                    X1 = chartOffsetX - 5,
-                    X2 = chartOffsetX,
+                    X1 = offsetX - 5,
+                    X2 = offsetX,
                     Y1 = Y,
                     Y2 = Y,
                     StrokeThickness = 2,
@@ -285,16 +354,18 @@ namespace MR.BinPacking.App.Chart
                 };
                 Canvas.Children.Add(newLine);
 
-                Label newLabel = new Label()
+
+                TextBlock tblAxisVal = new TextBlock()
                 {
-                    Width = chartOffsetX - 5,
-                    FlowDirection = FlowDirection.RightToLeft,
-                    Content = (i * AxisYMax / AxisYIntervals).ToString("0.##"),
-                    Padding = new Thickness(0.0)
+                    Width = offsetX - 8,
+                    Text = (i * maxY / intervalsY).ToString("0.##"),
+                    FontWeight = FontWeights.Bold,
+                    TextAlignment = TextAlignment.Right
                 };
-                Canvas.SetLeft(newLabel, 0);
-                Canvas.SetTop(newLabel, Y);
-                Canvas.Children.Add(newLabel);
+
+                Canvas.SetLeft(tblAxisVal, 0);
+                Canvas.SetTop(tblAxisVal, Y - 10.0);
+                Canvas.Children.Add(tblAxisVal);
             }
         }
 
@@ -305,8 +376,8 @@ namespace MR.BinPacking.App.Chart
             if (DataSource != null)
             {
                 DataSeries = GetDataSeries(chartDataType, fieldType);
-                AxisXIntervalWidth = DataSource.Params.Step;
-                AxisXMin = DataSource.Params.MinN;
+                intervalWidthX = DataSource.Params.Step;
+                minX = DataSource.Params.MinN;
 
                 RefreshChart();
                 lbLegend.ItemsSource = DataSeries;
@@ -320,8 +391,8 @@ namespace MR.BinPacking.App.Chart
             if (DataSource != null)
             {
                 DataSeries = GetDataSeries(chartDataType, fieldType);
-                AxisXIntervalWidth = DataSource.Params.Step;
-                AxisXMin = DataSource.Params.MinN;
+                intervalWidthX = DataSource.Params.Step;
+                minX = DataSource.Params.MinN;
 
                 RefreshChart();
                 lbLegend.ItemsSource = DataSeries;
@@ -404,15 +475,19 @@ namespace MR.BinPacking.App.Chart
         public void RefreshChart()
         {
             Canvas.Children.Clear();
-            AxisYMax = 0.01;
+
+            chartWidth = Canvas.ActualWidth - 1.5 * offsetX;
+            chartHeight = Canvas.ActualHeight - 2 * offsetY;
+
+            maxY = 0.01;
 
             IEnumerable<DataSerie> VisibleDS = DataSeries.Where(ds => ds.Visible == true);
             foreach (var series in VisibleDS)
             {
                 if (logScale)
-                    AxisYMax = Math.Max(AxisYMax, series.Points.Select(p => Math.Log(Math.Max(p.Y, 1), 2)).Max());
+                    maxY = Math.Max(maxY, series.Points.Select(p => Math.Log(Math.Max(p.Y, 1), 2)).Max());
                 else
-                    AxisYMax = Math.Max(AxisYMax, series.Points.Select(p => p.Y).Max());
+                    maxY = Math.Max(maxY, series.Points.Select(p => p.Y).Max());
             }
 
             //int factor = 1;
@@ -422,9 +497,6 @@ namespace MR.BinPacking.App.Chart
             //    factor *= 10;
             //}
             //AxisYMax = factor;
-
-            chartWidth = Canvas.ActualWidth - 2 * chartOffsetX;
-            chartHeight = Canvas.ActualHeight - 2 * chartOffsetY;
 
             for (int i = 0; i < VisibleDS.Count(); i++)
             {
@@ -438,8 +510,8 @@ namespace MR.BinPacking.App.Chart
                             Line newLine = new Line()
                             {
                                 X1 = ConvertX(serie.Points[j - 1].X),
-                                X2 = ConvertX(serie.Points[j].X),
                                 Y1 = ConvertY(serie.Points[j - 1].Y),
+                                X2 = ConvertX(serie.Points[j].X),
                                 Y2 = ConvertY(serie.Points[j].Y),
                                 Stroke = serie.Color,
                                 StrokeThickness = 2.0,
@@ -448,11 +520,11 @@ namespace MR.BinPacking.App.Chart
                             Canvas.Children.Add(newLine);
                         }
 
-                        DrawPoint(serie.Points[j].X, serie.Points[j].Y, serie.Color, serie.Name);
+                        DrawPoint(serie.Points[j], serie.Color, serie.Name);
                     }
                     else
                     {
-                        DrawRect(serie.Points[j].X, serie.Points[j].Y, serie.Color, i, VisibleDS.Count(), serie.Name);
+                        DrawRect(serie.Points[j], serie.Color, i, VisibleDS.Count(), serie.Name);
                     }
                 }
             }
@@ -487,7 +559,7 @@ namespace MR.BinPacking.App.Chart
                     if (i == 0)
                     {
                         gTable.ColumnDefinitions.Add(new ColumnDefinition() { MaxWidth = 100.0 });
-                        border.BorderThickness = new Thickness(2.0);
+                        border.BorderThickness = new Thickness(1.0);
                         textBlock.FontWeight = FontWeights.Bold;
 
                         if (j == 0)
@@ -506,13 +578,13 @@ namespace MR.BinPacking.App.Chart
                     {
                         if (j == 0)
                         {
-                            border.BorderThickness = new Thickness(2.0);
+                            border.BorderThickness = new Thickness(1.0);
                             textBlock.FontWeight = FontWeights.Bold;
                             textBlock.Text = DataSeries[i - 1].Name;
                         }
                         else
                         {
-                            border.BorderThickness = new Thickness(1.0);
+                            border.BorderThickness = new Thickness(0.5);
                             textBlock.Text = DataSeries[i - 1].Points[j - 1].Y.ToString();
                             textBlock.HorizontalAlignment = HorizontalAlignment.Right;
                         }
@@ -523,8 +595,6 @@ namespace MR.BinPacking.App.Chart
                     gTable.Children.Add(border);
                 }
             }
-
-            RefreshChart();
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)

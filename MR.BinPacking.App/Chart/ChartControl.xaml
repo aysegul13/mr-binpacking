@@ -37,7 +37,7 @@
             </Canvas>
         </ScrollViewer>
         <Expander Grid.Row="1" Grid.Column="1" ExpandDirection="Left" IsExpanded="True">
-            <ListBox x:Name="lbLegend" MinWidth="80">
+            <ListBox x:Name="lbLegend" MinWidth="120">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
