@@ -187,23 +187,23 @@ namespace MR.BinPacking.App
                     BinSize = 100,
                     Distributions = new List<Distribution>(),
                     Sortings = new List<Sorting>(),
-                    MinN = 100,
+                    MinN = 500,
                     MaxN = 1000,
-                    Step = 10,
+                    Step = 100,
                     MinVal = 0.0,
                     MaxVal = 1.0,
                     Repeat = 1
                 };
 
                 prms.Algorithms.Add(Algorithm.NextFit);
-                //prms.Algorithms.Add(Algorithm.FirstFit);
+                prms.Algorithms.Add(Algorithm.FirstFit);
                 //prms.Algorithms.Add(Algorithm.BestFit);
-                //prms.Algorithms.Add(Algorithm.BestFitDecreasing);
+                prms.Algorithms.Add(Algorithm.BestFitDecreasing);
 
                 prms.Algs.Add(new NextFit() { IsPresentation = false });
-                //prms.Algs.Add(new FirstFit() { IsPresentation = false });
+                prms.Algs.Add(new FirstFit() { IsPresentation = false });
                 //prms.Algs.Add(new BestFit() { IsPresentation = false });
-                //prms.Algs.Add(new BestFitDecreasing() { IsPresentation = false });
+                prms.Algs.Add(new BestFitDecreasing() { IsPresentation = false });
 
                 prms.Distributions.Add(Distribution.Uniform);
                 prms.Distributions.Add(Distribution.Gauss);
