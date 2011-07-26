@@ -341,5 +341,35 @@ namespace MR.BinPacking.App
                     childWindow.Close();
             }
         }
+
+        private void ntbBinSize_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ntbMinValue.MaxValue = ntbMaxValue.MaxValue = Int32.Parse(ntbBinSize.Text);
+        }
+
+        private void ntbMinValue_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (Int32.Parse(ntbMinValue.Text) > Int32.Parse(ntbMaxValue.Text))
+                ntbMinValue.Text = ntbMaxValue.Text;
+        }
+
+        private void ntbMaxValue_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (Int32.Parse(ntbMaxValue.Text) < Int32.Parse(ntbMinValue.Text))
+                ntbMaxValue.Text = ntbMinValue.Text;
+        }
+
+        private void tbElements_LostFocus(object sender, RoutedEventArgs e)
+        {
+            BinSize = Int32.Parse(ntbBinSize.Text);
+            int parse;
+
+            Elements = (from elemStr in tbElements.Text.Split()
+                        where (Int32.TryParse(elemStr, out parse) && (Int32.Parse(elemStr) < BinSize))
+                        select Int32.Parse(elemStr)).ToList();
+
+            RefreshElements();
+            RefreshPreview();
+        }
     }
 }
