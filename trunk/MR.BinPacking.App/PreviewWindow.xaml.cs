@@ -45,46 +45,6 @@ namespace MR.BinPacking.App
         }
 
 
-        public const Int32 WM_EXITSIZEMOVE = 0x0232;
-        private IntPtr WinProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, ref Boolean handled)
-        {
-            IntPtr result = IntPtr.Zero;
-            switch (msg)
-            {
-                case WM_EXITSIZEMOVE:
-                    {
-                        Refresh();
-                        break;
-                    }
-            }
-
-            return result;
-        }
-
-        private void Refresh()
-        {
-            foreach (var child in spResult.Children)
-            {
-                if (child is BinControl)
-                {
-                    BinControl binControl = child as BinControl;
-                    if (binControl.AutoRefresh)
-                        binControl.UpdateSizes();
-                }
-            }
-        }
-
-        protected override void OnSourceInitialized(EventArgs e)
-        {
-            base.OnSourceInitialized(e);
-            HwndSource source = HwndSource.FromVisual(this) as HwndSource;
-            if (source != null)
-            {
-                source.AddHook(new HwndSourceHook(WinProc));
-            }
-        }
-
-
         public void DoWork()
         {
             stopWatch.Reset();
@@ -112,17 +72,14 @@ namespace MR.BinPacking.App
                 bin.Insert(elem);
 
                 BinControl newBin = new BinControl();
-                newBin.AutoRefresh = false;
-                newBin.Bin = bin;
                 newBin.ShowFiller = false;
+                newBin.ShowAsElement = true;
+                newBin.Bin = bin;
 
                 newBin.LayoutTransform = new ScaleTransform(0.8, 0.8);
                 newBin.Border.BorderThickness = new Thickness(0);
                 newBin.Border.Background = Brushes.Transparent;
                 newBin.laFreeSpace.Visibility = Visibility.Collapsed;
-
-                foreach (var elemControl in newBin.DataItems)
-                    elemControl.Border.BorderThickness = new Thickness(3);
 
                 if (previewBins.Count < Elements.Count)
                 {
@@ -152,39 +109,7 @@ namespace MR.BinPacking.App
                 spResult.Children.Add(newBin);
                 algorithmBins.Add(newBin);
 
-                newBin.UpdateSizes();
-
-                #region old
-                //int sum = 0;
-                //foreach (var elem in bin.Elements)
-                //{
-                //    double totalSum = (totalHeight * sum) / bin.Size;
-                //    double rectHeight = (totalHeight * elem) / bin.Size;
-                //    double rectTop = 36 + totalHeight - totalSum - rectHeight;
-
-                //    Rectangle rect = new Rectangle();
-                //    rect.Fill = Brushes.Beige;
-                //    rect.Width = 64 - 8;
-                //    rect.Height = rectHeight;
-
-                //    Canvas.SetTop(rect, rectTop);
-                //    Canvas.SetLeft(rect, 64 * binCnt + 4);
-
-                //    Line line = new Line();
-                //    line.X1 = 64 * binCnt + 4;
-                //    line.X2 = line.X1 + 64 - 8;
-                //    line.Y1 = line.Y2 = rectTop;
-                //    line.StrokeThickness = 3;
-                //    line.Stroke = Brushes.Black;
-
-                //    cnResult.Children.Add(rect);
-                //    cnResult.Children.Add(line);
-
-                //    sum += elem;
-                //}
-
-                //binCnt++;
-                #endregion
+                newBin.UpdateGrid();
             }
 
             UpdateSelection();
@@ -398,12 +323,6 @@ namespace MR.BinPacking.App
             //            <Label x:Name="laLowerBounds" Content="LB/SLB: " Visibility="Collapsed" />
             //            <Label x:Name="laQualityEstimations" Content="Oszac. jakości LB/SLB: " Visibility="Collapsed" />
             //            <Label x:Name="laErrorEstimations" Content="Oszac. błędu LB/SLB: " Visibility="Collapsed" />
-        }
-
-        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            if (e.ViewportWidthChange > 0.5)
-                Refresh();
         }
     }
 }

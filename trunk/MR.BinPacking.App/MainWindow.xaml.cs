@@ -89,17 +89,14 @@ namespace MR.BinPacking.App
                 bin.Insert(elem);
 
                 BinControl newBin = new BinControl();
-                newBin.AutoRefresh = false;
+                newBin.ShowFiller = false;
+                newBin.ShowAsElement = true;
                 newBin.Bin = bin;
-                newBin.bFiller.Visibility = Visibility.Collapsed;
 
                 newBin.Border.BorderThickness = new Thickness(0);
                 newBin.Border.Background = Brushes.Transparent;
                 newBin.laFreeSpace.Visibility = Visibility.Collapsed;
                 newBin.ShowFiller = false;
-
-                foreach (var elemControl in newBin.DataItems)
-                    elemControl.Border.BorderThickness = new Thickness(3);
 
                 spPreview.Children.Add(newBin);
             }
@@ -137,24 +134,6 @@ namespace MR.BinPacking.App
 
         private void bExperiment_Click(object sender, RoutedEventArgs e)
         {
-            //List<ListAlgorithm> algorithms = new List<ListAlgorithm>() { new NextFit(), new FirstFit() };
-
-            //ExperimentParams prms = new ExperimentParams()
-            //{
-            //    Algorithms = algorithms,
-            //    BinSize = 100,
-            //    Dist = Distribution.Uniform,
-            //    MinN = 100,
-            //    MaxN = 1000,
-            //    Step = 100,
-            //    MinVal = 0.0,
-            //    MaxVal = 1.0,
-            //    Repeat = 2
-            //};
-
-            //TestWindow test = new TestWindow(null);
-            //test.Show();
-
             ExperimentProgressWindow test = new ExperimentProgressWindow(null);
             ChildWindows.Add(test);
             test.Show();

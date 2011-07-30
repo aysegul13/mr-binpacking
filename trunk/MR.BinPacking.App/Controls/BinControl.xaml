@@ -6,30 +6,15 @@
              xmlns:gui="clr-namespace:MR.BinPacking.App.Controls"
              mc:Ignorable="d" 
              MinWidth="64"
-             x:Name="binControl" SizeChanged="binControl_SizeChanged" Loaded="binControl_Loaded" Padding="4">
-    <UserControl.Resources>
-        <DataTemplate x:Key="itemsTemplate">
-            <gui:ElementControl/>
-        </DataTemplate>
-    </UserControl.Resources>
+             x:Name="binControl" Padding="4">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Label x:Name="laFreeSpace" Grid.Row="0" Content="{Binding ElementName=binControl, Path=FreeSpace}" VerticalAlignment="Stretch" HorizontalAlignment="Center" FontWeight="Bold" />
-        <Border x:Name="Border" Grid.Row="1" Background="LightGray" BorderBrush="Black" BorderThickness="3,0,3,3" MinHeight="110" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseRightButtonDown="Border_MouseRightButtonDown">
-            <Grid x:Name="gElements">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Border x:Name="bFiller" BorderBrush="Black" BorderThickness="0,3,0,0" Visibility="Collapsed"/>
-                <!--<gui:ElementControl x:Name="ecFiller" Grid.Row="0" Message="" Color="LightGray"/>-->
-                <ItemsControl x:Name="icElements" Grid.Row="1" ItemsSource="{Binding ElementName=binControl, Path=DataItems}"
-                          ItemTemplate="{StaticResource itemsTemplate}" VerticalAlignment="Bottom">
-                </ItemsControl>
-            </Grid>
+        <Border x:Name="Border" Grid.Row="1" Background="LightGray" BorderBrush="Black" BorderThickness="3,0" MinHeight="110">
+            <Grid x:Name="gElements"/>
         </Border>
     </Grid>
 

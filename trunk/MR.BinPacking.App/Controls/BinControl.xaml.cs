@@ -22,27 +22,9 @@ namespace MR.BinPacking.App.Controls
     /// </summary>
     public partial class BinControl : UserControl
     {
-
-        private ObservableCollection<ElementControl> dataItems;
-        public ObservableCollection<ElementControl> DataItems
-        {
-            get { return dataItems; }
-        }
-
-        public bool AutoRefresh = true;
-
-        public bool showScaled = true;
-        public bool ShowScaled
-        {
-            get { return showScaled; }
-            set
-            {
-                showScaled = value;
-                UpdateLabels();
-            }
-        }
-
+        public bool ShowScaled = false;
         public bool ShowFiller = true;
+        public bool ShowAsElement = false;
 
         public static DependencyProperty FreeSpaceProperty = DependencyProperty.Register(
             "FreeSpace", typeof(string), typeof(BinControl));
@@ -75,27 +57,70 @@ namespace MR.BinPacking.App.Controls
                 else
                     FreeSpace = (bin != null) ? bin.FreeSpace().ToString() : "";
 
-                dataItems.Clear();
-                foreach (var binElem in value.Elements)
-                {
-                    ElementControl newElemControl = new ElementControl(binElem);
-                    dataItems.Insert(0, newElemControl);
-                }
-
-                //UpdateSizes();
-                UpdateLabels();
+                UpdateGrid();
             }
         }
 
-
         public BinControl()
         {
-            dataItems = new ObservableCollection<ElementControl>();
             InitializeComponent();
-
             Bin = new Bin();
         }
 
+        public void UpdateGrid()
+        {
+            gElements.Children.Clear();
+            gElements.RowDefinitions.Clear();
+
+            if (bin.FreeSpace() > 0)
+            {
+                RowDefinition rowDefinition = new RowDefinition();
+                if (bin.Elements.Count > 0)
+                    rowDefinition.Height = new GridLength((double)bin.FreeSpace() / bin.Size, GridUnitType.Star);
+                gElements.RowDefinitions.Add(rowDefinition);
+
+                if (ShowFiller)
+                {
+                    Border border = new Border();
+                    border.BorderBrush = Brushes.Black;
+
+                    if (bin.Elements.Count > 0)
+                        border.BorderThickness = new Thickness(0, 3, 0, 0);
+                    else
+                        border.BorderThickness = new Thickness(0, 3, 0, 3);
+                    gElements.Children.Add(border);
+                }
+            }
+
+            for (int i = 0; i < bin.Elements.Count; i++)
+            {
+                int elem = bin.Elements[(bin.Elements.Count - 1) - i];
+
+                RowDefinition rowDefinition = new RowDefinition()
+                {
+                    Height = new GridLength((double)elem / bin.Size, GridUnitType.Star)
+                };
+                gElements.RowDefinitions.Add(rowDefinition);
+
+                ElementControl newElemControl = new ElementControl(elem);
+                if (ShowAsElement)
+                    newElemControl.Border.BorderThickness = new Thickness(3);
+                else if (i == bin.Elements.Count - 1)
+                    newElemControl.Border.BorderThickness = new Thickness(0, 3, 0, 3);
+
+                if (ShowScaled)
+                    newElemControl.Message = ((double)elem / Bin.Size).ToString("0.00");
+                else
+                    newElemControl.Message = elem.ToString();
+
+                gElements.Children.Add(newElemControl);
+
+                if (bin.FreeSpace() > 0)
+                    Grid.SetRow(newElemControl, i + 1);
+                else
+                    Grid.SetRow(newElemControl, i);
+            }
+        }
 
         public void StartAnimation()
         {
@@ -112,81 +137,6 @@ namespace MR.BinPacking.App.Controls
         public void StopAnimation()
         {
             Border.BeginAnimation(Border.OpacityProperty, null);
-        }
-
-        public void UpdateLabels()
-        {
-            if (ShowScaled)
-                FreeSpace = (Bin != null) ? ((double)Bin.FreeSpace() / Bin.Size).ToString("0.00") : "";
-            else
-                FreeSpace = (Bin != null) ? Bin.FreeSpace().ToString() : "";
-
-            foreach (var elem in dataItems)
-            {
-                if (ShowScaled)
-                    elem.Message = ((double)elem.Size / Bin.Size).ToString("0.00");
-                else
-                    elem.Message = Bin.Size.ToString();
-            }
-        }
-
-        public void UpdateSizes()
-        {
-            double height = Border.ActualHeight;
-            if (ShowFiller && (Bin.FreeSpace() > 0))
-            {
-                bFiller.Height = height * Bin.FreeSpace() / Bin.Size;
-                bFiller.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                bFiller.Visibility = Visibility.Collapsed;
-            }
-
-            //if (bFiller.Visibility != Visibility.Collapsed)
-            //    height -= bFiller.ActualHeight;
-
-            foreach (var elem in dataItems)
-            {
-                //elem.Message = ((double)elem.Size / Bin.Size).ToString("0.00");
-                elem.Height = height * elem.Size / Bin.Size;
-            }
-
-            dataItems.Add(new ElementControl(0));
-            dataItems.Remove(dataItems.Last());
-        }
-
-
-        private double prevHeight = 0.0;
-        private void binControl_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (Math.Abs(ActualHeight - prevHeight) > 48)
-            {
-                prevHeight = ActualHeight;
-                if (AutoRefresh)
-                    UpdateSizes();
-            }
-        }
-
-        private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            Label senderLabel = (sender as Label);
-            senderLabel.Foreground = Brushes.Red;
-        }
-
-        private void binControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            UpdateSizes();
-        }
-
-        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            //StartAnimation();         
-        }
-
-        private void Border_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            //StopAnimation();
         }
     }
 }
