@@ -24,6 +24,21 @@ namespace MR.BinPacking.Library.Algorithms
             }
         }
 
+        public override int PrevSelectedElement
+        {
+            get
+            {
+                if (algorithm != null)
+                    return algorithm.PrevSelectedElement;
+                else
+                    return base.PrevSelectedElement;
+            }
+            set
+            {
+                base.PrevSelectedElement = value;
+            }
+        }
+
         public override int SelectedElement
         {
             get
@@ -110,6 +125,7 @@ namespace MR.BinPacking.Library.Algorithms
         {
             IsWaiting = true;
             SelectedBin = bin;
+            PrevSelectedElement = SelectedElement;
             SelectedElement = elem;
 
             if (algorithm != null)
