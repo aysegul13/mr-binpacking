@@ -187,12 +187,22 @@ namespace MR.BinPacking.App
                 #endregion
             }
 
+            UpdateSelection();
+        }
 
+        void UpdateSelection()
+        {
+            if (Algorithm.PrevSelectedElement >= 0)
+            {
+                previewBins[Algorithm.PrevSelectedElement].StopAnimation();
+                previewBins[Algorithm.PrevSelectedElement].Border.Opacity = 0.5;
+            }
 
-            previewBins[Algorithm.PrevSelectedElement].StopAnimation();
-            previewBins[Algorithm.PrevSelectedElement].Border.Opacity = 0.5;
-            previewBins[Algorithm.SelectedElement].StartAnimation();
-            algorithmBins[Algorithm.SelectedBin].StartAnimation();
+            if (Algorithm.SelectedElement >= 0)
+                previewBins[Algorithm.SelectedElement].StartAnimation();
+
+            if (Algorithm.SelectedBin >= 0)
+                algorithmBins[Algorithm.SelectedBin].StartAnimation();
 
             if (result != null)
             {
