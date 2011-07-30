@@ -87,8 +87,6 @@ namespace MR.BinPacking.App.Controls
             }
         }
 
-        private Storyboard storyboard;
-
 
         public BinControl()
         {
@@ -96,7 +94,11 @@ namespace MR.BinPacking.App.Controls
             InitializeComponent();
 
             Bin = new Bin();
+        }
 
+
+        public void StartAnimation()
+        {
             DoubleAnimation doubleAnimation = new DoubleAnimation();
             doubleAnimation.From = 1.0;
             doubleAnimation.To = 0.0;
@@ -104,24 +106,12 @@ namespace MR.BinPacking.App.Controls
             doubleAnimation.AutoReverse = true;
             doubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
 
-            storyboard = new Storyboard();
-            storyboard.Children.Add(doubleAnimation);
-
-            Border.RegisterName(Border.Name, Border);
-            Storyboard.SetTargetName(doubleAnimation, Border.Name);
-            Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(Border.OpacityProperty));
-        }
-
-
-        public void StartAnimation()
-        {
-            storyboard.Begin(Border, true);
+            Border.BeginAnimation(Border.OpacityProperty, doubleAnimation);
         }
 
         public void StopAnimation()
         {
-            storyboard.Seek(TimeSpan.Zero);
-            storyboard.Stop(Border);          
+            Border.BeginAnimation(Border.OpacityProperty, null);
         }
 
         public void UpdateLabels()
