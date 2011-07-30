@@ -154,6 +154,7 @@ namespace MR.BinPacking.App
 
                 newBin.UpdateSizes();
 
+                #region old
                 //int sum = 0;
                 //foreach (var elem in bin.Elements)
                 //{
@@ -183,17 +184,15 @@ namespace MR.BinPacking.App
                 //}
 
                 //binCnt++;
+                #endregion
             }
 
 
-            if (Algorithm.SelectedElement > 0)
-                previewBins[Algorithm.SelectedElement - 1].StopAnimation();
 
-            if (Algorithm.SelectedElement >= 0)
-                previewBins[Algorithm.SelectedElement].StartAnimation();
-
-            if (Algorithm.SelectedBin >= 0)
-                algorithmBins[Algorithm.SelectedBin].StartAnimation();
+            previewBins[Algorithm.PrevSelectedElement].StopAnimation();
+            previewBins[Algorithm.PrevSelectedElement].Border.Opacity = 0.5;
+            previewBins[Algorithm.SelectedElement].StartAnimation();
+            algorithmBins[Algorithm.SelectedBin].StartAnimation();
 
             if (result != null)
             {
@@ -337,8 +336,16 @@ namespace MR.BinPacking.App
             ShowInfo();
         }
 
+        private void UpdateOpacity()
+        {
+            foreach (var bin in previewBins)
+                bin.Border.Opacity = 1.0;
+        }
+
         private void ShowInfo()
         {
+            UpdateOpacity();
+
             laBinCount.Visibility = Visibility.Visible;
             laLowerBounds.Visibility = Visibility.Visible;
             laQualityEstimations.Visibility = Visibility.Visible;

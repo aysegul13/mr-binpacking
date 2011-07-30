@@ -11,6 +11,7 @@ namespace MR.BinPacking.Library.Base
         public virtual string Name { get; protected set; }
 
         public virtual string Message { get; set; }
+        public virtual int PrevSelectedElement { get; set; }
         public virtual int SelectedElement { get; set; }
         public virtual int SelectedBin { get; set; }
 
@@ -28,6 +29,7 @@ namespace MR.BinPacking.Library.Base
         {
             IsWaiting = true;
             SelectedBin = bin;
+            PrevSelectedElement = SelectedElement;
             SelectedElement = elem;
 
             while (IsWaiting)
