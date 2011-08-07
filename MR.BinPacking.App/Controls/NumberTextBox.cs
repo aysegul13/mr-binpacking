@@ -67,7 +67,9 @@ namespace MR.BinPacking.App.Controls
         {
             for (int i = 0; i < str.Length; i++)
             {
-                if (!Char.IsDigit(str[i]) && (!IntsOnly && (str[i] != '.') && (str[i] != ',')))
+                char c = str[i];
+
+                if (!Char.IsDigit(c) && (IntsOnly || ((c != '.') && (c != ','))))
                     return false;
             }
 
