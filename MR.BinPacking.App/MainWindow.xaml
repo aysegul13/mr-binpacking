@@ -19,9 +19,12 @@
             <StackPanel>
                 <Border BorderThickness="1" BorderBrush="SlateGray">
                     <Expander Header="Podgląd danych" FontWeight="Bold" IsExpanded="True">
-                        <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
-                            <StackPanel x:Name="spPreview" Orientation="Horizontal"/>
-                        </ScrollViewer>
+                        <StackPanel>
+                            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                                <StackPanel x:Name="spPreview" Orientation="Horizontal"/>
+                            </ScrollViewer>
+                            <Label x:Name="laBounds" FontWeight="Normal" Visibility="Collapsed"/>
+                        </StackPanel>
                     </Expander>
                 </Border>
                 <Grid>
@@ -114,6 +117,12 @@
                         <CheckBox x:Name="cbRandomFit" Content="RF" Margin="4"/>
                     </StackPanel>
                     <Label Grid.Row="1" Content="Inne algorytmy:"/>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                        <CheckBox x:Name="cbAAS" Content="AAS" Margin="4" Checked="cbAAS_CheckedChanged" Unchecked="cbAAS_CheckedChanged"/>
+                        <Border Grid.Row="4" Grid.Column="0" Style="{StaticResource tbBorderStyle}">
+                            <TextBox x:Name="tbAASEpsilon" Text="0,3333" Style="{StaticResource tbStyle}" MinWidth="48" LostFocus="tbAASEpsilon_LostFocus"/>
+                        </Border>
+                    </StackPanel>
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -157,28 +166,28 @@
                     <Label Content="Liczba elementów (n)" FontWeight="Bold"/>
                     <Label Grid.Row="1" Content="Od:"/>
                     <Border Grid.Row="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                        <gui:NumberTextBox x:Name="ntbExpMinN" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="100" Text="10"/>
+                        <gui:NumberTextBox x:Name="ntbExpMinN" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="100" Text="100"/>
                     </Border>
                     <Label Grid.Row="2" Content="Do:"/>
                     <Border Grid.Row="2" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                        <gui:NumberTextBox x:Name="ntbExpMaxN" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="10" MaxValue="1000"/>
+                        <gui:NumberTextBox x:Name="ntbExpMaxN" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="10" MaxValue="1000" Text="1000" />
                     </Border>
                     <Label Grid.Row="3" Content="Krok:"/>
                     <Border Grid.Row="3" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                        <gui:NumberTextBox x:Name="ntbExpStep" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1"/>
+                        <gui:NumberTextBox x:Name="ntbExpStep" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" Text="100"/>
                     </Border>
                     <Label Grid.Column="1" Content="Rozmiar elementów" FontWeight="Bold"/>
                     <Label Grid.Row="1" Grid.Column="1" Content="Skrzynki (c):"/>
                     <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                        <gui:NumberTextBox x:Name="ntbExpBinSize" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="1000" Text="10"/>
+                        <gui:NumberTextBox x:Name="ntbExpBinSize" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="1000" Text="100"/>
                     </Border>
                     <Label Grid.Row="2" Grid.Column="1" Content="Min:"/>
                     <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                        <gui:NumberTextBox x:Name="ntbExpMinVal" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="1000" Text="10"/>
+                        <gui:NumberTextBox x:Name="ntbExpMinVal" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="0.00001" MaxValue="1" Text="0,01" IntsOnly="false" />
                     </Border>
                     <Label Grid.Row="3" Grid.Column="1" Content="Max:"/>
                     <Border Grid.Row="3" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                        <gui:NumberTextBox x:Name="ntbExpMaxVal" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="1000" Text="10"/>
+                        <gui:NumberTextBox x:Name="ntbExpMaxVal" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="0" MaxValue="1" Text="1"/>
                     </Border>
                     <Label Grid.Column="2" Content="Rozkłady elementów" FontWeight="Bold"/>
                     <CheckBox x:Name="cbExpDistUniform" Grid.Row="1" Grid.Column="2" Content="jednostajny" Margin="4" IsChecked="True" />

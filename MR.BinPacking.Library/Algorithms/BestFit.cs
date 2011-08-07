@@ -21,16 +21,16 @@ namespace MR.BinPacking.Library.Algorithms
             if (IsPresentation)
                 Message = "";
 
-            ActualResult = new Instance(binSize);
-            ActualResult.Elements = elements;
+            Result = new Instance(binSize);
+            Result.Elements = elements;
 
-            for (int i = 0; i < ActualResult.Elements.Count; i++)
+            for (int i = 0; i < Result.Elements.Count; i++)
             {
-                int elem = ActualResult.Elements[i];
+                int elem = Result.Elements[i];
                 int minSpaceLeft = binSize;
                 int minIndex = -1;
 
-                for (int k = 0; k < ActualResult.Bins.Count; k++)
+                for (int k = 0; k < Result.Bins.Count; k++)
                 {
                     #region UI
                     if (IsPresentation)
@@ -40,9 +40,9 @@ namespace MR.BinPacking.Library.Algorithms
                     }
                     #endregion
 
-                    if ((ActualResult.Bins[k].FreeSpace() >= elem) && (ActualResult.Bins[k].FreeSpace() - elem < minSpaceLeft))
+                    if ((Result.Bins[k].FreeSpace() >= elem) && (Result.Bins[k].FreeSpace() - elem < minSpaceLeft))
                     {
-                        minSpaceLeft = ActualResult.Bins[k].FreeSpace() - elem;
+                        minSpaceLeft = Result.Bins[k].FreeSpace() - elem;
                         minIndex = k;
 
                         #region UI
@@ -58,7 +58,7 @@ namespace MR.BinPacking.Library.Algorithms
                         #region UI
                         if (IsPresentation)
                         {
-                            if (ActualResult.Bins[k].FreeSpace() < elem)
+                            if (Result.Bins[k].FreeSpace() < elem)
                                 Message = String.Format("Brak miejsca w skrzynce {0} dla elementu {1} ({2}).", k + 1, i + 1, elem) + Environment.NewLine + Environment.NewLine;
                             else
                                 Message = "Aktualne dopasowanie jest gorsze od najlepszego znalezionego." + Environment.NewLine + Environment.NewLine;
@@ -69,8 +69,8 @@ namespace MR.BinPacking.Library.Algorithms
 
                 if (minIndex < 0)
                 {
-                    ActualResult.Bins.Add(new Bin(ActualResult.BinSize));
-                    minIndex = ActualResult.Bins.Count - 1;
+                    Result.Bins.Add(new Bin(Result.BinSize));
+                    minIndex = Result.Bins.Count - 1;
 
                     #region UI
                     if (IsPresentation)
@@ -81,7 +81,7 @@ namespace MR.BinPacking.Library.Algorithms
                     #endregion
                 }
 
-                ActualResult.Bins[minIndex].Insert(elem);
+                Result.Bins[minIndex].Insert(elem);
 
                 #region UI
                 if (IsPresentation)
@@ -89,7 +89,7 @@ namespace MR.BinPacking.Library.Algorithms
                 #endregion
             }
 
-            return ActualResult;
+            return Result;
         }
     }
 }

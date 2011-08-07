@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MR.BinPacking.Library.Base;
 using MR.BinPacking.Library.Utils;
+using MR.BinPacking.Library.Algorithms;
 
 namespace MR.BinPacking.Library.Experiment
 {
@@ -35,10 +36,64 @@ namespace MR.BinPacking.Library.Experiment
         public List<Algorithm> Algorithms { get; set; }
         public List<Distribution> Distributions { get; set; }
         public List<Sorting> Sortings { get; set; }
+
+        public ExperimentParamsFile()
+        {
+            Algorithms = new List<Algorithm>();
+            Distributions = new List<Distribution>();
+            Sortings = new List<Sorting>();
+        }
     }
 
     public class ExperimentParams : ExperimentParamsFile
     {
         public List<ListAlgorithm> Algs { get; set; }
+
+        public ExperimentParams()
+        {
+            Algs = new List<ListAlgorithm>();
+        }
+
+        public ExperimentParams(ExperimentParamsFile fileParams) : this()
+        {
+            MinN = fileParams.MinN;
+            MaxN = fileParams.MaxN;
+            Step = fileParams.Step;
+            BinSize = fileParams.BinSize;
+            MinVal = fileParams.MinVal;
+            MaxVal = fileParams.MaxVal;
+            Repeat = fileParams.Repeat;
+            Algorithms = fileParams.Algorithms;
+            Distributions = fileParams.Distributions;
+            Sortings = fileParams.Sortings;
+
+            foreach (var algorithm in fileParams.Algorithms)
+                Algs.Add(ListAlgorithmFromAlgorithm(algorithm, false));
+        }
+
+        static ListAlgorithm ListAlgorithmFromAlgorithm(Algorithm algorithm, bool isPresentation)
+        {
+            switch (algorithm)
+            {
+                case Algorithm.FirstFit:
+                    return new FirstFit() { IsPresentation = isPresentation };
+                case Algorithm.BestFit:
+                    return new BestFit() { IsPresentation = isPresentation };
+                case Algorithm.FirstFitDecreasing:
+                    return new FirstFitDecreasing() { IsPresentation = isPresentation };
+                case Algorithm.BestFitDecreasing:
+                    return new BestFitDecreasing() { IsPresentation = isPresentation };
+                case Algorithm.RandomFit:
+                    return new RandomFit() { IsPresentation = isPresentation };
+                case Algorithm.AsymptoticApproximationScheme:
+                    throw new NotImplementedException();
+                    //return new NextFit() { IsPresentation = isPresentation };
+                case Algorithm.BruteForce:
+                    throw new NotImplementedException();
+                    //return new NextFit() { IsPresentation = isPresentation };
+                default:    //NextFit
+                    return new NextFit() { IsPresentation = isPresentation };
+            }
+        }
     }
 }

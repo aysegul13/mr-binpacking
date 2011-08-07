@@ -6,10 +6,15 @@ using System.Threading;
 
 namespace MR.BinPacking.Library.Base
 {
-    public abstract class ListAlgorithm
+    public abstract class BaseAlgorithm
     {
         public virtual string Name { get; protected set; }
+        public abstract Instance Execute(List<int> elements, int binSize);
+        public virtual Instance Result { get; set; }
+    }
 
+    public abstract class ListAlgorithm : BaseAlgorithm
+    {
         public virtual string Message { get; set; }
         public virtual int PrevSelectedElement { get; set; }
         public virtual int SelectedElement { get; set; }
@@ -23,7 +28,6 @@ namespace MR.BinPacking.Library.Base
         }
 
         public virtual bool IsPresentation { get; set; }
-        public virtual Instance ActualResult { get; set; }
 
         public virtual void Wait(int bin, int elem)
         {
@@ -35,7 +39,5 @@ namespace MR.BinPacking.Library.Base
             while (IsWaiting)
                 Thread.Sleep(100);
         }
-
-        public abstract Instance Execute(List<int> elements, int binSize);
     }
 }

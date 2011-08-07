@@ -100,6 +100,12 @@ namespace MR.BinPacking.App
 
                 spPreview.Children.Add(newBin);
             }
+
+            int LB = Bounds.LowerBound(Elements, BinSize);
+            int SLB = Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
+
+            laBounds.Visibility = Visibility.Visible;
+            laBounds.Content = String.Format("Dolne ograniczenia LB/SLB: {0}/{1}", LB, SLB);
         }
 
         private void RefreshElements()
@@ -134,7 +140,9 @@ namespace MR.BinPacking.App
 
         private void bExperiment_Click(object sender, RoutedEventArgs e)
         {
-            ExperimentProgressWindow test = new ExperimentProgressWindow(null);
+            ExperimentParams expParams = new ExperimentParams(GetExpParamsFromUI());
+
+            ExperimentProgressWindow test = new ExperimentProgressWindow(expParams);
             ChildWindows.Add(test);
             test.Show();
         }
@@ -194,7 +202,7 @@ namespace MR.BinPacking.App
 
         private void bResult_Click(object sender, RoutedEventArgs e)
         {
-            List<ListAlgorithm> algorithms = new List<ListAlgorithm>();
+            List<BaseAlgorithm> algorithms = new List<BaseAlgorithm>();
             if (cbNextFit.IsChecked == true)
                 algorithms.Add(new NextFit());
             if (cbFirstFit.IsChecked == true)
@@ -207,11 +215,20 @@ namespace MR.BinPacking.App
                 algorithms.Add(new BestFitDecreasing());
             if (cbRandomFit.IsChecked == true)
                 algorithms.Add(new RandomFit());
+            if (cbAAS.IsChecked == true)
+            {
+                double epsilon = Double.Parse(tbAASEpsilon.Text);
+                algorithms.Add(new AAS() { Epsilon = epsilon });
+            }
 
             foreach (var alg in algorithms)
             {
-                alg.IsPresentation = false;
-                alg.IsWaiting = false;
+                if (alg is ListAlgorithm)
+                {
+                    (alg as ListAlgorithm).IsPresentation = false;
+                    (alg as ListAlgorithm).IsWaiting = false;
+                }
+
                 PreviewWindow prev = new PreviewWindow(alg, Elements, BinSize);
                 ChildWindows.Add(prev);
                 prev.Show();
@@ -349,6 +366,18 @@ namespace MR.BinPacking.App
 
             RefreshElements();
             RefreshPreview();
+        }
+
+        private void cbAAS_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            bPresentation.IsEnabled = (bool)!cbAAS.IsChecked;
+        }
+
+        private void tbAASEpsilon_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double epsilon;
+            if (!Double.TryParse(tbAASEpsilon.Text, out epsilon))
+                tbAASEpsilon.Text = (0.33).ToString();
         }
     }
 }

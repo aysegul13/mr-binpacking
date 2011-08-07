@@ -21,8 +21,8 @@ namespace MR.BinPacking.Library.Algorithms
 
         public override Instance Execute(List<int> elements, int binSize)
         {
-            ActualResult = new Instance(binSize);
-            ActualResult.Elements = elements;
+            Result = new Instance(binSize);
+            Result.Elements = elements;
 
             List<int> elemIndexes = new List<int>();
             for (int i = 0; i < elements.Count; i++)
@@ -40,23 +40,23 @@ namespace MR.BinPacking.Library.Algorithms
                 #endregion
 
                 List<int> binsIndexes = new List<int>();
-                for (int i = 0; i < ActualResult.Bins.Count; i++)
+                for (int i = 0; i < Result.Bins.Count; i++)
                 {
-                    if (ActualResult.Bins[i].FreeSpace() >= elements[elemIndexes[elemIndex]])
+                    if (Result.Bins[i].FreeSpace() >= elements[elemIndexes[elemIndex]])
                         binsIndexes.Add(i);
                 }
 
                 int index;
                 if (binsIndexes.Count == 0)
                 {
-                    ActualResult.Bins.Add(new Bin(ActualResult.BinSize));
-                    index = ActualResult.Bins.Count - 1;
+                    Result.Bins.Add(new Bin(Result.BinSize));
+                    index = Result.Bins.Count - 1;
 
                     #region UI
                     if (IsPresentation)
                     {
                         Message += "Brak miejsca we wszystkich skrzynkach. Dodano nową skrzynkę." + Environment.NewLine + Environment.NewLine;
-                        Wait(ActualResult.Bins.Count - 1, elemIndexes[elemIndex]);
+                        Wait(Result.Bins.Count - 1, elemIndexes[elemIndex]);
                     }
                     #endregion
                 }
@@ -73,7 +73,7 @@ namespace MR.BinPacking.Library.Algorithms
                     #endregion
                 }
 
-                ActualResult.Bins[index].Insert(elements[elemIndexes[elemIndex]]);
+                Result.Bins[index].Insert(elements[elemIndexes[elemIndex]]);
 
                 #region UI
                 if (IsPresentation)
@@ -83,7 +83,7 @@ namespace MR.BinPacking.Library.Algorithms
                 elemIndexes.RemoveAt(elemIndex);
             }
 
-            return ActualResult;
+            return Result;
         }
     }
 }

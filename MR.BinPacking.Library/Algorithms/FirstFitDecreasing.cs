@@ -69,18 +69,18 @@ namespace MR.BinPacking.Library.Algorithms
             }
         }
 
-        public override Instance ActualResult
+        public override Instance Result
         {
             get
             {
                 if (algorithm != null)
-                    return algorithm.ActualResult;
+                    return algorithm.Result;
                 else
-                    return base.ActualResult;
+                    return base.Result;
             }
             set
             {
-                base.ActualResult = value;
+                base.Result = value;
             }
         }
 
@@ -145,13 +145,13 @@ namespace MR.BinPacking.Library.Algorithms
             if (IsPresentation)
                 Message = "";
 
-            ActualResult = new Instance(binSize);
-            ActualResult.Elements = elements;
+            Result = new Instance(binSize);
+            Result.Elements = elements;
 
             List<int> elementsSorted = new List<int>(elements);
             elementsSorted.Sort((x, y) => y.CompareTo(x));
 
-            ActualResult.Elements = elementsSorted;
+            Result.Elements = elementsSorted;
 
             if (IsPresentation)
             {

@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -37,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\AAS.cs" />
     <Compile Include="Base\Bin.cs" />
     <Compile Include="Base\ListAlgorithm.cs" />
     <Compile Include="Base\Instance.cs" />
@@ -54,9 +57,13 @@
     <Compile Include="Algorithms\FirstFitDecreasing.cs" />
     <Compile Include="Utils\Generator.cs" />
     <Compile Include="Algorithms\NextFit.cs" />
+    <Compile Include="Utils\lpsolve.cs" />
     <Compile Include="Utils\Probability.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Algorithms\RandomFit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Libraries\lpsolve55.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
