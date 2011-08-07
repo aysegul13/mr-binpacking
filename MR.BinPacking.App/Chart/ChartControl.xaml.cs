@@ -66,9 +66,11 @@ namespace MR.BinPacking.App.Chart
 
         private double ConvertY(double y)
         {
+            //maxY = Math.Max(maxY, series.Points.Select(p => Math.Log(Math.Max(p.Y, 1), 2)).Max());
+
             double h;
             if (logScale)
-                h = Math.Log(Math.Max(y, 1), 2) / maxY;
+                h = Math.Log(Math.Max(y, 1), 2) / Math.Log(Math.Max(maxY, 1), 2);
             else
                 h = y / maxY;
 
@@ -149,33 +151,44 @@ namespace MR.BinPacking.App.Chart
                 DrawValue((X2 + X1) / 2.0, w, Y2 - 20.0, brush, point.Y.ToString());
         }
 
+        double Func(double X)
+        {
+            //return X * Math.Log(X, 2);
+            //return X;
+            //return Math.Log(X, 2);
+            return X * X;
+            //return Math.Pow(2, X);
+        }
+
         private void DrawFunction()
         {
+            double max = 0.0000001;
+            foreach (var series in DataSeries)
+                max = Math.Max(max, series.Points.Select(p => p.Y).Max());
+
+            int count = (DataSeries[0].Points.Count - 1) * 8;
+            if (chartType == ChartType.Bars)
+                count += 8;
+
+            double funcMaxX = minX + (count - 1) * intervalWidthX / 8;
+            //funcMaxX = funcMaxX / minX;
+            double funcMaxY = Func(funcMaxX);
+
             double X = minX;
-            //double Y = Math.Log(X, 2);
-            //double Y = X * X;
-            //double Y = Math.Pow(2, X);
-            double Y = X;
+            double Y = Func(X);
+            Y = maxY * (Y / funcMaxY);
 
             PathFigure myPathFigure = new PathFigure();
             myPathFigure.StartPoint = new Point(ConvertX(X), ConvertY(Y));
             PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
 
-            double max = 0.01;
-            foreach (var series in DataSeries)
-                max = Math.Max(max, series.Points.Select(p => p.Y).Max());
-
-            int count = DataSeries[0].Points.Count * 4;
-            if (chartType == ChartType.Bars)
-                count += 4;
-
             for (int i = 1; i < count; i++)
             {
-                X = minX + i * intervalWidthX;
-                //Y = Math.Log(X, 2);
-                //Y = X * X;
-                //Y = Math.Pow(2, X);
-                Y = X;
+                X = minX + ((double)(i * intervalWidthX) / 8);
+                X = X;
+
+                Y = Func(X);
+                Y = maxY * (Y / funcMaxY);
 
                 LineSegment myLineSegment = new LineSegment();
                 myLineSegment.Point = new Point(ConvertX(X), ConvertY(Y));
@@ -250,7 +263,7 @@ namespace MR.BinPacking.App.Chart
 
 
             int count = DataSeries[0].Points.Count;
-            int gap = count / 10;
+            int gap = Math.Max(count / 10 - 1, 0);
             if (chartType == ChartType.Bars)
                 count++;
 
@@ -360,10 +373,21 @@ namespace MR.BinPacking.App.Chart
                 TextBlock tblAxisVal = new TextBlock()
                 {
                     Width = offsetX - 8,
-                    Text = (i * maxY / intervalsY).ToString("0.##"),
                     FontWeight = FontWeights.Bold,
                     TextAlignment = TextAlignment.Right
                 };
+
+                //tblAxisVal.Text = (i * Math.Log(Math.Max(maxY, 1), 2) / intervalsY).ToString("0.##");
+                if (logScale)
+                {
+                    //tblAxisVal.Text = (i * Math.Pow(maxY, (double)i/intervalsY) / intervalsY).ToString("0.##");
+                    tblAxisVal.Text = Math.Pow(maxY, (double)i / intervalsY).ToString("0.##");
+
+                    //tblAxisVal.Text = (i * Math.Pow(maxY, 0.1) / intervalsY).ToString("0.##");
+                    //tblAxisVal.Text = (Math.Log(Math.Max(i * maxY / intervalsY, 1), 2)).ToString("0.##");
+                }
+                else
+                    tblAxisVal.Text = (i * maxY / intervalsY).ToString("0.##");
 
                 Canvas.SetLeft(tblAxisVal, 0);
                 Canvas.SetTop(tblAxisVal, Y - 10.0);
@@ -493,10 +517,12 @@ namespace MR.BinPacking.App.Chart
             IEnumerable<DataSerie> VisibleDS = DataSeries.Where(ds => ds.Visible == true);
             foreach (var series in VisibleDS)
             {
-                if (logScale)
-                    maxY = Math.Max(maxY, series.Points.Select(p => Math.Log(Math.Max(p.Y, 1), 2)).Max());
-                else
-                    maxY = Math.Max(maxY, series.Points.Select(p => p.Y).Max());
+                maxY = Math.Max(maxY, series.Points.Select(p => p.Y).Max());
+
+                //if (logScale)
+                //    maxY = Math.Max(maxY, series.Points.Select(p => Math.Log(Math.Max(p.Y, 1), 2)).Max());
+                //else
+                //    maxY = Math.Max(maxY, series.Points.Select(p => p.Y).Max());
             }
 
             //int factor = 1;
