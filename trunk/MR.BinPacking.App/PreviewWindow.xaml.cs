@@ -24,7 +24,7 @@ namespace MR.BinPacking.App
     /// </summary>
     public partial class PreviewWindow : Window
     {
-        private ListAlgorithm Algorithm;
+        private BaseAlgorithm Algorithm;
         private List<int> Elements;
         private int BinSize = 10;
 
@@ -33,7 +33,7 @@ namespace MR.BinPacking.App
 
         private Stopwatch stopWatch = new Stopwatch();
 
-        public PreviewWindow(ListAlgorithm algorithm, List<int> elements, int binSize)
+        public PreviewWindow(BaseAlgorithm algorithm, List<int> elements, int binSize)
         {
             InitializeComponent();
 
@@ -55,7 +55,8 @@ namespace MR.BinPacking.App
 
         public void GoAhead()
         {
-            Algorithm.IsWaiting = false;
+            if (Algorithm is ListAlgorithm)
+                (Algorithm as ListAlgorithm).IsWaiting = false;
         }
 
         Instance result = null;
@@ -117,22 +118,27 @@ namespace MR.BinPacking.App
 
         void UpdateSelection()
         {
-            if (Algorithm.PrevSelectedElement >= 0)
+            if (!(Algorithm is ListAlgorithm))
+                return;
+
+            ListAlgorithm listAlgorithm = Algorithm as ListAlgorithm;
+
+            if (listAlgorithm.PrevSelectedElement >= 0)
             {
-                previewBins[Algorithm.PrevSelectedElement].StopAnimation();
-                previewBins[Algorithm.PrevSelectedElement].Border.Opacity = 0.5;
+                previewBins[listAlgorithm.PrevSelectedElement].StopAnimation();
+                previewBins[listAlgorithm.PrevSelectedElement].Border.Opacity = 0.5;
             }
 
-            if (Algorithm.SelectedElement >= 0)
-                previewBins[Algorithm.SelectedElement].StartAnimation();
+            if (listAlgorithm.SelectedElement >= 0)
+                previewBins[listAlgorithm.SelectedElement].StartAnimation();
 
-            if (Algorithm.SelectedBin >= 0)
-                algorithmBins[Algorithm.SelectedBin].StartAnimation();
+            if (listAlgorithm.SelectedBin >= 0)
+                algorithmBins[listAlgorithm.SelectedBin].StartAnimation();
 
             if (result != null)
             {
-                previewBins[Algorithm.SelectedElement].StopAnimation();
-                algorithmBins[Algorithm.SelectedBin].StopAnimation();
+                previewBins[listAlgorithm.SelectedElement].StopAnimation();
+                algorithmBins[listAlgorithm.SelectedBin].StopAnimation();
             }
         }
 
@@ -198,7 +204,7 @@ namespace MR.BinPacking.App
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Algorithm.IsPresentation)
+            if ((Algorithm is ListAlgorithm) && (Algorithm as ListAlgorithm).IsPresentation)
             {
                 DrawPreview();
                 Execute();
@@ -206,7 +212,7 @@ namespace MR.BinPacking.App
             else
             {
                 DoWork();
-                Elements = Algorithm.ActualResult.Elements;
+                Elements = Algorithm.Result.Elements;
 
                 DrawPreview();
                 Draw(result);
@@ -217,16 +223,17 @@ namespace MR.BinPacking.App
         private bool first = true;
         private void bNext_Click(object sender, RoutedEventArgs e)
         {
+            if (Algorithm is ListAlgorithm)
+                tblMessage.Text = (Algorithm as ListAlgorithm).Message;
+
             if (result == null)
             {
-                tblMessage.Text = Algorithm.Message;
+                Elements = Algorithm.Result.Elements;
 
-                Elements = Algorithm.ActualResult.Elements;
-
-                Instance inst = new Instance(Algorithm.ActualResult.BinSize);
-                foreach (var bin in Algorithm.ActualResult.Bins)
+                Instance inst = new Instance(Algorithm.Result.BinSize);
+                foreach (var bin in Algorithm.Result.Bins)
                 {
-                    Bin newBin = new Bin(Algorithm.ActualResult.BinSize);
+                    Bin newBin = new Bin(Algorithm.Result.BinSize);
 
                     foreach (var elem in bin.Elements)
                         newBin.Insert(elem);
@@ -243,7 +250,6 @@ namespace MR.BinPacking.App
             else
             {
                 bNext.IsEnabled = false;
-                tblMessage.Text = Algorithm.Message;
 
                 workerThread.Join();
                 Draw(result);
@@ -259,12 +265,14 @@ namespace MR.BinPacking.App
 
         private void bEnd_Click(object sender, RoutedEventArgs e)
         {
-            Algorithm.IsPresentation = false;
+            if (Algorithm is ListAlgorithm)
+                (Algorithm as ListAlgorithm).IsPresentation = false;
+
             GoAhead();
 
             workerThread.Join();
 
-            Elements = Algorithm.ActualResult.Elements;
+            Elements = Algorithm.Result.Elements;
 
             DrawPreview();
             Draw(result);
@@ -287,7 +295,7 @@ namespace MR.BinPacking.App
             laErrorEstimations.Visibility = Visibility.Visible;
 
             //TODO: poprawić - powinno być tylko jeżeli IsPresentation było od początku
-            if (!Algorithm.IsPresentation)
+            if (!(Algorithm is ListAlgorithm) || !(Algorithm as ListAlgorithm).IsPresentation)
                 laExecutionTime.Visibility = Visibility.Visible;
 
             tblMessage.Visibility = Visibility.Collapsed;

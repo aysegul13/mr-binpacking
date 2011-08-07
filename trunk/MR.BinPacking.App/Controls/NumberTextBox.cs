@@ -8,8 +8,15 @@ namespace MR.BinPacking.App.Controls
 {
     public class NumberTextBox : TextBox
     {
-        private int minValue = 0;
-        public int MinValue
+        private bool intsOnly = true;
+        public bool IntsOnly
+        {
+            get { return intsOnly; }
+            set { intsOnly = value; }
+        }
+
+        private double minValue = 0;
+        public double MinValue
         {
             get
             {
@@ -26,8 +33,8 @@ namespace MR.BinPacking.App.Controls
             }
         }
 
-        private int maxValue = 100;
-        public int MaxValue
+        private double maxValue = 100;
+        public double MaxValue
         {
             get
             {
@@ -60,7 +67,7 @@ namespace MR.BinPacking.App.Controls
         {
             for (int i = 0; i < str.Length; i++)
             {
-                if (!Char.IsDigit(str[i]))
+                if (!Char.IsDigit(str[i]) && (!IntsOnly && (str[i] != '.') && (str[i] != ',')))
                     return false;
             }
 
@@ -69,10 +76,22 @@ namespace MR.BinPacking.App.Controls
 
         private void FixValue()
         {
-            if ((Text.Length == 0) || (Int32.Parse(Text) < MinValue))
-                Text = MinValue.ToString();
-            else if (Int32.Parse(Text) > MaxValue)
-                Text = MaxValue.ToString();
+            if (IntsOnly)
+            {
+                int val;
+                if (!Int32.TryParse(Text, out val) || (val < MinValue))
+                    Text = MinValue.ToString();
+                else if (val > MaxValue)
+                    Text = MaxValue.ToString();
+            }
+            else
+            {
+                double val;
+                if (!Double.TryParse(Text, out val) || (val < MinValue))
+                    Text = MinValue.ToString();
+                else if (val > MaxValue)
+                    Text = MaxValue.ToString();
+            }
         }
 
         protected override void OnLostFocus(System.Windows.RoutedEventArgs e)

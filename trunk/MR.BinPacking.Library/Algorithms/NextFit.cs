@@ -22,10 +22,10 @@ namespace MR.BinPacking.Library.Algorithms
             if (IsPresentation)
                 Message = "";
 
-            ActualResult = new Instance(binSize);
-            ActualResult.Elements = elements;
+            Result = new Instance(binSize);
+            Result.Elements = elements;
 
-            ActualResult.Bins.Add(new Bin(ActualResult.BinSize));
+            Result.Bins.Add(new Bin(Result.BinSize));
 
             if (IsPresentation)
                 Message = "Brak skrzynek. Dodano nową skrzynkę." + Environment.NewLine + Environment.NewLine;
@@ -33,9 +33,9 @@ namespace MR.BinPacking.Library.Algorithms
             int k = 0;
             int sum = 0;
 
-            for (int i = 0; i < ActualResult.Elements.Count; i++)
+            for (int i = 0; i < Result.Elements.Count; i++)
             {
-                int elem = ActualResult.Elements[i];
+                int elem = Result.Elements[i];
 
                 #region UI
                 if (IsPresentation)
@@ -45,9 +45,9 @@ namespace MR.BinPacking.Library.Algorithms
                 }
                 #endregion
 
-                if (sum + elem > ActualResult.BinSize)
+                if (sum + elem > Result.BinSize)
                 {
-                    ActualResult.Bins.Add(new Bin(ActualResult.BinSize));
+                    Result.Bins.Add(new Bin(Result.BinSize));
                     k++;
                     sum = 0;
 
@@ -60,7 +60,7 @@ namespace MR.BinPacking.Library.Algorithms
                     #endregion
                 }
 
-                ActualResult.Bins[k].Insert(elem);
+                Result.Bins[k].Insert(elem);
                 sum += elem;
 
                 #region UI
@@ -69,7 +69,7 @@ namespace MR.BinPacking.Library.Algorithms
                 #endregion
             }
 
-            return ActualResult;
+            return Result;
         }
     }
 }

@@ -373,22 +373,21 @@ namespace MR.BinPacking.App.Chart
 
         private void cbDataType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            chartDataType = (ChartDataType)cbDataType.SelectedValue;
-
-            if (DataSource != null)
-            {
-                DataSeries = GetDataSeries(chartDataType, fieldType);
-                intervalWidthX = DataSource.Params.Step;
-                minX = DataSource.Params.MinN;
-
-                RefreshChart();
-                lbLegend.ItemsSource = DataSeries;
-            }
+            GetParamsAndRefresh();
         }
 
         private void cbField_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            fieldType = (StatField)cbField.SelectedValue;
+            GetParamsAndRefresh();
+        }
+
+        public void GetParamsAndRefresh()
+        {
+            if (cbDataType.SelectedValue != null)
+                chartDataType = (ChartDataType)cbDataType.SelectedValue;
+
+            if (cbField.SelectedValue != null)
+                fieldType = (StatField)cbField.SelectedValue;
 
             if (DataSource != null)
             {
@@ -435,7 +434,7 @@ namespace MR.BinPacking.App.Chart
         }
 
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        void AddChartDataTypes()
         {
             //fill chart data types combo box
             ComboBoxItem item = new ComboBoxItem() { Content = "Algorytm", Tag = ChartDataType.Algorithm };
@@ -455,11 +454,12 @@ namespace MR.BinPacking.App.Chart
 
             item = new ComboBoxItem() { Content = "Rozkład/sortowanie", Tag = ChartDataType.DistributionSorting };
             cbDataType.Items.Add(item);
+        }
 
-            cbDataType.SelectedIndex = 0;
-
+        void AddStatFields()
+        {
             //fill stat fields combo box
-            item = new ComboBoxItem() { Content = "czas działania", Tag = StatField.ExecutionTime };
+            ComboBoxItem item = new ComboBoxItem() { Content = "czas działania", Tag = StatField.ExecutionTime };
             cbField.Items.Add(item);
 
             item = new ComboBoxItem() { Content = "wynik", Tag = StatField.Result };
@@ -470,7 +470,14 @@ namespace MR.BinPacking.App.Chart
 
             item = new ComboBoxItem() { Content = "silniejsze dolne ograniczenie", Tag = StatField.StrongerLowerBound };
             cbField.Items.Add(item);
+        }
 
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            AddChartDataTypes();
+            AddStatFields();
+
+            cbDataType.SelectedIndex = 0;
             cbField.SelectedIndex = 0;
         }
 
@@ -744,6 +751,23 @@ namespace MR.BinPacking.App.Chart
             using (Stream stm = File.Create(file))
             {
                 encoder.Save(stm);
+            }
+        }
+
+
+        private double prevW = -10.0;
+        private double prevH = -10.0;
+        private void svScroll_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if ((e.WidthChanged) || (e.HeightChanged))
+            {
+                double maxChange = Math.Max(Math.Abs(e.NewSize.Width - prevW), Math.Abs(e.NewSize.Height - prevH));
+                if (maxChange > 4.0)
+                {
+                    prevW = e.NewSize.Width;
+                    prevH = e.NewSize.Height;
+                    GetParamsAndRefresh();
+                }
             }
         }
     }

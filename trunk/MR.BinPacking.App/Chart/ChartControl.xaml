@@ -29,7 +29,7 @@
             <Button x:Name="bScale" MinWidth="75" Content="liniowa" Margin="2,4" Click="bScale_Click"/>
             <Button x:Name="bSaveImg" MinWidth="75" Content="zapisz" Margin="2,4" Click="bSaveImg_Click"/>
         </StackPanel>
-        <ScrollViewer x:Name="svScroll" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer x:Name="svScroll" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SizeChanged="svScroll_SizeChanged">
             <Canvas x:Name="Canvas" Background="White"/>
         </ScrollViewer>
         <Expander Grid.Row="1" Grid.Column="1" ExpandDirection="Left" IsExpanded="True">
@@ -52,12 +52,6 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <!--<StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <CheckBox Content="NextFit" MinWidth="80" Margin="4,2,2,2"/>
-                    <Rectangle Fill="Red" Width="12" Height="12" Margin="2,2,4,2" Stroke="Gray" />
-                </StackPanel>
-            </StackPanel>-->
         </Expander>
         <Expander Grid.Row="2" Grid.ColumnSpan="2" Header="Tabela" Expanded="Expander_Expanded">
             <Grid x:Name="gTable"/>

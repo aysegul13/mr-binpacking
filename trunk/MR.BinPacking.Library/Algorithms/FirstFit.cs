@@ -21,15 +21,15 @@ namespace MR.BinPacking.Library.Algorithms
             if (IsPresentation)
                 Message = "";
 
-            ActualResult = new Instance(binSize);
-            ActualResult.Elements = elements;
+            Result = new Instance(binSize);
+            Result.Elements = elements;
 
-            for (int i = 0; i < ActualResult.Elements.Count; i++)
+            for (int i = 0; i < Result.Elements.Count; i++)
             {
-                int elem = ActualResult.Elements[i];
+                int elem = Result.Elements[i];
                 bool fit = false;
 
-                for (int k = 0; k < ActualResult.Bins.Count; k++)
+                for (int k = 0; k < Result.Bins.Count; k++)
                 {
                     #region UI
                     if (IsPresentation)
@@ -39,7 +39,7 @@ namespace MR.BinPacking.Library.Algorithms
                     }
                     #endregion
 
-                    Bin bin = ActualResult.Bins[k];
+                    Bin bin = Result.Bins[k];
                     if (bin.FreeSpace() >= elem)
                     {
                         fit = true;
@@ -63,26 +63,26 @@ namespace MR.BinPacking.Library.Algorithms
 
                 if (!fit)
                 {
-                    ActualResult.Bins.Add(new Bin(ActualResult.BinSize));
+                    Result.Bins.Add(new Bin(Result.BinSize));
 
                     #region UI
                     if (IsPresentation)
                     {
                         Message += "Brak miejsca we wszystkich skrzynkach. Dodano nową skrzynkę." + Environment.NewLine + Environment.NewLine;
-                        Wait(ActualResult.Bins.Count - 1, i);
+                        Wait(Result.Bins.Count - 1, i);
                     }
                     #endregion
 
-                    ActualResult.Bins.Last().Insert(elem);
+                    Result.Bins.Last().Insert(elem);
 
                     #region UI
                     if (IsPresentation)
-                        Message = String.Format("Wstawiono element {0} ({1}) do skrzynki {2}.", i + 1, elem, ActualResult.Bins.Count) + Environment.NewLine + Environment.NewLine;
+                        Message = String.Format("Wstawiono element {0} ({1}) do skrzynki {2}.", i + 1, elem, Result.Bins.Count) + Environment.NewLine + Environment.NewLine;
                     #endregion
                 }
             }
 
-            return ActualResult;
+            return Result;
         }
     }
 }
