@@ -408,5 +408,16 @@ namespace MR.BinPacking.App
             RefreshElements();
             RefreshPreview();
         }
+
+        private void bLoad3_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openDialog = new OpenFileDialog();
+            if (openDialog.ShowDialog() == true)
+            {
+                ESLoader.LoadFromFile2(openDialog.FileName);
+                //ExperimentParamsFile experimentParams = Loader.LoadExperimentParams(openDialog.FileName);
+                //SetParamsToUI(experimentParams);
+            }
+        }
     }
 }

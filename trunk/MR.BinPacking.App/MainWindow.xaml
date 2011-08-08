@@ -245,6 +245,7 @@
                             <Label Content="Eksperyment" VerticalContentAlignment="Center"/>
                         </StackPanel>
                     </Button>
+                    <Button x:Name="bLoad3" Content="Load3" Click="bLoad3_Click"/>
                 </Grid>
             </StackPanel>
         </TabItem>
