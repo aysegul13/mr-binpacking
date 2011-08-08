@@ -143,20 +143,11 @@ namespace MR.BinPacking.App.Chart
                 DrawValue((X2 + X1) / 2.0, w, Y2 - 20.0, brush, point.Y.ToString("0.##"));
         }
 
-        double Func(double X)
-        {
-            //return X * Math.Log(X, 2);
-            //return X;
-            //return Math.Log(X, 2);
-            return X * X;
-            //return Math.Pow(2, X);
-        }
-
         private void DrawFunction(FunctionHandler function)
         {
-            double max = 0.0000001;
-            foreach (var series in DataSeries)
-                max = Math.Max(max, series.Points.Select(p => p.Y).Max());
+            //double max = 0.0000001;
+            //foreach (var series in DataSeries)
+            //    max = Math.Max(max, series.Points.Select(p => p.Y).Max());
 
             int count = (DataSeries[0].Points.Count - 1) * 8;
             if (chartType == ChartType.Bars)
@@ -165,8 +156,12 @@ namespace MR.BinPacking.App.Chart
             double maxX = minX + (count - 1) * intervalWidthX / 8;
 
             double X = minX;
-            double Y = function.Function(X, maxX);
-            Y = maxY * Y; ;
+            double Y;
+            if ((fieldType == StatField.ExecutionTime) || (fieldType == StatField.Result))
+                Y = function.Function(X, maxX);
+            else
+                Y = function.Function(X, maxY);
+            Y = maxY * Y;
 
             PathFigure myPathFigure = new PathFigure();
             myPathFigure.StartPoint = new Point(ConvertX(X), ConvertY(Y));
@@ -176,15 +171,17 @@ namespace MR.BinPacking.App.Chart
             {
                 X = minX + ((double)(i * intervalWidthX) / 8);
 
-                //Y = Func(X);
-                Y = function.Function(X, maxX);
+                if ((fieldType == StatField.ExecutionTime) || (fieldType == StatField.Result))
+                    Y = function.Function(X, maxX);
+                else
+                    Y = function.Function(X, maxY);
                 Y = maxY * Y;
 
                 LineSegment myLineSegment = new LineSegment();
                 myLineSegment.Point = new Point(ConvertX(X), ConvertY(Y));
                 myPathSegmentCollection.Add(myLineSegment);
 
-                if (Y > max)
+                if (Y > maxY)
                     break;
             }
 
@@ -194,12 +191,14 @@ namespace MR.BinPacking.App.Chart
             PathGeometry myPathGeometry = new PathGeometry();
             myPathGeometry.Figures = myPathFigureCollection;
 
-            System.Windows.Shapes.Path myPath = new System.Windows.Shapes.Path();
-            myPath.Stroke = function.Color;
-            myPath.ToolTip = function.Name;
-            myPath.StrokeDashArray = new DoubleCollection { 6, 3 };
-            myPath.StrokeThickness = 2;
-            myPath.Data = myPathGeometry;
+            System.Windows.Shapes.Path myPath = new System.Windows.Shapes.Path()
+            {
+                Stroke = function.Color,
+                ToolTip = function.Name,
+                StrokeDashArray = new DoubleCollection { 6, 3 },
+                StrokeThickness = 2,
+                Data = myPathGeometry
+            };
 
             Canvas.Children.Add(myPath);
         }
@@ -336,13 +335,15 @@ namespace MR.BinPacking.App.Chart
 
             TextBlock tblUnitY = new TextBlock()
             {
-                Width = offsetX - 8,
-                Text = ((StatField)cbField.SelectedValue).ToString(),
+                //Width = offsetX - 8,
+                Width = offsetX + 8,
+                Text = StatFieldToString((StatField)cbField.SelectedValue),
                 FontWeight = FontWeights.Bold,
-                TextAlignment = TextAlignment.Right
+                TextAlignment = TextAlignment.Center,
+                TextWrapping = TextWrapping.Wrap
             };
             Canvas.SetLeft(tblUnitY, 0);
-            Canvas.SetTop(tblUnitY, offsetY - 10.0);
+            Canvas.SetTop(tblUnitY, offsetY - 32.0);
             Canvas.Children.Add(tblUnitY);
 
             double h = chartHeight / (intervalsY + 1);
@@ -402,6 +403,8 @@ namespace MR.BinPacking.App.Chart
                 DataSeries = GetDataSeries(chartDataType, fieldType);
                 intervalWidthX = DataSource.Params.Step;
                 minX = DataSource.Params.MinN;
+
+                AddFunctions();
 
                 RefreshChart();
                 RefreshTable();
@@ -465,60 +468,113 @@ namespace MR.BinPacking.App.Chart
             cbDataType.Items.Add(item);
         }
 
+        string StatFieldToString(StatField statField)
+        {
+            switch (statField)
+            {
+                case StatField.QualityEstimation:
+                    return "oszacowanie jakości";
+                case StatField.ErrorEstimation:
+                    return "oszacowanie błędu";
+                case StatField.Result:
+                    return "wynik";
+                default:    //ExecutionTime
+                    return "czas działania";
+            }
+        }
+
         void AddStatFields()
         {
             //fill stat fields combo box
-            ComboBoxItem item = new ComboBoxItem() { Content = "czas działania", Tag = StatField.ExecutionTime };
-            cbField.Items.Add(item);
+            cbField.Items.Add(new ComboBoxItem()
+            {
+                Content = StatFieldToString(StatField.ExecutionTime),
+                Tag = StatField.ExecutionTime
+            });
 
-            item = new ComboBoxItem() { Content = "wynik", Tag = StatField.Result };
-            cbField.Items.Add(item);
+            cbField.Items.Add(new ComboBoxItem()
+            {
+                Content = StatFieldToString(StatField.Result),
+                Tag = StatField.Result
+            });
 
-            item = new ComboBoxItem() { Content = "oszacowanie jakości", Tag = StatField.QualityEstimation };
-            cbField.Items.Add(item);
+            cbField.Items.Add(new ComboBoxItem()
+            {
+                Content = StatFieldToString(StatField.QualityEstimation),
+                Tag = StatField.QualityEstimation
+            });
 
-            item = new ComboBoxItem() { Content = "oszacowanie błędu", Tag = StatField.ErrorEstimation };
-            cbField.Items.Add(item);
+            cbField.Items.Add(new ComboBoxItem()
+            {
+                Content = StatFieldToString(StatField.ErrorEstimation),
+                Tag = StatField.ErrorEstimation
+            });
         }
 
         void AddFunctions()
         {
             Functions = new List<FunctionHandler>();
 
-            Functions.Add(new FunctionHandler()
+            if ((fieldType == StatField.ExecutionTime) || (fieldType == StatField.Result))
             {
-                Name = "O(log(n))",
-                Color = Brushes.CornflowerBlue,
-                Function = FunctionHandler.FuncLogN
-            });
+                Functions.Add(new FunctionHandler()
+                {
+                    Name = "O(log(n))",
+                    Color = Brushes.CornflowerBlue,
+                    Function = FunctionHandler.FuncLogN
+                });
 
-            Functions.Add(new FunctionHandler()
-            {
-                Name = "O(n)",
-                Color = Brushes.CornflowerBlue,
-                Function = FunctionHandler.FuncN
-            });
+                Functions.Add(new FunctionHandler()
+                {
+                    Name = "O(n)",
+                    Color = Brushes.CornflowerBlue,
+                    Function = FunctionHandler.FuncN
+                });
 
-            Functions.Add(new FunctionHandler()
-            {
-                Name = "O(n*log(n))",
-                Color = Brushes.CornflowerBlue,
-                Function = FunctionHandler.FuncNLogN
-            });
+                Functions.Add(new FunctionHandler()
+                {
+                    Name = "O(n*log(n))",
+                    Color = Brushes.CornflowerBlue,
+                    Function = FunctionHandler.FuncNLogN
+                });
 
-            Functions.Add(new FunctionHandler()
-            {
-                Name = "O(n^2)",
-                Color = Brushes.CornflowerBlue,
-                Function = FunctionHandler.FuncNN
-            });
+                Functions.Add(new FunctionHandler()
+                {
+                    Name = "O(n^2)",
+                    Color = Brushes.CornflowerBlue,
+                    Function = FunctionHandler.FuncNN
+                });
 
-            Functions.Add(new FunctionHandler()
+                Functions.Add(new FunctionHandler()
+                {
+                    Name = "O(2^n)",
+                    Color = Brushes.CornflowerBlue,
+                    Function = FunctionHandler.Func2PowN
+                });
+            }
+            else
             {
-                Name = "O(2^n)",
-                Color = Brushes.CornflowerBlue,
-                Function = FunctionHandler.Func2PowN
-            });
+                Functions.Add(new FunctionHandler()
+                {
+                    Name = "11/9",
+                    Color = Brushes.Red,
+                    Function = FunctionHandler.Const11f9
+                });
+
+                Functions.Add(new FunctionHandler()
+                {
+                    Name = "17/10",
+                    Color = Brushes.Red,
+                    Function = FunctionHandler.Const17f10
+                });
+
+                Functions.Add(new FunctionHandler()
+                {
+                    Name = "2",
+                    Color = Brushes.Red,
+                    Function = FunctionHandler.Const2
+                });
+            }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -568,7 +624,10 @@ namespace MR.BinPacking.App.Chart
             chartWidth = Canvas.ActualWidth - 1.5 * offsetX;
             chartHeight = Canvas.ActualHeight - 2 * offsetY;
 
-            maxY = 0.01;
+            if ((fieldType == StatField.ErrorEstimation) || (fieldType == StatField.QualityEstimation))
+                maxY = 2;
+            else
+                maxY = 0.01;
 
             IEnumerable<DataSerie> VisibleDataSeries = DataSeries.Where(ds => ds.Visible == true);
             foreach (var series in VisibleDataSeries)

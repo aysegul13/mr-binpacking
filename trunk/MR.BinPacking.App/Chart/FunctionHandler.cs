@@ -44,5 +44,20 @@ namespace MR.BinPacking.App.Chart
         {
             return Math.Pow(2, x - maxX);
         }
+
+        public static double Const11f9(double x, double maxY)
+        {
+            return 11 / (9 * maxY);
+        }
+
+        public static double Const17f10(double x, double maxY)
+        {
+            return 1.7 / maxY;
+        }
+
+        public static double Const2(double x, double maxY)
+        {
+            return 2 / maxY;
+        }
     }
 }
