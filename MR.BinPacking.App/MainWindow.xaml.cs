@@ -250,9 +250,9 @@ namespace MR.BinPacking.App
             cbExpDistGauss.IsChecked = experimentParams.Distributions.Contains(Distribution.Gauss);
             cbExpDistExp.IsChecked = experimentParams.Distributions.Contains(Distribution.Exponential);
 
-            rbExpSortNone.IsChecked = experimentParams.Sortings.Contains(Sorting.None);
-            rbExpSortAsc.IsChecked = experimentParams.Sortings.Contains(Sorting.Ascending);
-            rbExpSortDesc.IsChecked = experimentParams.Sortings.Contains(Sorting.Descending);
+            cbExpSortNone.IsChecked = experimentParams.Sortings.Contains(Sorting.None);
+            cbExpSortAsc.IsChecked = experimentParams.Sortings.Contains(Sorting.Ascending);
+            cbExpSortDesc.IsChecked = experimentParams.Sortings.Contains(Sorting.Descending);
 
             cbExpNF.IsChecked = experimentParams.Algorithms.Contains(Algorithm.NextFit);
             cbExpFF.IsChecked = experimentParams.Algorithms.Contains(Algorithm.FirstFit);
@@ -291,17 +291,27 @@ namespace MR.BinPacking.App
                 distributions.Add(Distribution.Gauss);
             if (cbExpDistExp.IsChecked == true)
                 distributions.Add(Distribution.Exponential);
-            if ((cbExpDistUniform.IsChecked == true) || (distributions.Count == 0))
+            if (cbExpDistUniform.IsChecked == true)
                 distributions.Add(Distribution.Uniform);
+            if (distributions.Count == 0)
+            {
+                distributions.Add(Distribution.Uniform);
+                cbExpDistUniform.IsChecked = true;
+            }
             experimentParams.Distributions = distributions;
 
             //"None" must be first!!!
-            if (rbExpSortNone.IsChecked == true)
+            if (cbExpSortNone.IsChecked == true)
                 experimentParams.Sortings.Add(Sorting.None);
-            if (rbExpSortAsc.IsChecked == true)
+            if (cbExpSortAsc.IsChecked == true)
                 experimentParams.Sortings.Add(Sorting.Ascending);
-            if (rbExpSortDesc.IsChecked == true)
+            if (cbExpSortDesc.IsChecked == true)
                 experimentParams.Sortings.Add(Sorting.Descending);
+            if (experimentParams.Sortings.Count == 0)
+            {
+                experimentParams.Sortings.Add(Sorting.None);
+                cbExpSortNone.IsChecked = true;
+            }
 
             List<Algorithm> algorithms = new List<Algorithm>();
             if (cbExpNF.IsChecked == true)
@@ -320,6 +330,11 @@ namespace MR.BinPacking.App
             {
                 experimentParams.AASEpsilon = Double.Parse(ntbAASExpEpsilon.Text);
                 algorithms.Add(Algorithm.AsymptoticApproximationScheme);
+            }
+            if (algorithms.Count == 0)
+            {
+                algorithms.Add(Algorithm.NextFit);
+                cbExpNF.IsChecked = true;
             }
 
             experimentParams.Algorithms = algorithms;
