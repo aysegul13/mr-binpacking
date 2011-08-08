@@ -33,6 +33,8 @@ namespace MR.BinPacking.Library.Experiment
 
         public int Repeat { get; set; }
 
+        public double AASEpsilon { get; set; }
+
         public List<Algorithm> Algorithms { get; set; }
         public List<Distribution> Distributions { get; set; }
         public List<Sorting> Sortings { get; set; }
@@ -47,11 +49,11 @@ namespace MR.BinPacking.Library.Experiment
 
     public class ExperimentParams : ExperimentParamsFile
     {
-        public List<ListAlgorithm> Algs { get; set; }
+        public List<BaseAlgorithm> Algs { get; set; }
 
         public ExperimentParams()
         {
-            Algs = new List<ListAlgorithm>();
+            Algs = new List<BaseAlgorithm>();
         }
 
         public ExperimentParams(ExperimentParamsFile fileParams) : this()
@@ -63,16 +65,19 @@ namespace MR.BinPacking.Library.Experiment
             MinVal = fileParams.MinVal;
             MaxVal = fileParams.MaxVal;
             Repeat = fileParams.Repeat;
+            AASEpsilon = fileParams.AASEpsilon;
             Algorithms = fileParams.Algorithms;
             Distributions = fileParams.Distributions;
             Sortings = fileParams.Sortings;
 
             foreach (var algorithm in fileParams.Algorithms)
-                Algs.Add(ListAlgorithmFromAlgorithm(algorithm, false));
+                Algs.Add(ListAlgorithmFromAlgorithm(algorithm, AASEpsilon));
         }
 
-        static ListAlgorithm ListAlgorithmFromAlgorithm(Algorithm algorithm, bool isPresentation)
+        static BaseAlgorithm ListAlgorithmFromAlgorithm(Algorithm algorithm, double AASEpsilon)
         {
+            bool isPresentation = false;
+
             switch (algorithm)
             {
                 case Algorithm.FirstFit:
@@ -86,8 +91,7 @@ namespace MR.BinPacking.Library.Experiment
                 case Algorithm.RandomFit:
                     return new RandomFit() { IsPresentation = isPresentation };
                 case Algorithm.AsymptoticApproximationScheme:
-                    throw new NotImplementedException();
-                    //return new NextFit() { IsPresentation = isPresentation };
+                    return new AAS() { Epsilon = AASEpsilon };
                 case Algorithm.BruteForce:
                     throw new NotImplementedException();
                     //return new NextFit() { IsPresentation = isPresentation };

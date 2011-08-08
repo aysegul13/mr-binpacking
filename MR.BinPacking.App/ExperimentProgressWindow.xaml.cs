@@ -71,7 +71,7 @@ namespace MR.BinPacking.App
                             //TODO: algorytm z innego źródła
                             for (int i = 0; i < prms.Algorithms.Count; i++)
                             {
-                                ListAlgorithm A = prms.Algs[i];
+                                BaseAlgorithm A = prms.Algs[i];
                                 ExperimentState state = new ExperimentState()
                                 {
                                     Repeat = R,
