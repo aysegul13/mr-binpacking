@@ -133,26 +133,24 @@ namespace MR.BinPacking.Library.Algorithms
 
             #endregion
 
-
-            #region STEP 2
-
             //get L
             int[] L = I.Where(e => e < gamma).ToArray();
             int m = (int)Math.Floor((double)(I.Length - L.Length) / h);
 
-            //get M
-            int[] M = new int[m];
-            for (int i = 1; i <= m; i++)
-                M[i - 1] = I[GetIndex(i, I, m, h) - 1];
-
             //get R
-            int ym = GetIndex(m, I, m, h);
-            int[] R = I.Skip(ym).ToArray();
+            int[] R;
 
-            #endregion
+            if (m > 0)
+            {
+                int ym = GetIndex(m, I, m, h);
+                R = I.Skip(ym).ToArray();
+            }
+            else
+            {
+                R = I.Skip(L.Length).ToArray();
+            }
 
-
-            #region STEP 3
+            #region pack R
 
             foreach (var item in R)
             {
@@ -164,93 +162,101 @@ namespace MR.BinPacking.Library.Algorithms
             #endregion
 
 
-            #region STEP 4
+            #region pack M (K's)
 
-            //prepare packings
-            int[] Kcounts = new int[m];
-            int skip = L.Length;
-            List<List<int>> K = new List<List<int>>();
-            Kcounts[0] = GetIndex(1, I, m, h) - L.Length;    //K0 can have less elements
-            List<int> K0 = I.Skip(skip).Take(Kcounts[0]).ToList();
-            K.Add(K0);
-            skip += Kcounts[0];
-            for (int i = 1; i < m; i++)
+            if (m > 0)
             {
-                Kcounts[i] = h;
-                List<int> Ki = I.Skip(skip).Take(h).ToList();
-                K.Add(Ki);
-                skip += h;
-            }
+                //get M
+                int[] M = new int[m];
+                for (int i = 1; i <= m; i++)
+                    M[i - 1] = I[GetIndex(i, I, m, h) - 1];
 
-            PreparePackings(M, Kcounts, c);
-
-            int packings = T.Count;
-
-            try
-            {
-                //LP
-                int lp = lpsolve.make_lp(0, packings);
-
-                //add constraints
-                for (int i = 0; i < m; i++)
+                //prepare packings
+                int[] Kcounts = new int[m];
+                int skip = L.Length;
+                List<List<int>> K = new List<List<int>>();
+                Kcounts[0] = GetIndex(1, I, m, h) - L.Length;    //K0 can have less elements
+                List<int> K0 = I.Skip(skip).Take(Kcounts[0]).ToList();
+                K.Add(K0);
+                skip += Kcounts[0];
+                for (int i = 1; i < m; i++)
                 {
-                    double[] constraintRaw = T.Select(t => (double)t[i]).ToArray();
-                    double[] constraint = new double[packings + 1];
-                    constraintRaw.CopyTo(constraint, 1);
-                    lpsolve.add_constraint(lp, constraint, lpsolve.lpsolve_constr_types.GE, Kcounts[i]);
+                    Kcounts[i] = h;
+                    List<int> Ki = I.Skip(skip).Take(h).ToList();
+                    K.Add(Ki);
+                    skip += h;
                 }
 
-                //set objective function
-                double[] obj = new double[packings + 1];
-                for (int i = 1; i < packings + 1; i++)
-                    obj[i] = 1;
-                lpsolve.set_obj_fn(lp, obj);
+                PreparePackings(M, Kcounts, c);
 
-                //solve
-                lpsolve.solve(lp);
+                int packings = T.Count;
 
-                //TODO: obsługa błędu
-                int N = lpsolve.get_Ncolumns(lp);
-                double[] resultLP = new double[N];
-                if (!lpsolve.get_variables(lp, resultLP))
-                    throw new Exception("Błąd!!!");
-
-                for (int i = 0; i < N; i++)
+                try
                 {
-                    int x = (int)Math.Floor((decimal)resultLP[i]);
-                    if (x == 0)
-                        continue;
+                    //LP
+                    int lp = lpsolve.make_lp(0, packings);
 
-                    Bin bin = new Bin(c);
-                    int[] pack = T[i];
-                    for (int j = 0; j < pack.Length; j++)
+                    //add constraints
+                    for (int i = 0; i < m; i++)
                     {
-                        bin.Elements.AddRange(K[j].GetRange(K[j].Count - pack[j], pack[j]));
-                        K[j].RemoveRange(K[j].Count - pack[j], pack[j]);
+                        double[] constraintRaw = T.Select(t => (double)t[i]).ToArray();
+                        double[] constraint = new double[packings + 1];
+                        constraintRaw.CopyTo(constraint, 1);
+                        lpsolve.add_constraint(lp, constraint, lpsolve.lpsolve_constr_types.GE, Kcounts[i]);
                     }
-                    Result.Bins.Add(bin);
+
+                    //set objective function
+                    double[] obj = new double[packings + 1];
+                    for (int i = 1; i < packings + 1; i++)
+                        obj[i] = 1;
+                    lpsolve.set_obj_fn(lp, obj);
+
+                    //solve
+                    lpsolve.solve(lp);
+
+                    //TODO: obsługa błędu
+                    int N = lpsolve.get_Ncolumns(lp);
+                    double[] resultLP = new double[N];
+                    if (!lpsolve.get_variables(lp, resultLP))
+                        throw new Exception("Błąd!!!");
+
+                    for (int i = 0; i < N; i++)
+                    {
+                        int x = (int)Math.Floor((decimal)resultLP[i]);
+                        if (x == 0)
+                            continue;
+
+                        Bin bin = new Bin(c);
+                        int[] pack = T[i];
+                        for (int j = 0; j < pack.Length; j++)
+                        {
+                            bin.Elements.AddRange(K[j].GetRange(K[j].Count - pack[j], pack[j]));
+                            K[j].RemoveRange(K[j].Count - pack[j], pack[j]);
+                        }
+                        Result.Bins.Add(bin);
+                    }
                 }
-            }
-            catch (Exception exc)
-            {
-                Debug.WriteLine(exc.Message + exc.StackTrace);
-            }
+                catch (Exception exc)
+                {
+                    Debug.WriteLine(exc.Message + exc.StackTrace);
+                }
 
-            List<int> leftK = new List<int>();
-            foreach (var actualK in K)
-                leftK.AddRange(actualK);
+                List<int> leftK = new List<int>();
+                foreach (var actualK in K)
+                    leftK.AddRange(actualK);
 
-            //pack leftK using NextFit
-            if (leftK.Count > 0)
-            {
-                NextFit nextFit = new NextFit() { IsPresentation = false };
-                Instance tmpInst = nextFit.Execute(leftK, c);
-                Result.Bins.AddRange(tmpInst.Bins);
+                //pack leftK using NextFit
+                if (leftK.Count > 0)
+                {
+                    NextFit nextFit = new NextFit() { IsPresentation = false };
+                    Instance tmpInst = nextFit.Execute(leftK, c);
+                    Result.Bins.AddRange(tmpInst.Bins);
+                }
             }
 
             #endregion
 
-            #region STEP 5
+            #region pack L
 
             List<int> leftL = new List<int>(L);
             for (int i = 0; i < Result.Bins.Count; i++)
