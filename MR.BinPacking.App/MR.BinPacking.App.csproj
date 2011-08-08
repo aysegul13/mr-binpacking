@@ -55,6 +55,7 @@
     </Compile>
     <Compile Include="Chart\ChartDataType.cs" />
     <Compile Include="Chart\DataSerie.cs" />
+    <Compile Include="Chart\FunctionHandler.cs" />
     <Compile Include="Controls\NumberTextBox.cs" />
     <Compile Include="Chart\Point2D.cs" />
     <Compile Include="ExperimentProgressWindow.xaml.cs">
