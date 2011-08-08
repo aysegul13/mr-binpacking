@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace MR.BinPacking.App.Chart
 {
-    public delegate double Func(double x);
+    public delegate double Func(double x, double maxX);
 
     public class FunctionHandler
     {
@@ -20,24 +20,29 @@ namespace MR.BinPacking.App.Chart
             Visible = false;
         }
 
-        public static double FuncN(double x)
+        public static double FuncN(double x, double maxX)
         {
-            return x;
+            return x / maxX;
         }
 
-        public static double FuncNN(double x)
+        public static double FuncNN(double x, double maxX)
         {
-            return x * x;
+            return (x * x) / (maxX * maxX);
         }
 
-        public static double FuncLogN(double x)
+        public static double FuncLogN(double x, double maxX)
         {
-            return Math.Log(x, 2);
+            return Math.Log(x, 2) / Math.Log(maxX, 2);
         }
 
-        public static double FuncNLogN(double x)
+        public static double FuncNLogN(double x, double maxX)
         {
-            return x * Math.Log(x, 2);
+            return (x * Math.Log(x, 2)) / (maxX * Math.Log(maxX, 2));
+        }
+
+        public static double Func2PowN(double x, double maxX)
+        {
+            return Math.Pow(2, x - maxX);
         }
     }
 }

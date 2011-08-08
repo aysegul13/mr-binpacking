@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:gui="clr-namespace:MR.BinPacking.App.Controls"
         Title="Bin Packing - Marcin Robaszyński 2011" Width="550" MinHeight="400" MinWidth="500"
-        Closing="Window_Closing">
+        Closing="Window_Closing" Loaded="Window_Loaded">
     <Window.Resources>
         <Style x:Key="tbBorderStyle" TargetType="Border">
             <Setter Property="BorderThickness" Value="1"/>
@@ -166,15 +166,15 @@
                     <Label Content="Liczba elementów (n)" FontWeight="Bold"/>
                     <Label Grid.Row="1" Content="Od:"/>
                     <Border Grid.Row="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                        <gui:NumberTextBox x:Name="ntbExpMinN" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="100" Text="100"/>
+                        <gui:NumberTextBox x:Name="ntbExpMinN" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="1000000" Text="100"/>
                     </Border>
                     <Label Grid.Row="2" Content="Do:"/>
                     <Border Grid.Row="2" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                        <gui:NumberTextBox x:Name="ntbExpMaxN" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="10" MaxValue="1000" Text="1000" />
+                        <gui:NumberTextBox x:Name="ntbExpMaxN" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="10" MaxValue="1000000" Text="1000" />
                     </Border>
                     <Label Grid.Row="3" Content="Krok:"/>
                     <Border Grid.Row="3" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                        <gui:NumberTextBox x:Name="ntbExpStep" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" Text="100"/>
+                        <gui:NumberTextBox x:Name="ntbExpStep" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="1000000" Text="100"/>
                     </Border>
                     <Label Grid.Column="1" Content="Rozmiar elementów" FontWeight="Bold"/>
                     <Label Grid.Row="1" Grid.Column="1" Content="Skrzynki (c):"/>

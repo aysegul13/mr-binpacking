@@ -11,9 +11,7 @@ namespace MR.BinPacking.Library
         //lower bound from 8.14
         public static int LowerBound(List<int> elements, int c)
         {
-            double test = elements.Sum(el => (double)el);
-
-            return (int)Math.Ceiling((double)elements.Sum() / c);
+            return (int)Math.Ceiling(elements.Sum(el => (decimal)el) / c);
         }
 
         //lower bound from 8.19
@@ -25,8 +23,8 @@ namespace MR.BinPacking.Library
             IEnumerable<int> J1 = elements.Where(e => e > c - alpha);
             IEnumerable<int> J2 = elements.Where(e => (c - alpha >= e) && (2 * e > c));
             IEnumerable<int> J3 = elements.Where(e => (c >= 2 * e) && (e >= alpha));
-            
-            return J1.Count() + J2.Count() + Math.Max(0, (int)Math.Ceiling((double)(J3.Sum() - (J2.Count() * c - J2.Sum())) / c));
+
+            return J1.Count() + J2.Count() + Math.Max(0, (int)Math.Ceiling((double)(J3.Sum(el => (decimal)el) - (J2.Count() * c - J2.Sum(el => (decimal)el))) / c));
         }
     }
 }

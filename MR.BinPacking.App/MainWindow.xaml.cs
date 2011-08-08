@@ -379,5 +379,18 @@ namespace MR.BinPacking.App
             if (!Double.TryParse(tbAASEpsilon.Text, out epsilon))
                 tbAASEpsilon.Text = (0.33).ToString();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            BinSize = Int32.Parse(ntbBinSize.Text);
+            int elementsNumber = Int32.Parse(ntbElementsNumber.Text);
+            int minValue = Int32.Parse(ntbMinValue.Text);
+            int maxValue = Int32.Parse(ntbMaxValue.Text);
+
+            Elements = Generator.GenerateData(elementsNumber, minValue, maxValue, Distribution.Uniform);
+
+            RefreshElements();
+            RefreshPreview();
+        }
     }
 }

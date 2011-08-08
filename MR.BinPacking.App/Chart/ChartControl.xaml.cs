@@ -161,14 +161,11 @@ namespace MR.BinPacking.App.Chart
             if (chartType == ChartType.Bars)
                 count += 8;
 
-            double funcMaxX = minX + (count - 1) * intervalWidthX / 8;
-            //double funcMaxY = Func(funcMaxX);
-            double funcMaxY = function.Function(funcMaxX);
+            double maxX = minX + (count - 1) * intervalWidthX / 8;
 
             double X = minX;
-            //double Y = Func(X);
-            double Y = function.Function(X);
-            Y = maxY * (Y / funcMaxY);
+            double Y = function.Function(X, maxX);
+            Y = maxY * Y; ;
 
             PathFigure myPathFigure = new PathFigure();
             myPathFigure.StartPoint = new Point(ConvertX(X), ConvertY(Y));
@@ -179,8 +176,8 @@ namespace MR.BinPacking.App.Chart
                 X = minX + ((double)(i * intervalWidthX) / 8);
 
                 //Y = Func(X);
-                Y = function.Function(X);
-                Y = maxY * (Y / funcMaxY);
+                Y = function.Function(X, maxX);
+                Y = maxY * Y;
 
                 LineSegment myLineSegment = new LineSegment();
                 myLineSegment.Point = new Point(ConvertX(X), ConvertY(Y));
@@ -205,7 +202,6 @@ namespace MR.BinPacking.App.Chart
 
             Canvas.Children.Add(myPath);
         }
-
 
         private void DrawXAxis()
         {
@@ -490,7 +486,7 @@ namespace MR.BinPacking.App.Chart
 
             Functions.Add(new FunctionHandler()
             {
-                Name = "O(n*log(n))",
+                Name = "O(log(n))",
                 Color = Brushes.CornflowerBlue,
                 Function = FunctionHandler.FuncLogN
             });
@@ -514,6 +510,13 @@ namespace MR.BinPacking.App.Chart
                 Name = "O(n^2)",
                 Color = Brushes.CornflowerBlue,
                 Function = FunctionHandler.FuncNN
+            });
+
+            Functions.Add(new FunctionHandler()
+            {
+                Name = "O(2^n)",
+                Color = Brushes.CornflowerBlue,
+                Function = FunctionHandler.Func2PowN
             });
         }
 

@@ -63,7 +63,9 @@
     <Compile Include="Algorithms\RandomFit.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Libraries\lpsolve55.dll" />
+    <None Include="Libraries\lpsolve55.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
