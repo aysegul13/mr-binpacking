@@ -6,6 +6,10 @@ using MR.BinPacking.Library.Base;
 using System.IO;
 using MR.BinPacking.Library.Experiment;
 using System.Xml.Serialization;
+using System.Windows.Media.Imaging;
+using System.Windows;
+using Microsoft.Win32;
+using System.Windows.Media;
 
 namespace MR.BinPacking.App.Utils
 {
@@ -67,6 +71,49 @@ namespace MR.BinPacking.App.Utils
             string xml = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
             using (StreamWriter sw = new StreamWriter(fileName))
                 sw.Write(xml);
+        }
+
+        public static void SaveToImg(UIElement control, double width, double height)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.DefaultExt = ".png";
+            dialog.Filter = "Bitmapa (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|Pliki PNG (*.png)|*.png|Obrazki (*.bmp;*.jpg;*.png)|*.bmp;*.jpg;*.png|Wszystkie pliki (*.*)|*.*";
+            dialog.FilterIndex = 3;
+
+            int Width = (int)Math.Floor(width);
+            int Height = (int)Math.Floor(height);
+
+            Nullable<bool> result = dialog.ShowDialog();
+            if (result != true)
+                return;
+
+            string file = dialog.FileName;
+            string Extension = System.IO.Path.GetExtension(file).ToLower();
+
+
+            RenderTargetBitmap bmp = new RenderTargetBitmap(Width, Height, 96, 96, PixelFormats.Pbgra32);
+            bmp.Render(control);
+
+            BitmapEncoder encoder;
+
+            if (Extension == ".bmp")
+                encoder = new BmpBitmapEncoder();
+            else if (Extension == ".png")
+                encoder = new PngBitmapEncoder();
+            else if (Extension == ".jpg")
+            {
+                encoder = new JpegBitmapEncoder();
+                (encoder as JpegBitmapEncoder).QualityLevel = 100;
+            }
+            else
+                return;
+
+            encoder.Frames.Add(BitmapFrame.Create(bmp));
+
+            using (Stream stm = File.Create(file))
+            {
+                encoder.Save(stm);
+            }
         }
     }
 }

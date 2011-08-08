@@ -16,6 +16,9 @@ using System.Diagnostics;
 using MR.BinPacking.Library;
 using System.Windows.Interop;
 using System.Threading;
+using Microsoft.Win32;
+using System.IO;
+using MR.BinPacking.App.Utils;
 
 namespace MR.BinPacking.App
 {
@@ -331,6 +334,16 @@ namespace MR.BinPacking.App
             //            <Label x:Name="laLowerBounds" Content="LB/SLB: " Visibility="Collapsed" />
             //            <Label x:Name="laQualityEstimations" Content="Oszac. jakości LB/SLB: " Visibility="Collapsed" />
             //            <Label x:Name="laErrorEstimations" Content="Oszac. błędu LB/SLB: " Visibility="Collapsed" />
+        }
+
+        private void bSaveResult_Click(object sender, RoutedEventArgs e)
+        {
+            Loader.SaveToImg(spResult, spResult.ActualWidth, spResult.ActualHeight);
+        }
+
+        private void bSaveElements_Click(object sender, RoutedEventArgs e)
+        {
+            Loader.SaveToImg(spElements, spElements.ActualWidth, spElements.ActualHeight);
         }
     }
 }

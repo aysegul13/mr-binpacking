@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 using MR.BinPacking.Library.Experiment;
 using Microsoft.Win32;
 using System.IO;
+using MR.BinPacking.App.Utils;
 
 namespace MR.BinPacking.App.Chart
 {
@@ -111,7 +112,7 @@ namespace MR.BinPacking.App.Chart
 
             double w = 2.0 * (X2 - X1);
             if (w >= 40.0)
-                DrawValue(X1, w, Y1 - 20.0, brush, point.Y.ToString());
+                DrawValue(X1, w, Y1 - 20.0, brush, point.Y.ToString("0.##"));
         }
 
         private void DrawRect(Point2D point, Brush brush, int number, int count, string name)
@@ -139,7 +140,7 @@ namespace MR.BinPacking.App.Chart
 
             double w = 2.0 * (X2 - X1);
             if (w >= 40.0)
-                DrawValue((X2 + X1) / 2.0, w, Y2 - 20.0, brush, point.Y.ToString());
+                DrawValue((X2 + X1) / 2.0, w, Y2 - 20.0, brush, point.Y.ToString("0.##"));
         }
 
         double Func(double X)
@@ -279,12 +280,12 @@ namespace MR.BinPacking.App.Chart
                     {
                         double centerX = ConvertX(minX + (i + 0.5) * intervalWidthX);
                         if (i < count - 1)
-                            DrawValue(centerX, 40.0, Y + 8, Brushes.Black, DataSeries[0].Points[i].X.ToString());
+                            DrawValue(centerX, 40.0, Y + 8, Brushes.Black, DataSeries[0].Points[i].X.ToString("0.##"));
                     }
                     else
                     {
                         double centerX = X;
-                        DrawValue(centerX, 40.0, Y + 8, Brushes.Black, DataSeries[0].Points[i].X.ToString());
+                        DrawValue(centerX, 40.0, Y + 8, Brushes.Black, DataSeries[0].Points[i].X.ToString("0.##"));
                     }
 
                     actGap = 0;
@@ -473,10 +474,10 @@ namespace MR.BinPacking.App.Chart
             item = new ComboBoxItem() { Content = "wynik", Tag = StatField.Result };
             cbField.Items.Add(item);
 
-            item = new ComboBoxItem() { Content = "dolne ograniczenie", Tag = StatField.LowerBound };
+            item = new ComboBoxItem() { Content = "oszacowanie jakości", Tag = StatField.QualityEstimation };
             cbField.Items.Add(item);
 
-            item = new ComboBoxItem() { Content = "silniejsze dolne ograniczenie", Tag = StatField.StrongerLowerBound };
+            item = new ComboBoxItem() { Content = "oszacowanie błędu", Tag = StatField.ErrorEstimation };
             cbField.Items.Add(item);
         }
 
@@ -669,9 +670,9 @@ namespace MR.BinPacking.App.Chart
                 N = first.N,
                 Sorting = first.Sorting,
                 ExecutionTime = group.Sum(s => s.ExecutionTime) / group.Count(),
-                LowerBound = (int)Math.Ceiling(group.Average(s => s.LowerBound)),
+                QualityEstimation = group.Average(s => s.QualityEstimation),
                 Result = (int)Math.Ceiling(group.Average(s => s.Result)),
-                StrongerLowerBound = (int)Math.Ceiling(group.Average(s => s.StrongerLowerBound))
+                ErrorEstimation = group.Average(s => s.ErrorEstimation)
             };
 
             return avgSample;
@@ -760,45 +761,7 @@ namespace MR.BinPacking.App.Chart
 
         private void bSaveImg_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.DefaultExt = ".png";
-            dialog.Filter = "Bitmapa (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|Pliki PNG (*.png)|*.png|Obrazki (*.bmp;*.jpg;*.png)|*.bmp;*.jpg;*.png|Wszystkie pliki (*.*)|*.*";
-            dialog.FilterIndex = 3;
-
-            int Height = (int)Math.Floor(Canvas.ActualHeight);
-            int Width = (int)Math.Floor(Canvas.ActualWidth);
-
-            Nullable<bool> result = dialog.ShowDialog();
-            if (result != true)
-                return;
-
-            string file = dialog.FileName;
-            string Extension = System.IO.Path.GetExtension(file).ToLower();
-
-
-            RenderTargetBitmap bmp = new RenderTargetBitmap(Width, Height, 96, 96, PixelFormats.Pbgra32);
-            bmp.Render(Canvas);
-
-            BitmapEncoder encoder;
-
-            if (Extension == ".bmp")
-                encoder = new BmpBitmapEncoder();
-            else if (Extension == ".png")
-                encoder = new PngBitmapEncoder();
-            else if (Extension == ".jpg")
-            {
-                encoder = new JpegBitmapEncoder();
-                (encoder as JpegBitmapEncoder).QualityLevel = 100;
-            }
-            else
-                return;
-
-            encoder.Frames.Add(BitmapFrame.Create(bmp));
-
-            using (Stream stm = File.Create(file))
-            {
-                encoder.Save(stm);
-            }
+            Loader.SaveToImg(Canvas, Canvas.ActualWidth, Canvas.ActualHeight);
         }
 
 
@@ -860,9 +823,9 @@ namespace MR.BinPacking.App.Chart
 
             switch (fieldType)
             {
-                case StatField.LowerBound:
+                case StatField.QualityEstimation:
                     return name + "dolne ograniczenie [liczba elementów]";
-                case StatField.StrongerLowerBound:
+                case StatField.ErrorEstimation:
                     return name + "silniejsze dolne ograniczenie [liczba elementów]";
                 case StatField.Result:
                     return name + "wynik [liczba elementów]";
@@ -908,6 +871,11 @@ namespace MR.BinPacking.App.Chart
                     sw.WriteLine();
                 }
             }
+        }
+
+        private void bSaveTableImg_Click(object sender, RoutedEventArgs e)
+        {
+            Loader.SaveToImg(gTable, gTable.ActualWidth, gTable.ActualHeight);
         }
     }
 }

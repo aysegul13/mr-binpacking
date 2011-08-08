@@ -5,5 +5,5 @@ using System.Text;
 
 namespace MR.BinPacking.Library.Experiment
 {
-    public enum StatField { LowerBound, StrongerLowerBound, Result, ExecutionTime };
+    public enum StatField { QualityEstimation, ErrorEstimation, Result, ExecutionTime };
 }

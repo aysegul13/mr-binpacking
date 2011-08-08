@@ -14,21 +14,21 @@ namespace MR.BinPacking.Library.Experiment
         public Sorting Sorting { get; set; }
         public Algorithm Algorithm { get; set; }
 
-        public int LowerBound { get; set; }
-        public int StrongerLowerBound { get; set; }
+        public double QualityEstimation { get; set; }
+        public double ErrorEstimation { get; set; }
         public int Result { get; set; }
         public long ExecutionTime { get; set; }
 
-        public long this[StatField index]
+        public double this[StatField index]
         {
             get
             {
                 switch (index)
                 {
-                    case StatField.LowerBound:
-                        return LowerBound;
-                    case StatField.StrongerLowerBound:
-                        return StrongerLowerBound;
+                    case StatField.QualityEstimation:
+                        return QualityEstimation;
+                    case StatField.ErrorEstimation:
+                        return ErrorEstimation;
                     case StatField.Result:
                         return Result;
                     case StatField.ExecutionTime:
@@ -42,8 +42,8 @@ namespace MR.BinPacking.Library.Experiment
 
         public void Add(Sample stats)
         {
-            LowerBound += stats.LowerBound;
-            StrongerLowerBound += stats.StrongerLowerBound;
+            QualityEstimation += stats.QualityEstimation;
+            ErrorEstimation += stats.ErrorEstimation;
             Result += stats.Result;
             ExecutionTime += stats.ExecutionTime;
         }
