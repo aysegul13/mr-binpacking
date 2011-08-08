@@ -194,9 +194,9 @@
                     <CheckBox x:Name="cbExpDistGauss" Grid.Row="2" Grid.Column="2" Content="normalny (Gaussa)" Margin="4"/>
                     <CheckBox x:Name="cbExpDistExp" Grid.Row="3" Grid.Column="2" Content="wykładniczy" Margin="4"/>
                     <Label Grid.Row="4" Content="Sortowanie elementów" FontWeight="Bold"/>
-                    <RadioButton x:Name="rbExpSortNone" Grid.Row="5" Content="nie sortuj" IsChecked="True" Margin="4"/>
-                    <RadioButton x:Name="rbExpSortAsc" Grid.Row="6" Content="rosnąco" Margin="4"/>
-                    <RadioButton x:Name="rbExpSortDesc" Grid.Row="7" Content="malejąco" Margin="4"/>
+                    <CheckBox x:Name="cbExpSortNone" Grid.Row="5" Content="nie sortuj" IsChecked="True" Margin="4"/>
+                    <CheckBox x:Name="cbExpSortAsc" Grid.Row="6" Content="rosnąco" Margin="4"/>
+                    <CheckBox x:Name="cbExpSortDesc" Grid.Row="7" Content="malejąco" Margin="4"/>
                     <Label Grid.Row="4" Grid.Column="1" Content="Powtórzenia" FontWeight="Bold"/>
                     <Label Grid.Row="5" Grid.Column="1" Content="Liczba:"/>
                     <Border Grid.Row="5" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
