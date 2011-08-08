@@ -129,7 +129,7 @@ namespace MR.BinPacking.Library.Algorithms
             #region STEP 1
 
             double gamma = c * epsilon / (epsilon + 1);
-            int h = (int)Math.Ceiling(epsilon * I.Sum() / c);
+            int h = (int)Math.Ceiling((decimal)epsilon * I.Sum(el => (decimal)el) / c);
 
             #endregion
 
