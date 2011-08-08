@@ -64,6 +64,7 @@
     <Compile Include="PreviewWindow.xaml.cs">
       <DependentUpon>PreviewWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\ESLoader.cs" />
     <Compile Include="Utils\Loader.cs" />
     <Page Include="Controls\BinControl.xaml">
       <SubType>Designer</SubType>
