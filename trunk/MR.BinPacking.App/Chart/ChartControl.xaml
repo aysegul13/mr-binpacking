@@ -27,7 +27,9 @@
             <ComboBox x:Name="cbField" MinWidth="100" Margin="2,4" SelectedValuePath="Tag" SelectionChanged="cbField_SelectionChanged"/>
             <Button x:Name="bType" MinWidth="75" Content="słupkowy" Margin="2,4" Click="bType_Click"/>
             <Button x:Name="bScale" MinWidth="75" Content="liniowa" Margin="2,4" Click="bScale_Click"/>
-            <Button x:Name="bSaveImg" MinWidth="75" Content="zapisz" Margin="2,4" Click="bSaveImg_Click"/>
+            <Button Grid.Row="1" x:Name="bSaveImg" Height="22px" HorizontalAlignment="Left" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" Click="bSaveImg_Click">
+                <Image Source="/MR.BinPacking.App;component/images/base_picture_32.png" />
+            </Button>
         </StackPanel>
         <ScrollViewer x:Name="svScroll" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" SizeChanged="svScroll_SizeChanged">
             <Canvas x:Name="Canvas" Background="White"/>
@@ -79,17 +81,18 @@
                 <Grid Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="32"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Tabela" HorizontalAlignment="Left"/>
-                    <Button x:Name="bSaveTable" Content="zapisz" MinWidth="75" HorizontalAlignment="Right" Click="bSaveTable_Click"/>
+                    <TextBlock Text="Tabela" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Button Grid.Column="1" x:Name="bSaveTableImg" Height="22px" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" Click="bSaveTableImg_Click">
+                        <Image Source="/MR.BinPacking.App;component/images/base_picture_32.png" />
+                    </Button>
+                    <Button Grid.Column="2" x:Name="bSaveTable" Height="22px" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" Click="bSaveTable_Click">
+                        <Image Source="/MR.BinPacking.App;component/images/base_floppydisk_32.png" />
+                    </Button>
                 </Grid>
-                <!--<TextBlock Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}"
-                           Background="Red" Text="Test" Margin="0,0,30,0"/>-->
-                <!--<Grid HorizontalAlignment="Right">
-                    <TextBlock Text="Tabela" HorizontalAlignment="Left"/>
-                    <Button x:Name="bSaveTable" Content="zapisz" HorizontalAlignment="Right" Click="bSaveTable_Click"/>
-                </Grid>-->
             </Expander.Header>
             <Grid x:Name="gTable"/>
         </Expander>

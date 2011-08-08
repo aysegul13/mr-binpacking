@@ -210,6 +210,10 @@
     <Resource Include="images\sort_decreasing.png" />
     <Resource Include="images\sort_increasing.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\base_floppydisk_32.png" />
+    <Resource Include="images\base_picture_32.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
