@@ -120,7 +120,7 @@
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                         <CheckBox x:Name="cbAAS" Content="AAS" Margin="4" Checked="cbAAS_CheckedChanged" Unchecked="cbAAS_CheckedChanged"/>
                         <Border Grid.Row="4" Grid.Column="0" Style="{StaticResource tbBorderStyle}">
-                            <TextBox x:Name="tbAASEpsilon" Text="0,3333" Style="{StaticResource tbStyle}" MinWidth="48" LostFocus="tbAASEpsilon_LostFocus"/>
+                            <gui:NumberTextBox x:Name="ntbAASEpsilon" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="0.0001" MaxValue="100" Text="0,3333"/>
                         </Border>
                     </StackPanel>
                 </Grid>
@@ -227,6 +227,9 @@
                     <Label Grid.Row="1" Content="Inne algorytmy:"/>
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
                         <CheckBox x:Name="cbExpAAS" Content="AAS" Margin="4"/>
+                        <Border Grid.Row="4" Grid.Column="0" Style="{StaticResource tbBorderStyle}">
+                            <gui:NumberTextBox x:Name="ntbAASExpEpsilon" IntsOnly="False" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="0.0001" MaxValue="100" Text="0,3333"/>
+                        </Border>
                         <CheckBox x:Name="cbExpBrute" Content="brute-force" Margin="4"/>
                     </StackPanel>
                 </Grid>

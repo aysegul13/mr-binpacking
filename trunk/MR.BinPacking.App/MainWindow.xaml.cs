@@ -217,7 +217,7 @@ namespace MR.BinPacking.App
                 algorithms.Add(new RandomFit());
             if (cbAAS.IsChecked == true)
             {
-                double epsilon = Double.Parse(tbAASEpsilon.Text);
+                double epsilon = Double.Parse(ntbAASEpsilon.Text);
                 algorithms.Add(new AAS() { Epsilon = epsilon });
             }
 
@@ -244,6 +244,7 @@ namespace MR.BinPacking.App
             ntbExpMinVal.Text = experimentParams.MinVal.ToString();
             ntbExpMaxVal.Text = experimentParams.MaxVal.ToString();
             ntbExpRepeat.Text = experimentParams.Repeat.ToString();
+            ntbAASEpsilon.Text = experimentParams.AASEpsilon.ToString();
 
             cbExpDistUniform.IsChecked = experimentParams.Distributions.Contains(Distribution.Uniform);
             cbExpDistGauss.IsChecked = experimentParams.Distributions.Contains(Distribution.Gauss);
@@ -259,6 +260,7 @@ namespace MR.BinPacking.App
             cbExpFFD.IsChecked = experimentParams.Algorithms.Contains(Algorithm.FirstFitDecreasing);
             cbExpBFD.IsChecked = experimentParams.Algorithms.Contains(Algorithm.BestFitDecreasing);
             cbExpRF.IsChecked = experimentParams.Algorithms.Contains(Algorithm.RandomFit);
+            cbExpAAS.IsChecked = experimentParams.Algorithms.Contains(Algorithm.AsymptoticApproximationScheme);
         }
 
         private void bExpLoadParams_Click(object sender, RoutedEventArgs e)
@@ -314,6 +316,12 @@ namespace MR.BinPacking.App
                 algorithms.Add(Algorithm.BestFitDecreasing);
             if (cbExpRF.IsChecked == true)
                 algorithms.Add(Algorithm.RandomFit);
+            if (cbExpAAS.IsChecked == true)
+            {
+                experimentParams.AASEpsilon = Double.Parse(ntbAASExpEpsilon.Text);
+                algorithms.Add(Algorithm.AsymptoticApproximationScheme);
+            }
+
             experimentParams.Algorithms = algorithms;
 
             return experimentParams;
@@ -371,13 +379,6 @@ namespace MR.BinPacking.App
         private void cbAAS_CheckedChanged(object sender, RoutedEventArgs e)
         {
             bPresentation.IsEnabled = (bool)!cbAAS.IsChecked;
-        }
-
-        private void tbAASEpsilon_LostFocus(object sender, RoutedEventArgs e)
-        {
-            double epsilon;
-            if (!Double.TryParse(tbAASEpsilon.Text, out epsilon))
-                tbAASEpsilon.Text = (0.33).ToString();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
