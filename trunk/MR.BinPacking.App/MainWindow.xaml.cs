@@ -264,16 +264,6 @@ namespace MR.BinPacking.App
             cbExpAAS.IsChecked = experimentParams.Algorithms.Contains(Algorithm.AsymptoticApproximationScheme);
         }
 
-        private void bExpLoadParams_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openDialog = new OpenFileDialog();
-            if (openDialog.ShowDialog() == true)
-            {
-                ExperimentParamsFile experimentParams = Loader.LoadExperimentParams(openDialog.FileName);
-                SetParamsToUI(experimentParams);
-            }
-        }
-
         private ExperimentParamsFile GetExpParamsFromUI()
         {
             ExperimentParamsFile experimentParams = new ExperimentParamsFile()
@@ -343,16 +333,6 @@ namespace MR.BinPacking.App
             return experimentParams;
         }
 
-        private void bExpSaveParams_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFileDialog saveDialog = new SaveFileDialog();
-            if (saveDialog.ShowDialog() == true)
-            {
-                ExperimentParamsFile experimentParams = GetExpParamsFromUI();
-                Loader.SaveExperimentParams(experimentParams, saveDialog.FileName);
-            }
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             foreach (var childWindow in ChildWindows)
@@ -418,6 +398,31 @@ namespace MR.BinPacking.App
                 ESLoader.LoadFromFile2(openDialog.FileName);
                 //ExperimentParamsFile experimentParams = Loader.LoadExperimentParams(openDialog.FileName);
                 //SetParamsToUI(experimentParams);
+            }
+        }
+
+        private void bSavePreview_Click(object sender, RoutedEventArgs e)
+        {
+            Loader.SaveToImg(spPreview, spPreview.ActualWidth, spPreview.ActualHeight);
+        }
+
+        private void bLoadGenSettings_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openDialog = new OpenFileDialog();
+            if (openDialog.ShowDialog() == true)
+            {
+                ExperimentParamsFile experimentParams = Loader.LoadExperimentParams(openDialog.FileName);
+                SetParamsToUI(experimentParams);
+            }
+        }
+
+        private void bSaveGenSettings_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            if (saveDialog.ShowDialog() == true)
+            {
+                ExperimentParamsFile experimentParams = GetExpParamsFromUI();
+                Loader.SaveExperimentParams(experimentParams, saveDialog.FileName);
             }
         }
     }
