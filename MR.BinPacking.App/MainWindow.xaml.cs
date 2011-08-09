@@ -141,8 +141,9 @@ namespace MR.BinPacking.App
         private void bExperiment_Click(object sender, RoutedEventArgs e)
         {
             ExperimentParams expParams = new ExperimentParams(GetExpParamsFromUI());
+            List<ExperimentInstance> expInstances = Generator.GenerateInstances(expParams);
 
-            ExperimentProgressWindow test = new ExperimentProgressWindow(expParams);
+            ExperimentProgressWindow test = new ExperimentProgressWindow(expParams, expInstances);
             ChildWindows.Add(test);
             test.Show();
         }
