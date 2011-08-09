@@ -9,9 +9,9 @@ namespace MR.BinPacking.App.Utils
 {
     internal static class ESLoader
     {
-        public static Instance LoadFromFile1(string filename, int elemCountIdx, int binSizeIdx)
+        public static List<Instance> LoadFromFile1(string filename, int elemCountIdx, int binSizeIdx)
         {
-            Instance result = new Instance();
+            List<Instance> result = new List<Instance>();
 
             using (StreamReader sr = new StreamReader(filename))
             {
@@ -21,11 +21,12 @@ namespace MR.BinPacking.App.Utils
                 while ((line = sr.ReadLine()) != null)
                     numbers.Add(Int32.Parse(line.Trim()));
 
-                int skip = 0;
+                Instance instance = new Instance();
 
+                int skip = 0;
                 if (binSizeIdx >= 0)
                 {
-                    result.BinSize = numbers[binSizeIdx];
+                    instance.BinSize = numbers[binSizeIdx];
                     skip++;
                 }
 
@@ -40,7 +41,8 @@ namespace MR.BinPacking.App.Utils
                     elemCount = numbers.Count - skip;
                 }
 
-                result.Elements = numbers.Skip(skip).Take(elemCount).ToList();
+                instance.Elements = numbers.Skip(skip).Take(elemCount).ToList();
+                result.Add(instance);
             }
 
             return result;
