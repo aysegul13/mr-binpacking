@@ -12,17 +12,18 @@ namespace MR.BinPacking.Library.Experiment
     {
         public static List<int> GetElementsWithSorting(List<int> elements, Sorting sorting)
         {
+            List<int> result = new List<int>(elements);
+
             switch (sorting)
             {
                 case Sorting.Ascending:
-                    elements.Sort();
-                    return elements;
+                    result.Sort();
+                    return result;
                 case Sorting.Descending:
-                    List<int> elementsSorted = new List<int>(elements);
-                    elementsSorted.Sort((x, y) => y.CompareTo(x));
-                    return elementsSorted;
+                    result.Sort((x, y) => y.CompareTo(x));
+                    return result;
                 default:
-                    return elements;
+                    return result;
             }
         }
     }
