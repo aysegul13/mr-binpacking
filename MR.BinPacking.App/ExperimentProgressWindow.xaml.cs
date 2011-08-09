@@ -18,15 +18,15 @@ namespace MR.BinPacking.App
     public partial class ExperimentProgressWindow : Window
     {
         ExperimentParams experimentParams = null;
-        List<ExperimentInstance> experimentInstances = null;
+        ExperimentInstance experimentInstance = null;
         BackgroundWorker bw = null;
 
-        public ExperimentProgressWindow(ExperimentParams prms, List<ExperimentInstance> instances)
+        public ExperimentProgressWindow(ExperimentParams prms, ExperimentInstance instance)
         {
             InitializeComponent();
 
             experimentParams = prms;
-            experimentInstances = instances;
+            experimentInstance = instance;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -39,15 +39,117 @@ namespace MR.BinPacking.App
 
             bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
             bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
-            bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+
+            if (experimentInstance == null)
+                bw.DoWork += new DoWorkEventHandler(bw_DoWorkGenerator);
+            else
+                bw.DoWork += new DoWorkEventHandler(bw_DoWorkFile);
         }
 
-        void bw_DoWork(object sender, DoWorkEventArgs e)
+        List<Sample> DoWorkInternal(BackgroundWorker worker, DoWorkEventArgs e, ExperimentInstance I, ExperimentParams prms, int samplesCount, int sampleNumber, out int counter, int R)
+        {
+            counter = 0;
+
+            List<Sample> result = new List<Sample>();
+            int N = I.Elements.Count;
+
+            foreach (var S in prms.Sortings)
+            {
+                List<int> elements = Experiment.GetElementsWithSorting(I.Elements, S);
+
+                //TODO: algorytm z innego źródła
+                for (int i = 0; i < prms.Algorithms.Count; i++)
+                {
+                    BaseAlgorithm A = prms.Algs[i];
+                    ExperimentState state = new ExperimentState()
+                    {
+                        Repeat = R,
+                        N = N,
+                        Distribution = I.Dist,
+                        Sorting = S,
+                        AlgorithmName = A.Name,
+                        Samples = samplesCount,
+                        ActualSample = sampleNumber + counter + 1
+                    };
+                    worker.ReportProgress(0, state);
+
+                    if (worker.CancellationPending)
+                    {
+                        e.Cancel = true;
+                        return null;
+                    }
+
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+                    Instance instanceResult = A.Execute(elements, prms.BinSize);
+                    sw.Stop();
+
+                    int LB = Bounds.LowerBound(elements, prms.BinSize);
+                    int SLB = Bounds.StrongerLowerBound(elements, prms.BinSize, prms.BinSize / 2 - 1);
+                    int res = instanceResult.Bins.Count();
+
+                    int minLB = Math.Min(LB, SLB);
+                    if (minLB == 0)
+                        minLB = 1;
+                    //minLB = Math.Max(LB, SLB);
+
+                    double quality = (double)res / minLB;
+                    double error = 100.0 * (res - minLB) / minLB;
+
+                    //TODO: dopisać info o algorytmie
+                    Sample stats = new Sample()
+                    {
+                        ID = sampleNumber + counter,
+                        N = N,
+                        Distribution = I.Dist,
+                        Sorting = S,
+                        Algorithm = prms.Algorithms[i],
+                        QualityEstimation = quality,
+                        ErrorEstimation = error,
+                        Result = res,
+                        ExecutionTime = sw.ElapsedMilliseconds
+                    };
+
+                    result.Add(stats);
+                    counter++;
+                }
+            }
+
+            return result;
+        }
+
+        void bw_DoWorkFile(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             //ExperimentParams prms = e.Argument as ExperimentParams;
             ExperimentParams prms = experimentParams;
 
+            int samplesCount = prms.Sortings.Count * prms.Algorithms.Count;
+            //int samplesCount = prms.Repeat * (((prms.MaxN - prms.MinN) / prms.Step) + 1) * prms.Distributions.Count * prms.Sortings.Count * prms.Algorithms.Count;
+            int sampleNumber = 0;
+
+            ExperimentResult result = new ExperimentResult()
+            {
+                Params = prms,
+                Samples = new List<Sample>()
+            };
+
+
+            int counter = 0;
+            List<Sample> samples = DoWorkInternal(worker, e, experimentInstance, prms, samplesCount, sampleNumber, out counter, 0);
+            if (samples == null)
+                return;
+
+            result.Samples.AddRange(samples);
+
+            e.Result = result;
+        }
+
+        void bw_DoWorkGenerator(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            //ExperimentParams prms = e.Argument as ExperimentParams;
+            ExperimentParams prms = experimentParams;
             int samplesCount = prms.Repeat * (((prms.MaxN - prms.MinN) / prms.Step) + 1) * prms.Distributions.Count * prms.Sortings.Count * prms.Algorithms.Count;
             int sampleNumber = 0;
 
@@ -57,70 +159,35 @@ namespace MR.BinPacking.App
                 Samples = new List<Sample>()
             };
 
-            foreach (var I in experimentInstances)
+            for (int R = 0; R < prms.Repeat; R++)
             {
-                int N = I.Elements.Count;
-
-                foreach (var S in prms.Sortings)
+                int N = prms.MinN;
+                while (N <= prms.MaxN)
                 {
-                    List<int> elements = Experiment.GetElementsWithSorting(I.Elements, S);
+                    int min = (int)Math.Ceiling(prms.MinVal * prms.BinSize);
+                    int max = (int)Math.Ceiling(prms.MaxVal * prms.BinSize);
 
-                    //TODO: algorytm z innego źródła
-                    for (int i = 0; i < prms.Algorithms.Count; i++)
+                    foreach (var D in prms.Distributions)
                     {
-                        BaseAlgorithm A = prms.Algs[i];
-                        ExperimentState state = new ExperimentState()
-                        {
-                            //Repeat = R,
-                            N = N,
-                            Distribution = I.Dist,
-                            Sorting = S,
-                            AlgorithmName = A.Name,
-                            Samples = samplesCount,
-                            ActualSample = sampleNumber + 1
-                        };
-                        worker.ReportProgress(0, state);
+                        List<int> elements = Generator.GenerateData(N, min, max, D);
 
-                        if (worker.CancellationPending)
+                        ExperimentInstance I = new ExperimentInstance()
                         {
-                            e.Cancel = true;
+                            BinSize = prms.BinSize,
+                            Dist = D,
+                            Elements = elements
+                        };
+
+                        int counter = 0;
+                        List<Sample> samples = DoWorkInternal(worker, e, I, prms, samplesCount, sampleNumber, out counter, 0);
+                        if (samples == null)
                             return;
-                        }
 
-                        Stopwatch sw = new Stopwatch();
-                        sw.Start();
-                        Instance instanceResult = A.Execute(elements, prms.BinSize);
-                        sw.Stop();
-
-                        int LB = Bounds.LowerBound(elements, prms.BinSize);
-                        int SLB = Bounds.StrongerLowerBound(elements, prms.BinSize, prms.BinSize / 2 - 1);
-                        int res = instanceResult.Bins.Count();
-
-                        int minLB = Math.Min(LB, SLB);
-                        if (minLB == 0)
-                            minLB = 1;
-                            //minLB = Math.Max(LB, SLB);
-
-                        double quality = (double)res / minLB;
-                        double error = 100.0 * (res - minLB) / minLB;
-
-                        //TODO: dopisać info o algorytmie
-                        Sample stats = new Sample()
-                        {
-                            ID = sampleNumber,
-                            N = N,
-                            Distribution = I.Dist,
-                            Sorting = S,
-                            Algorithm = prms.Algorithms[i],
-                            QualityEstimation = quality,
-                            ErrorEstimation = error,
-                            Result = res,
-                            ExecutionTime = sw.ElapsedMilliseconds
-                        };
-
-                        result.Samples.Add(stats);
-                        sampleNumber++;
+                        result.Samples.AddRange(samples);
+                        sampleNumber += counter;
                     }
+
+                    N += prms.Step;
                 }
             }
 

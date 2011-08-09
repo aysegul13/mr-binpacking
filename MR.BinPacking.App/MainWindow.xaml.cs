@@ -138,14 +138,20 @@ namespace MR.BinPacking.App
             RefreshPreview();
         }
 
+        ExperimentInstance Instance = null;
+
         private void bExperiment_Click(object sender, RoutedEventArgs e)
         {
             ExperimentParams expParams = new ExperimentParams(GetExpParamsFromUI());
-            List<ExperimentInstance> expInstances = Generator.GenerateInstances(expParams);
+            ExperimentProgressWindow expWindow;
 
-            ExperimentProgressWindow test = new ExperimentProgressWindow(expParams, expInstances);
-            ChildWindows.Add(test);
-            test.Show();
+            if (rbSourceGenerator.IsChecked == true)
+                expWindow = new ExperimentProgressWindow(expParams, null);
+            else
+                expWindow = new ExperimentProgressWindow(expParams, Instance);
+
+            ChildWindows.Add(expWindow);
+            expWindow.Show();
         }
 
         private void bLoad_Click(object sender, RoutedEventArgs e)
@@ -423,6 +429,27 @@ namespace MR.BinPacking.App
             {
                 ExperimentParamsFile experimentParams = GetExpParamsFromUI();
                 Loader.SaveExperimentParams(experimentParams, saveDialog.FileName);
+            }
+        }
+
+        private void bLoadExpInstances_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openDialog = new OpenFileDialog();
+            if (openDialog.ShowDialog() == true)
+            {
+                FileTypeWindow fileTypeWindow = new FileTypeWindow(openDialog.FileName);
+                fileTypeWindow.ShowDialog();
+
+                Instance = fileTypeWindow.Result;
+
+                //if (result != null)
+                //    Instances = fileTypeWindow.Result.Select(inst => 
+                //else
+                //    Instances = null;
+
+                //ESLoader.LoadFromFile2(openDialog.FileName);
+                //ExperimentParamsFile experimentParams = Loader.LoadExperimentParams(openDialog.FileName);
+                //SetParamsToUI(experimentParams);
             }
         }
     }
