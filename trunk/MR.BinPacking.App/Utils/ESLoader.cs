@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using MR.BinPacking.Library.Base;
+using MR.BinPacking.Library.Experiment;
 
 namespace MR.BinPacking.App.Utils
 {
+    internal enum FileType { Simple, Multi, MultiWithWeights };
+
     internal static class ESLoader
     {
-        public static List<Instance> LoadFromFile1(string filename, int elemCountIdx, int binSizeIdx)
+        public static ExperimentInstance LoadFromFile1(string filename, int elemCountIdx, int binSizeIdx, int binSize)
         {
-            List<Instance> result = new List<Instance>();
-
             using (StreamReader sr = new StreamReader(filename))
             {
                 string line;
@@ -21,12 +22,16 @@ namespace MR.BinPacking.App.Utils
                 while ((line = sr.ReadLine()) != null)
                     numbers.Add(Int32.Parse(line.Trim()));
 
-                Instance instance = new Instance();
+                ExperimentInstance result = new ExperimentInstance()
+                {
+                    Dist = Distribution.None,
+                    BinSize = binSize
+                };
 
                 int skip = 0;
                 if (binSizeIdx >= 0)
                 {
-                    instance.BinSize = numbers[binSizeIdx];
+                    result.BinSize = numbers[binSizeIdx];
                     skip++;
                 }
 
@@ -41,16 +46,15 @@ namespace MR.BinPacking.App.Utils
                     elemCount = numbers.Count - skip;
                 }
 
-                instance.Elements = numbers.Skip(skip).Take(elemCount).ToList();
-                result.Add(instance);
-            }
+                result.Elements = numbers.Skip(skip).Take(elemCount).ToList();
 
-            return result;
+                return result;
+            }
         }
 
-        public static List<Instance> LoadFromFile2(string filename)
+        public static List<ExperimentInstance> LoadFromFile2(string filename)
         {
-            List<Instance> result = new List<Instance>();
+            List<ExperimentInstance> result = new List<ExperimentInstance>();
 
             using (StreamReader sr = new StreamReader(filename))
             {
@@ -75,7 +79,11 @@ namespace MR.BinPacking.App.Utils
                     int elemCount = Int32.Parse(instanceInfo[1]);
                     //int bestKnownSolution = Int32.Parse(instanceInfo[2]);
 
-                    Instance instance = new Instance(binSize) { Name = name };
+                    ExperimentInstance instance = new ExperimentInstance(binSize)
+                    {
+                        Name = name,
+                        Dist = Distribution.None
+                    };
 
                     for (int i = 0; i < elemCount; i++)
                     {
@@ -92,9 +100,9 @@ namespace MR.BinPacking.App.Utils
             }
         }
 
-        public static List<Instance> LoadFromFile3(string filename)
+        public static List<ExperimentInstance> LoadFromFile3(string filename)
         {
-            List<Instance> result = new List<Instance>();
+            List<ExperimentInstance> result = new List<ExperimentInstance>();
 
             using (StreamReader sr = new StreamReader(filename))
             {
@@ -115,7 +123,11 @@ namespace MR.BinPacking.App.Utils
                         return result;
                     int binSize = Int32.Parse(line.Trim());
 
-                    Instance instance = new Instance(binSize) { Name = name };
+                    ExperimentInstance instance = new ExperimentInstance(binSize)
+                    {
+                        Name = name,
+                        Dist = Distribution.None
+                    };
 
                     for (int i = 0; i < weightsCount; i++)
                     {

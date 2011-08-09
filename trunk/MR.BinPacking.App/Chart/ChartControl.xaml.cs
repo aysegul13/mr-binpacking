@@ -402,7 +402,8 @@ namespace MR.BinPacking.App.Chart
             {
                 DataSeries = GetDataSeries(chartDataType, fieldType);
                 intervalWidthX = DataSource.Params.Step;
-                minX = DataSource.Params.MinN;
+                //minX = DataSource.Params.MinN;
+                minX = DataSource.Samples.Select(s => s.N).Min();
 
                 AddFunctions();
 

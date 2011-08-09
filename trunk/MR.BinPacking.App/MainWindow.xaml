@@ -208,7 +208,7 @@
                             <Label Grid.Column="1" Content="Rozmiar elementów" FontWeight="Bold"/>
                             <Label Grid.Row="1" Grid.Column="1" Content="Skrzynki (c):"/>
                             <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                                <gui:NumberTextBox x:Name="ntbExpBinSize" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="1000" Text="100"/>
+                                <gui:NumberTextBox x:Name="ntbExpBinSize" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="10000" Text="100"/>
                             </Border>
                             <Label Grid.Row="2" Grid.Column="1" Content="Min:"/>
                             <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
@@ -224,7 +224,7 @@
                             <CheckBox x:Name="cbExpDistGauss" Grid.Row="2" Grid.Column="2" Content="normalny (Gaussa)" Margin="4"/>
                             <CheckBox x:Name="cbExpDistExp" Grid.Row="3" Grid.Column="2" Content="wykładniczy" Margin="4"/>
 
-                            <Label Grid.Row="4" Content="Powtórzenia" FontWeight="Bold"/>
+                            <Label Grid.Row="4" Content="Powtórzenia:" FontWeight="Bold"/>
                             <Border Grid.Row="4" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
                                 <gui:NumberTextBox x:Name="ntbExpRepeat" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="1000" Text="1"/>
                             </Border>
@@ -237,12 +237,13 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Sortowanie elementów" FontWeight="Bold"/>
+                    <Label Content="Sortowanie elementów:" FontWeight="Bold"/>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                         <CheckBox x:Name="cbExpSortNone" Content="nie sortuj" IsChecked="True" Margin="4"/>
                         <CheckBox x:Name="cbExpSortAsc" Content="rosnąco" Margin="4"/>
@@ -265,6 +266,14 @@
                             <gui:NumberTextBox x:Name="ntbAASExpEpsilon" IntsOnly="False" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="0.0001" MaxValue="100" Text="0,3333"/>
                         </Border>
                         <CheckBox x:Name="cbExpBrute" Content="brute-force" Margin="4"/>
+                    </StackPanel>
+                    <Label Grid.Row="4" Content="Źródło danych:" FontWeight="Bold"/>
+                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+                        <RadioButton x:Name="rbSourceGenerator" Content="generator" IsChecked="True" Margin="4"/>
+                        <RadioButton x:Name="rbSourceFile" Content="plik" Margin="4"/>
+                        <Button x:Name="bLoadExpInstances" Height="22px" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" Click="bLoadExpInstances_Click">
+                            <Image Source="/MR.BinPacking.App;component/images/Folder.png" />
+                        </Button>
                     </StackPanel>
                 </Grid>
                 <Grid>
