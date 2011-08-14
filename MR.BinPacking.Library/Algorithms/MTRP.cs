@@ -96,7 +96,7 @@ namespace MR.BinPacking.Library.Algorithms
 
                     int q = l - k + 1;
 
-                    if (Nprime.Count == 0)
+                    if ((Nprime.Count == 0) || (q == 0))
                         break;
 
                     tmpSum += w[Nprime[q - 1] - 1];
