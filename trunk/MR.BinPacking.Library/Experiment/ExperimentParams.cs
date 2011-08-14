@@ -18,6 +18,7 @@ namespace MR.BinPacking.Library.Experiment
         BestFitDecreasing,
         RandomFit,
         AsymptoticApproximationScheme,
+        MTRP,
         BruteForce
     };
 
@@ -71,10 +72,10 @@ namespace MR.BinPacking.Library.Experiment
             Sortings = fileParams.Sortings;
 
             foreach (var algorithm in fileParams.Algorithms)
-                Algs.Add(ListAlgorithmFromAlgorithm(algorithm, AASEpsilon));
+                Algs.Add(BaseAlgorithmFromAlgorithm(algorithm, AASEpsilon));
         }
 
-        static BaseAlgorithm ListAlgorithmFromAlgorithm(Algorithm algorithm, double AASEpsilon)
+        static BaseAlgorithm BaseAlgorithmFromAlgorithm(Algorithm algorithm, double AASEpsilon)
         {
             bool isPresentation = false;
 
@@ -92,6 +93,8 @@ namespace MR.BinPacking.Library.Experiment
                     return new RandomFit() { IsPresentation = isPresentation };
                 case Algorithm.AsymptoticApproximationScheme:
                     return new AAS() { Epsilon = AASEpsilon };
+                case Algorithm.MTRP:
+                    return new MTRP();
                 case Algorithm.BruteForce:
                     throw new NotImplementedException();
                     //return new NextFit() { IsPresentation = isPresentation };

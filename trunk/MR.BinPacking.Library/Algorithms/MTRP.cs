@@ -6,7 +6,7 @@ using MR.BinPacking.Library.Base;
 
 namespace MR.BinPacking.Library.Algorithms
 {
-    class MTRP : BaseAlgorithm
+    public class MTRP : BaseAlgorithm
     {
         public MTRP()
         {
