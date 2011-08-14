@@ -102,7 +102,7 @@ namespace MR.BinPacking.App
             }
 
             int LB = Bounds.LowerBound(Elements, BinSize);
-            int SLB = Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
+            int SLB = Bounds.StrongerLowerBound(Elements, BinSize);
 
             laBounds.Visibility = Visibility.Visible;
             laBounds.Content = String.Format("Dolne ograniczenia LB/SLB: {0}/{1}", LB, SLB);
