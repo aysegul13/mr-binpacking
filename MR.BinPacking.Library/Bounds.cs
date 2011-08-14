@@ -9,22 +9,58 @@ namespace MR.BinPacking.Library
     public static class Bounds
     {
         //lower bound from 8.14
-        public static int LowerBound(List<int> elements, int c)
+        public static int LowerBound(IEnumerable<int> elements, int c)
         {
             return (int)Math.Ceiling(elements.Sum(el => (decimal)el) / c);
         }
 
         //lower bound from 8.19
-        public static int StrongerLowerBound(List<int> elements, int c, int alpha)
+        //public static int StrongerLowerBound(IEnumerable<int> elements, int c, int alpha)
+        //{
+        //    if ((alpha < 0) || (2 * alpha > c))
+        //        throw new ArgumentOutOfRangeException();
+
+        //    IEnumerable<int> J1 = elements.Where(e => e > c - alpha);
+        //    IEnumerable<int> J2 = elements.Where(e => (c - alpha >= e) && (2 * e > c));
+        //    IEnumerable<int> J3 = elements.Where(e => (c >= 2 * e) && (e >= alpha));
+
+        //    return J1.Count() + J2.Count() + Math.Max(0, (int)Math.Ceiling((double)(J3.Sum(el => (decimal)el) - (J2.Count() * c - J2.Sum(el => (decimal)el))) / c));
+        //}
+
+        //lower bound from 8.19 ("full" L2)
+        public static int StrongerLowerBound(IEnumerable<int> elements, int c)
         {
-            if ((alpha < 0) || (2 * alpha > c))
-                throw new ArgumentOutOfRangeException();
+            var elems = from elem in elements
+                        where 2 * elem <= c
+                        orderby elem descending
+                        select elem;
 
-            IEnumerable<int> J1 = elements.Where(e => e > c - alpha);
-            IEnumerable<int> J2 = elements.Where(e => (c - alpha >= e) && (2 * e > c));
-            IEnumerable<int> J3 = elements.Where(e => (c >= 2 * e) && (e >= alpha));
+            if (elems.Count() == 0)
+                return elements.Count();
 
-            return J1.Count() + J2.Count() + Math.Max(0, (int)Math.Ceiling((double)(J3.Sum(el => (decimal)el) - (J2.Count() * c - J2.Sum(el => (decimal)el))) / c));
+            decimal jStarSum = elems.Sum(el => (decimal)el);
+            int L1 = LowerBound(elements, c);
+            int maxL = L1;
+
+            var distinctElems = elems.Distinct();
+            foreach (var alpha in distinctElems)
+            {
+                IEnumerable<int> J1 = elements.Where(e => e > c - alpha);
+                IEnumerable<int> J2 = elements.Where(e => (c - alpha >= e) && (2 * e > c));
+                IEnumerable<int> J3 = elements.Where(e => (c >= 2 * e) && (e >= alpha));
+
+                int tmp1 = J1.Count() + J2.Count();
+                decimal tmp2 = J2.Count() * c - J2.Sum(el => (decimal)el);
+
+                int L2 = tmp1 + Math.Max(0, (int)Math.Ceiling((double)(J3.Sum(el => (decimal)el) - tmp2) / c));
+                maxL = Math.Max(maxL, L2);
+
+                int test = tmp1 + (int)Math.Ceiling((double)(jStarSum - tmp2) / c);
+                if (test <= maxL)
+                    return maxL;
+            }
+
+            return maxL;
         }
     }
 }

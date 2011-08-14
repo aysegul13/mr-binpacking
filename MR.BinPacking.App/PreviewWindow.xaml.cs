@@ -161,7 +161,7 @@ namespace MR.BinPacking.App
             laBinCount.Content = "Liczba pudełek: " + result.Bins.Count;
             laExecutionTime.Content = "Czas obliczeń [ms]: " + sw.ElapsedMilliseconds;
 
-            int minBound = Math.Min(Bounds.LowerBound(Elements, BinSize), Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1));
+            int minBound = Math.Min(Bounds.LowerBound(Elements, BinSize), Bounds.StrongerLowerBound(Elements, BinSize));
             //laQualityEstimation.Content = "Oszacowanie jakości: " + (result.Bins.Count / (double)minBound).ToString("0.000");
             //laErrorEstimation.Content = "Oszacowanie błędu: " + (100.0 * (result.Bins.Count - minBound) / (double)minBound).ToString("0.000");
 
@@ -310,7 +310,7 @@ namespace MR.BinPacking.App
             laExecutionTime.Content = "Czas obliczeń [ms]: " + stopWatch.ElapsedMilliseconds;
 
             int LB = Bounds.LowerBound(Elements, BinSize);
-            int SLB = Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
+            int SLB = Bounds.StrongerLowerBound(Elements, BinSize);
 
             laLowerBounds.Content = String.Format("LB/SLB: {0}/{1}", LB, SLB);
             tblQualityEstimations.Text = String.Format("Oszac. jakości LB/SLB: {0:0.00}/{1:0.00}",
