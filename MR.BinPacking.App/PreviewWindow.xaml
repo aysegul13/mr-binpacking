@@ -43,12 +43,12 @@
                         <Button x:Name="bEnd" Content="Do końca" MinWidth="75" Margin="2,1" Click="bEnd_Click"/>
                         <Label x:Name="laBinCount" Content="Liczba pudełek: " Visibility="Collapsed" />
                         <Label x:Name="laExecutionTime" Content="Czas obliczeń: " Visibility="Collapsed" />
-                        <Label x:Name="laLowerBounds" Content="LB/SLB: " Visibility="Collapsed" />
+                        <Label x:Name="laLowerBounds" Content="L1/L2: " Visibility="Collapsed" />
                         <Label x:Name="laQualityEstimations" MaxWidth="150" Visibility="Collapsed">
-                            <TextBlock x:Name="tblQualityEstimations" Text="Oszac. jakości LB/SLB: " TextWrapping="Wrap"/>
+                            <TextBlock x:Name="tblQualityEstimations" Text="Oszac. jakości L1/L2: " TextWrapping="Wrap"/>
                         </Label>
                         <Label x:Name="laErrorEstimations" MaxWidth="150" Visibility="Collapsed">
-                            <TextBlock x:Name="tblErrorEstimations" Text="Oszac. błędu LB/SLB: " TextWrapping="Wrap"/>
+                            <TextBlock x:Name="tblErrorEstimations" Text="Oszac. błędu L1/L2: " TextWrapping="Wrap"/>
                         </Label>
                         <Label MaxWidth="150">
                             <TextBlock x:Name="tblMessage" Text="" TextWrapping="Wrap" FontWeight="Bold" />

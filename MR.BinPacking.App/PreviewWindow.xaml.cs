@@ -161,13 +161,13 @@ namespace MR.BinPacking.App
             laBinCount.Content = "Liczba pudełek: " + result.Bins.Count;
             laExecutionTime.Content = "Czas obliczeń [ms]: " + sw.ElapsedMilliseconds;
 
-            int minBound = Math.Min(Bounds.LowerBound(Elements, BinSize), Bounds.StrongerLowerBound(Elements, BinSize));
+            int minBound = Math.Min(Bounds.L1(Elements, BinSize), Bounds.L2(Elements, BinSize));
             //laQualityEstimation.Content = "Oszacowanie jakości: " + (result.Bins.Count / (double)minBound).ToString("0.000");
             //laErrorEstimation.Content = "Oszacowanie błędu: " + (100.0 * (result.Bins.Count - minBound) / (double)minBound).ToString("0.000");
 
 
-            //laLowerBound.Content = "LB: " + Bounds.LowerBound(Elements, BinSize);
-            //laStrongerLowerBound.Content = "SLB: " + Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
+            //laLowerBound.Content = "L1: " + Bounds.LowerBound(Elements, BinSize);
+            //laStrongerLowerBound.Content = "L2: " + Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
 
 
             sw.Reset();
@@ -309,31 +309,31 @@ namespace MR.BinPacking.App
             laBinCount.Content = "Liczba pudełek: " + result.Bins.Count;
             laExecutionTime.Content = "Czas obliczeń [ms]: " + stopWatch.ElapsedMilliseconds;
 
-            int LB = Bounds.LowerBound(Elements, BinSize);
-            int SLB = Bounds.StrongerLowerBound(Elements, BinSize);
+            int L1 = Bounds.L1(Elements, BinSize);
+            int L2 = Bounds.L2(Elements, BinSize);
 
-            laLowerBounds.Content = String.Format("LB/SLB: {0}/{1}", LB, SLB);
-            tblQualityEstimations.Text = String.Format("Oszac. jakości LB/SLB: {0:0.00}/{1:0.00}",
-                (result.Bins.Count / (double)LB), (result.Bins.Count / (double)SLB));
+            laLowerBounds.Content = String.Format("L1/L2: {0}/{1}", L1, L2);
+            tblQualityEstimations.Text = String.Format("Oszac. jakości L1/L2: {0:0.00}/{1:0.00}",
+                (result.Bins.Count / (double)L1), (result.Bins.Count / (double)L2));
 
-            tblErrorEstimations.Text = String.Format("Oszac. błędu LB/SLB [%]: {0:0.00}/{1:0.00}",
-                (100.0 * (result.Bins.Count - LB) / (double)LB),
-                (100.0 * (result.Bins.Count - SLB) / (double)SLB));
+            tblErrorEstimations.Text = String.Format("Oszac. błędu L1/L2 [%]: {0:0.00}/{1:0.00}",
+                (100.0 * (result.Bins.Count - L1) / (double)L1),
+                (100.0 * (result.Bins.Count - L2) / (double)L2));
 
             //int minBound = Math.Min(Bounds.LowerBound(Elements, BinSize), Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1));
             //laQualityEstimation.Content = "Oszacowanie jakości: " + (result.Bins.Count / (double)minBound).ToString("0.000");
             //laErrorEstimation.Content = "Oszacowanie błędu: " + (100.0 * (result.Bins.Count - minBound) / (double)minBound).ToString("0.000");
 
 
-            //laLowerBound.Content = "LB: " + Bounds.LowerBound(Elements, BinSize);
-            //laStrongerLowerBound.Content = "SLB: " + Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
+            //laLowerBound.Content = "L1: " + Bounds.LowerBound(Elements, BinSize);
+            //laStrongerLowerBound.Content = "L2: " + Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
 
 
             //<Label x:Name="laBinCount" Content="Liczba pudełek: " Visibility="Collapsed" />
             //            <Label x:Name="laExecutionTime" Content="Czas obliczeń: " Visibility="Collapsed" />
-            //            <Label x:Name="laLowerBounds" Content="LB/SLB: " Visibility="Collapsed" />
-            //            <Label x:Name="laQualityEstimations" Content="Oszac. jakości LB/SLB: " Visibility="Collapsed" />
-            //            <Label x:Name="laErrorEstimations" Content="Oszac. błędu LB/SLB: " Visibility="Collapsed" />
+            //            <Label x:Name="laLowerBounds" Content="L1/L2: " Visibility="Collapsed" />
+            //            <Label x:Name="laQualityEstimations" Content="Oszac. jakości L1/L2: " Visibility="Collapsed" />
+            //            <Label x:Name="laErrorEstimations" Content="Oszac. błędu L1/L2: " Visibility="Collapsed" />
         }
 
         private void bSaveResult_Click(object sender, RoutedEventArgs e)

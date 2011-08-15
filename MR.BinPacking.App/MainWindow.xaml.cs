@@ -101,11 +101,11 @@ namespace MR.BinPacking.App
                 spPreview.Children.Add(newBin);
             }
 
-            int LB = Bounds.LowerBound(Elements, BinSize);
-            int SLB = Bounds.StrongerLowerBound(Elements, BinSize);
+            int L1 = Bounds.L1(Elements, BinSize);
+            int L2 = Bounds.L2(Elements, BinSize);
 
             laBounds.Visibility = Visibility.Visible;
-            laBounds.Content = String.Format("Dolne ograniczenia LB/SLB: {0}/{1}", LB, SLB);
+            laBounds.Content = String.Format("Dolne ograniczenia L1/L2: {0}/{1}", L1, L2);
         }
 
         private void RefreshElements()
