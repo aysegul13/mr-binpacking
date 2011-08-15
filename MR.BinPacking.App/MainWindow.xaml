@@ -134,7 +134,7 @@
                         <Border Grid.Row="4" Grid.Column="0" Style="{StaticResource tbBorderStyle}">
                             <gui:NumberTextBox x:Name="ntbAASEpsilon" IntsOnly="False" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="0.0001" MaxValue="100" Text="0,3333"/>
                         </Border>
-                        <CheckBox x:Name="cbMTRP" Content="MTRP" Margin="4" Checked="cbMTRP_CheckedChanged" Unchecked="cbMTRP_CheckedChanged"/>
+                        <CheckBox x:Name="cbReduction" Content="Redukcja" Margin="4" Checked="cbReduction_CheckedChanged" Unchecked="cbReduction_CheckedChanged"/>
                     </StackPanel>
                 </Grid>
                 <Grid>
@@ -266,7 +266,7 @@
                         <Border Style="{StaticResource tbBorderStyle}">
                             <gui:NumberTextBox x:Name="ntbAASExpEpsilon" IntsOnly="False" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="0.0001" MaxValue="100" Text="0,3333"/>
                         </Border>
-                        <CheckBox x:Name="cbExpMTRP" Content="MTRP" Margin="4" />
+                        <CheckBox x:Name="cbExpReduction" Content="Redukcja" Margin="4" />
                         <CheckBox x:Name="cbExpBrute" Content="brute-force" Margin="4"/>
                     </StackPanel>
                     <Label Grid.Row="4" Content="Źródło danych:" FontWeight="Bold"/>

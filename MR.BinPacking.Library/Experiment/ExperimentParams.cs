@@ -94,7 +94,7 @@ namespace MR.BinPacking.Library.Experiment
                 case Algorithm.AsymptoticApproximationScheme:
                     return new AAS() { Epsilon = AASEpsilon };
                 case Algorithm.MTRP:
-                    return new MTRP();
+                    return new Reduction();
                 case Algorithm.BruteForce:
                     throw new NotImplementedException();
                     //return new NextFit() { IsPresentation = isPresentation };

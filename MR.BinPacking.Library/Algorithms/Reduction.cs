@@ -6,9 +6,9 @@ using MR.BinPacking.Library.Base;
 
 namespace MR.BinPacking.Library.Algorithms
 {
-    public class MTRP : BaseAlgorithm
+    public class Reduction : BaseAlgorithm
     {
-        public MTRP()
+        public Reduction()
         {
             Name = "Algorytm Redukcji";
         }
@@ -32,7 +32,7 @@ namespace MR.BinPacking.Library.Algorithms
             List<int> R = new List<int>();
             while (true)
             {
-                B = MTRP.Execute(w, N, binSize, B, ref zr);
+                B = Reduction.MTRP(w, N, binSize, B, ref zr);
                 if (N.Count == 0)
                     break;
 
@@ -71,7 +71,7 @@ namespace MR.BinPacking.Library.Algorithms
             return Result;
         }
 
-        public static int[] Execute(List<int> w, List<int> N, int c, int[] B, ref int zr)
+        public static int[] MTRP(List<int> w, List<int> N, int c, int[] B, ref int zr)
         {
             w.Sort();
             w.Reverse();
