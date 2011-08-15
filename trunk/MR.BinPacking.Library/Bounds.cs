@@ -9,26 +9,13 @@ namespace MR.BinPacking.Library
     public static class Bounds
     {
         //lower bound from 8.14
-        public static int LowerBound(IEnumerable<int> elements, int c)
+        public static int L1(IEnumerable<int> elements, int c)
         {
             return (int)Math.Ceiling(elements.Sum(el => (decimal)el) / c);
         }
 
-        //lower bound from 8.19
-        //public static int StrongerLowerBound(IEnumerable<int> elements, int c, int alpha)
-        //{
-        //    if ((alpha < 0) || (2 * alpha > c))
-        //        throw new ArgumentOutOfRangeException();
-
-        //    IEnumerable<int> J1 = elements.Where(e => e > c - alpha);
-        //    IEnumerable<int> J2 = elements.Where(e => (c - alpha >= e) && (2 * e > c));
-        //    IEnumerable<int> J3 = elements.Where(e => (c >= 2 * e) && (e >= alpha));
-
-        //    return J1.Count() + J2.Count() + Math.Max(0, (int)Math.Ceiling((double)(J3.Sum(el => (decimal)el) - (J2.Count() * c - J2.Sum(el => (decimal)el))) / c));
-        //}
-
         //lower bound from 8.19 ("full" L2)
-        public static int StrongerLowerBound(IEnumerable<int> elements, int c)
+        public static int L2(IEnumerable<int> elements, int c)
         {
             var elems = from elem in elements
                         where 2 * elem <= c
@@ -39,7 +26,7 @@ namespace MR.BinPacking.Library
                 return elements.Count();
 
             decimal jStarSum = elems.Sum(el => (decimal)el);
-            int L1 = LowerBound(elements, c);
+            int L1 = L1(elements, c);
             int maxL = L1;
 
             var distinctElems = elems.Distinct();

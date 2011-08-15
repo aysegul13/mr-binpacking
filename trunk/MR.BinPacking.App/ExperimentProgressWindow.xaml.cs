@@ -84,12 +84,12 @@ namespace MR.BinPacking.App
                     Instance instanceResult = A.Execute(elements, prms.BinSize);
                     sw.Stop();
 
-                    //int LB = Bounds.LowerBound(elements, prms.BinSize);
-                    int SLB = Bounds.StrongerLowerBound(elements, prms.BinSize);
+                    //int L1 = Bounds.LowerBound(elements, prms.BinSize);
+                    int L2 = Bounds.L2(elements, prms.BinSize);
                     int res = instanceResult.Bins.Count();
 
-                    double quality = (double)res / SLB;
-                    double error = 100.0 * (res - SLB) / SLB;
+                    double quality = (double)res / L2;
+                    double error = 100.0 * (res - L2) / L2;
 
                     //TODO: dopisać info o algorytmie
                     Sample stats = new Sample()
