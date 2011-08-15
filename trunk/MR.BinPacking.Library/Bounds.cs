@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MR.BinPacking.Library.Base;
+using MR.BinPacking.Library.Algorithms;
 
 namespace MR.BinPacking.Library
 {
@@ -26,7 +27,7 @@ namespace MR.BinPacking.Library
                 return elements.Count();
 
             decimal jStarSum = elems.Sum(el => (decimal)el);
-            int L1 = L1(elements, c);
+            int L1 = Bounds.L1(elements, c);
             int maxL = L1;
 
             var distinctElems = elems.Distinct();
@@ -48,6 +49,46 @@ namespace MR.BinPacking.Library
             }
 
             return maxL;
+        }
+
+        public static int L3(IEnumerable<int> elements, int c)
+        {
+            List<int> w = new List<int>(elements);
+            w.Sort();
+            w.Reverse();
+
+            List<int> N = new List<int>();
+            for (int i = 0; i < w.Count; i++)
+                N.Add(i + 1);
+
+            int zr = 0;
+            int[] B = new int[w.Count];
+            int L3 = 0;
+
+            while (true)
+            {
+                if (N.Count <= 1)
+                    break;
+
+                B = Reduction.MTRP(w, N, c, B, ref zr);
+                int L2;
+
+                if (B.Where(b => b == 0).Count() == 0)
+                {
+                    L2 = 0;
+                }
+                else
+                {
+                    L2 = Bounds.L2(N.Select(sn => w.ElementAt(sn - 1)), c);
+                }
+
+                L3 = Math.Max(L3, zr + L2);
+
+                if (N.Count > 0)
+                    N.RemoveAt(N.Count - 1);
+            }
+
+            return L3;
         }
     }
 }

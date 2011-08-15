@@ -228,7 +228,7 @@ namespace MR.BinPacking.App
                 algorithms.Add(new AAS() { Epsilon = epsilon });
             }
             if (cbMTRP.IsChecked == true)
-                algorithms.Add(new MTRP());
+                algorithms.Add(new Reduction());
 
             foreach (var alg in algorithms)
             {
