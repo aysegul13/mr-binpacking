@@ -1,0 +1,117 @@
+﻿<Window x:Class="MR.BinPacking.App.FileTypeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gui="clr-namespace:MR.BinPacking.App.Controls"
+        Title="FilteTypeWindow" Height="350" Width="600"
+        MinWidth="500"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style x:Key="tbBorderStyle" TargetType="Border">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="SlateGray"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+        <Style x:Key="tbStyle" TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30*" MinWidth="120"/>
+            <ColumnDefinition Width="70*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Wybierz typ pliku" FontWeight="Bold"/>
+
+        <Border Grid.Row="1" Style="{StaticResource tbBorderStyle}">
+            <TextBox x:Name="tbFile" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+        </Border>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <TabControl x:Name="tabFileTypes">
+                <TabItem Header="1 instancja">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Border Style="{StaticResource tbBorderStyle}">
+                            <TextBox x:Name="tbFileTypeSimple" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                        </Border>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Nagłówek:" FontWeight="Bold"/>
+                            <RadioButton x:Name="rbHeaderEmpty" Content="brak" IsChecked="True" Checked="rbHeaderEmpty_Checked"/>
+                            <RadioButton x:Name="rbOnlyBinSize" Content="wielkość skrzynki" Checked="rbOnlyBinSize_Checked"/>
+                            <RadioButton x:Name="rbOnlyElemCount" Content="liczba elementów" Checked="rbOnlyElemCount_Checked"/>
+                            <RadioButton x:Name="rbBinSizeElemCount" Checked="rbBinSizeElemCount_Checked">
+                                <TextBlock Text="wielkość skrzynki, liczba elementów" TextWrapping="Wrap"/>
+                            </RadioButton>
+                            <RadioButton x:Name="rbElemCountBinSize" Checked="rbElemCountBinSize_Checked">
+                                <TextBlock Text="liczba elementów, wielkość skrzynki" TextWrapping="Wrap"/>
+                            </RadioButton>
+                            <TextBlock Text="Wielkość skrzynki:" FontWeight="Bold" Margin="0,12,0,0"/>
+                            <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Left">
+                                <gui:NumberTextBox x:Name="ntbBinSize" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="1" MaxValue="10000" Text="100"/>
+                            </Border>
+                        </StackPanel>
+                        <Button Grid.Column="1" x:Name="bFileTypeSimple" Content="OK" HorizontalAlignment="Right" VerticalAlignment="Bottom" MinWidth="75" Click="bFileTypeSimple_Click"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="wiele instancji">
+                    <Grid>
+                        <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource tbBorderStyle}">
+                            <TextBox x:Name="tbFileTypeMulti" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                        </Border>
+                        <Button x:Name="bFileTypeMulti" Content="Wybierz" HorizontalAlignment="Right" VerticalAlignment="Bottom" MinWidth="75" Click="bFileTypeMulti_Click"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="wiele instancji z wagami">
+                    <Grid>
+                        <Border Grid.Row="1" Grid.Column="3" Style="{StaticResource tbBorderStyle}">
+                            <TextBox x:Name="tbFiletypeMultiWithWeights" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                        </Border>
+                        <Button x:Name="bFiletypeMultiWithWeights" Content="Wybierz" HorizontalAlignment="Right" VerticalAlignment="Bottom" MinWidth="75" Click="bFiletypeMultiWithWeights_Click"/>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="2" x:Name="gInstances" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Wybierz instancję" FontWeight="Bold"/>
+            <Border Grid.Row="1" Style="{StaticResource tbBorderStyle}">
+                <ListBox x:Name="lbInstances" MinWidth="175" SelectionChanged="lbInstances_SelectionChanged">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding BinSize}"/>
+                                <TextBlock Grid.Column="2" Text="|"/>
+                                <TextBlock Grid.Column="3" Text="{Binding Elements.Count}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+            <Button Grid.Row="2" x:Name="bSelect" Content="OK" IsEnabled="False" HorizontalAlignment="Right" MinWidth="75" Click="bSelect_Click"/>
+        </Grid>
+    </Grid>
+</Window>

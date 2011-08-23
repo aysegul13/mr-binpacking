@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="MR.BinPacking.App.Controls.BinControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:gui="clr-namespace:MR.BinPacking.App.Controls"
+             mc:Ignorable="d" 
+             MinWidth="64"
+             x:Name="binControl" Padding="4">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Label x:Name="laFreeSpace" Grid.Row="0" Content="{Binding ElementName=binControl, Path=FreeSpace}" VerticalAlignment="Stretch" HorizontalAlignment="Center" FontWeight="Bold" />
+        <Border x:Name="Border" Grid.Row="1" Background="LightGray" BorderBrush="Black" BorderThickness="3,0" MinHeight="110">
+            <Grid x:Name="gElements"/>
+        </Border>
+    </Grid>
+
+</UserControl>
