@@ -152,7 +152,7 @@
                     </Button>
                     <Button Grid.Column="2" x:Name="bResult" Height="40px" HorizontalContentAlignment="Stretch" Click="bResult_Click">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/MR.BinPacking.App;component/images/base_screen.png" />
+                            <Image Source="/MR.BinPacking.App;component/images/base_charts.png" />
                             <Label Content="Wynik" VerticalContentAlignment="Center" />
                         </StackPanel>
                     </Button>
@@ -291,9 +291,11 @@
                             <Label Content="Eksperyment" VerticalContentAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="bLoad3" Content="Load3" Click="bLoad3_Click"/>
                 </Grid>
             </StackPanel>
+        </TabItem>
+        <TabItem Name="tabSettings" Header="Ustawienia" MinHeight="32">
+            
         </TabItem>
     </TabControl>
     <!--<ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
