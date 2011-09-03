@@ -124,8 +124,8 @@ namespace MR.BinPacking.Test
 
             Random rand = new Random();
             List<int> elemsRaw = new List<int>();
-            for (int i = 0; i < 20; i++)
-                elemsRaw.Add(rand.Next(1, 50));
+            for (int i = 0; i < 300; i++)
+                elemsRaw.Add(rand.Next(1, 30));
 
             var elems = (from elem in elemsRaw
                          orderby elem descending
@@ -135,7 +135,7 @@ namespace MR.BinPacking.Test
             //int L2 = Bounds.L2(elems, c);
             //int L2r = Bounds.L2(elemsRelaxed, c);
 
-            BruteForce bf = new BruteForce();
+            Exact bf = new Exact();
             bf.Execute(elems, c);
         }
     }

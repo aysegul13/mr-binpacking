@@ -227,8 +227,10 @@ namespace MR.BinPacking.App
                 double epsilon = Double.Parse(ntbAASEpsilon.Text);
                 algorithms.Add(new AAS() { Epsilon = epsilon });
             }
-            if (cbMTRP.IsChecked == true)
+            if (cbReduction.IsChecked == true)
                 algorithms.Add(new Reduction());
+            if (cbExact.IsChecked == true)
+                algorithms.Add(new Exact());
 
             foreach (var alg in algorithms)
             {
@@ -270,7 +272,8 @@ namespace MR.BinPacking.App
             cbExpBFD.IsChecked = experimentParams.Algorithms.Contains(Algorithm.BestFitDecreasing);
             cbExpRF.IsChecked = experimentParams.Algorithms.Contains(Algorithm.RandomFit);
             cbExpAAS.IsChecked = experimentParams.Algorithms.Contains(Algorithm.AsymptoticApproximationScheme);
-            cbExpMTRP.IsChecked = experimentParams.Algorithms.Contains(Algorithm.MTRP);
+            cbExpReduction.IsChecked = experimentParams.Algorithms.Contains(Algorithm.Reduction);
+            cbExpExact.IsChecked = experimentParams.Algorithms.Contains(Algorithm.Exact);
         }
 
         private ExperimentParamsFile GetExpParamsFromUI()
@@ -331,8 +334,10 @@ namespace MR.BinPacking.App
                 experimentParams.AASEpsilon = Double.Parse(ntbAASExpEpsilon.Text);
                 algorithms.Add(Algorithm.AsymptoticApproximationScheme);
             }
-            if (cbExpMTRP.IsChecked == true)
-                algorithms.Add(Algorithm.MTRP);
+            if (cbExpReduction.IsChecked == true)
+                algorithms.Add(Algorithm.Reduction);
+            if (cbExpExact.IsChecked == true)
+                algorithms.Add(Algorithm.Exact);
 
             if (algorithms.Count == 0)
             {
@@ -382,11 +387,6 @@ namespace MR.BinPacking.App
 
             RefreshElements();
             RefreshPreview();
-        }
-
-        private void cbAAS_CheckedChanged(object sender, RoutedEventArgs e)
-        {
-            bPresentation.IsEnabled = !((bool)cbAAS.IsChecked || (bool)cbMTRP.IsChecked);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -459,9 +459,23 @@ namespace MR.BinPacking.App
             }
         }
 
-        private void cbMTRP_CheckedChanged(object sender, RoutedEventArgs e)
+        private void cbAAS_CheckedChanged(object sender, RoutedEventArgs e)
         {
-            bPresentation.IsEnabled = !((bool)cbAAS.IsChecked || (bool)cbMTRP.IsChecked);
+            bPresentation.IsEnabled = !((bool)cbAAS.IsChecked
+                || (bool)cbReduction.IsChecked
+                || (bool)cbExact.IsChecked);
+        }
+
+        private void cbReduction_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            bPresentation.IsEnabled = !((bool)cbAAS.IsChecked
+                || (bool)cbReduction.IsChecked
+                || (bool)cbExact.IsChecked);
+        }
+
+        private void cbExact_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

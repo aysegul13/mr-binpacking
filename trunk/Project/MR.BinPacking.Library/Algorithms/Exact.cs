@@ -6,11 +6,11 @@ using MR.BinPacking.Library.Base;
 
 namespace MR.BinPacking.Library.Algorithms
 {
-    public class BruteForce : BaseAlgorithm
+    public class Exact : BaseAlgorithm
     {
-        public BruteForce()
+        public Exact()
         {
-            Name = "Brute Force";
+            Name = "Algorytm Dokładny";
         }
 
         public override Instance Execute(List<int> elements, int binSize)
@@ -19,26 +19,32 @@ namespace MR.BinPacking.Library.Algorithms
             Result.Elements = elements;
             
             best = null;
-
             L2 = Bounds.L2(elements, binSize);
             L3 = Bounds.L3(elements, binSize);
-            Search(elements, 0, new List<List<int>>(), binSize);
 
-            
-            throw new NotImplementedException();
+            var elems = (from elem in elements
+                         orderby elem descending
+                         select elem).ToList();
+
+            Search(elems, 0, new List<List<int>>(), binSize);
+
+            foreach (var bin in best)
+            {
+                Bin newBin = new Bin(binSize);
+                newBin.Elements.AddRange(bin);
+                Result.Bins.Add(newBin);
+            }
+
+            return Result;
         }
 
-        //Instance best = null;
 
         int L2;
         int L3;
         List<List<int>> best = null;
-        int nodes = 0;
 
-        void Search(List<int> elements, int elemIdx, List<List<int>> bins, int c)
+        bool Search(List<int> elements, int elemIdx, List<List<int>> bins, int c)
         {
-            nodes++;
-
             if (elemIdx < elements.Count)
             {
                 for (int i = 0; i < bins.Count; i++)
@@ -46,7 +52,8 @@ namespace MR.BinPacking.Library.Algorithms
                     if (c - bins[i].Sum() >= elements[elemIdx])
                     {
                         bins[i].Add(elements[elemIdx]);
-                        Search(elements, elemIdx + 1, bins, c);
+                        if (Search(elements, elemIdx + 1, bins, c))
+                            return true;
                         bins[i].RemoveAt(bins[i].Count - 1);
                     }
                 }
@@ -69,7 +76,8 @@ namespace MR.BinPacking.Library.Algorithms
                         if (currL3 <= L3)
                         {
                             L3 = currL3;
-                            Search(elements, elemIdx + 1, bins, c);
+                            if (Search(elements, elemIdx + 1, bins, c))
+                                return true;
                         }
                     }
 
@@ -83,8 +91,13 @@ namespace MR.BinPacking.Library.Algorithms
                     best = new List<List<int>>();
                     foreach (var bin in bins)
                         best.Add(new List<int>(bin));
+
+                    if ((best.Count == L2) && (best.Count == L3))
+                        return true;
                 }
             }
+
+            return false;
         }
     }
 }
