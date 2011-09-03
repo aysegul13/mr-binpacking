@@ -159,13 +159,18 @@ namespace MR.BinPacking.App
             OpenFileDialog openDialog = new OpenFileDialog();
             if (openDialog.ShowDialog() == true)
             {
-                Instance instance = Loader.LoadFromFile(openDialog.FileName);
-                BinSize = instance.BinSize;
-                Elements = instance.Elements;
+                FileTypeWindow fileTypeWindow = new FileTypeWindow(openDialog.FileName);
+                fileTypeWindow.ShowDialog();
 
+                Instance instance = fileTypeWindow.Result;
+                if (instance != null)
+                {
+                    BinSize = instance.BinSize;
+                    Elements = instance.Elements;
 
-                RefreshElements();
-                RefreshPreview();
+                    RefreshElements();
+                    RefreshPreview();
+                }
             }
         }
 
@@ -436,15 +441,6 @@ namespace MR.BinPacking.App
                 fileTypeWindow.ShowDialog();
 
                 Instance = fileTypeWindow.Result;
-
-                //if (result != null)
-                //    Instances = fileTypeWindow.Result.Select(inst => 
-                //else
-                //    Instances = null;
-
-                //ESLoader.LoadFromFile2(openDialog.FileName);
-                //ExperimentParamsFile experimentParams = Loader.LoadExperimentParams(openDialog.FileName);
-                //SetParamsToUI(experimentParams);
             }
         }
 
