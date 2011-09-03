@@ -79,6 +79,10 @@ namespace MR.BinPacking.Library.Algorithms
             List<int> Ndiff = new List<int>(N);
             List<int> Ndash = new List<int>();
 
+            //TODO: check this
+            if (N.Count == 0)
+                return B;
+
             do
             {
                 int j = N.Where(n => !Ndash.Contains(n)).Min();

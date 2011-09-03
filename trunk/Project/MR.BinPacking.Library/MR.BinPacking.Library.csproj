@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\AAS.cs" />
     <Compile Include="Algorithms\Exact.cs" />
+    <Compile Include="Algorithms\MetaHeuristic.cs" />
     <Compile Include="Algorithms\Reduction.cs" />
     <Compile Include="Base\BaseAlgorithm.cs" />
     <Compile Include="Base\Bin.cs" />

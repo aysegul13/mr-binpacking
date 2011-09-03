@@ -19,7 +19,8 @@ namespace MR.BinPacking.Library.Experiment
         RandomFit,
         AsymptoticApproximationScheme,
         Reduction,
-        Exact
+        Exact,
+        Metaheuristic
     };
 
     public class ExperimentParamsFile
@@ -97,6 +98,8 @@ namespace MR.BinPacking.Library.Experiment
                     return new Reduction();
                 case Algorithm.Exact:
                     return new Exact();
+                case Algorithm.Metaheuristic:
+                    return new MetaHeuristic();
                 default:    //NextFit
                     return new NextFit() { IsPresentation = isPresentation };
             }

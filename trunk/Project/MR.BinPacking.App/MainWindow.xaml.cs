@@ -240,6 +240,8 @@ namespace MR.BinPacking.App
                 algorithms.Add(new Reduction());
             if (cbExact.IsChecked == true)
                 algorithms.Add(new Exact());
+            if (cbMetaHeuristic.IsChecked == true)
+                algorithms.Add(new MetaHeuristic());
 
             foreach (var alg in algorithms)
             {
@@ -283,6 +285,7 @@ namespace MR.BinPacking.App
             cbExpAAS.IsChecked = experimentParams.Algorithms.Contains(Algorithm.AsymptoticApproximationScheme);
             cbExpReduction.IsChecked = experimentParams.Algorithms.Contains(Algorithm.Reduction);
             cbExpExact.IsChecked = experimentParams.Algorithms.Contains(Algorithm.Exact);
+            cbExpMetaHeuristic.IsChecked = experimentParams.Algorithms.Contains(Algorithm.Metaheuristic);
         }
 
         private ExperimentParamsFile GetExpParamsFromUI()
@@ -347,6 +350,8 @@ namespace MR.BinPacking.App
                 algorithms.Add(Algorithm.Reduction);
             if (cbExpExact.IsChecked == true)
                 algorithms.Add(Algorithm.Exact);
+            if (cbExpMetaHeuristic.IsChecked == true)
+                algorithms.Add(Algorithm.Metaheuristic);
 
             if (algorithms.Count == 0)
             {
@@ -452,7 +457,8 @@ namespace MR.BinPacking.App
         {
             bPresentation.IsEnabled = !((bool)cbAAS.IsChecked
                 || (bool)cbReduction.IsChecked
-                || (bool)cbExact.IsChecked);
+                || (bool)cbExact.IsChecked
+                || (bool)cbMetaHeuristic.IsChecked);
         }
     }
 }
