@@ -9,6 +9,7 @@ using MR.BinPacking.Library.Utils;
 using System.Diagnostics;
 using MR.BinPacking.Library.Base;
 using MR.BinPacking.Library;
+using System.Threading;
 
 namespace MR.BinPacking.App
 {
@@ -19,7 +20,7 @@ namespace MR.BinPacking.App
     {
         ExperimentParams experimentParams = null;
         ExperimentInstance experimentInstance = null;
-        BackgroundWorker bw = null;
+        Thread workerThread = null;
 
         public ExperimentProgressWindow(ExperimentParams prms, ExperimentInstance instance)
         {
@@ -29,24 +30,42 @@ namespace MR.BinPacking.App
             experimentInstance = instance;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        void ReportProgress(ExperimentState state)
         {
-            bw = new BackgroundWorker()
-            {
-                WorkerReportsProgress = true,
-                WorkerSupportsCancellation = true
-            };
+            this.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    //laRepeat.Content = String.Format("Powtórzenie: {0}", state.Repeat + 1);
+                    laStep.Content = String.Format("Liczba elementów: {0}", state.N);
 
-            bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
-            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
+                    //TODO: poprawić wyświetlane nazwy dla rozkładu i sortowania
+                    laDistribution.Content = String.Format("Rozkład: {0}", state.Distribution.ToString());
+                    laSorting.Content = String.Format("Sortowanie: {0}", state.Sorting.ToString());
 
-            if (experimentInstance == null)
-                bw.DoWork += new DoWorkEventHandler(bw_DoWorkGenerator);
-            else
-                bw.DoWork += new DoWorkEventHandler(bw_DoWorkFile);
+                    laAlgorithm.Content = String.Format("Algorytm: {0}", state.AlgorithmName);
+
+                    laPart.Content = String.Format("Krok: {0} z {1}", state.ActualSample, state.Samples);
+                    pbPart.Maximum = 1.0;
+                    pbPart.Value = (double)(state.ActualSample) / state.Samples;
+                }));
         }
 
-        List<Sample> DoWorkInternal(BackgroundWorker worker, DoWorkEventArgs e, ExperimentInstance I, ExperimentParams prms, int samplesCount, int sampleNumber, out int counter, int R)
+        void Complete(ExperimentResult result)
+        {
+            this.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    guiChart.DataSource = result;
+
+                    spExperimentProgress.Visibility = Visibility.Collapsed;
+                    guiChart.Visibility = Visibility.Visible;
+
+                    this.Width = 600;
+                    this.Height = 450;
+
+                    guiChart.GetParamsAndRefresh();
+                }));
+        }
+
+        List<Sample> DoWorkInternal(ExperimentInstance I, ExperimentParams prms, int samplesCount, int sampleNumber, out int counter, int R)
         {
             counter = 0;
 
@@ -71,14 +90,8 @@ namespace MR.BinPacking.App
                         Samples = samplesCount,
                         ActualSample = sampleNumber + counter + 1
                     };
-                    worker.ReportProgress(0, state);
-
-                    if (worker.CancellationPending)
-                    {
-                        e.Cancel = true;
-                        return null;
-                    }
-
+                    ReportProgress(state);
+                    
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
                     Instance instanceResult = A.Execute(elements, prms.BinSize);
@@ -113,12 +126,9 @@ namespace MR.BinPacking.App
             return result;
         }
 
-        void bw_DoWorkFile(object sender, DoWorkEventArgs e)
+        void DoWorkFile()
         {
-            BackgroundWorker worker = sender as BackgroundWorker;
-            //ExperimentParams prms = e.Argument as ExperimentParams;
             ExperimentParams prms = experimentParams;
-
             int samplesCount = prms.Sortings.Count * prms.Algorithms.Count;
             //int samplesCount = prms.Repeat * (((prms.MaxN - prms.MinN) / prms.Step) + 1) * prms.Distributions.Count * prms.Sortings.Count * prms.Algorithms.Count;
             int sampleNumber = 0;
@@ -131,19 +141,17 @@ namespace MR.BinPacking.App
 
 
             int counter = 0;
-            List<Sample> samples = DoWorkInternal(worker, e, experimentInstance, prms, samplesCount, sampleNumber, out counter, 0);
+            List<Sample> samples = DoWorkInternal(experimentInstance, prms, samplesCount, sampleNumber, out counter, 0);
             if (samples == null)
                 return;
 
             result.Samples.AddRange(samples);
 
-            e.Result = result;
+            Complete(result);
         }
 
-        void bw_DoWorkGenerator(object sender, DoWorkEventArgs e)
+        void DoWorkGenerator()
         {
-            BackgroundWorker worker = sender as BackgroundWorker;
-            //ExperimentParams prms = e.Argument as ExperimentParams;
             ExperimentParams prms = experimentParams;
             int samplesCount = prms.Repeat * (((prms.MaxN - prms.MinN) / prms.Step) + 1) * prms.Distributions.Count * prms.Sortings.Count * prms.Algorithms.Count;
             int sampleNumber = 0;
@@ -174,7 +182,7 @@ namespace MR.BinPacking.App
                         };
 
                         int counter = 0;
-                        List<Sample> samples = DoWorkInternal(worker, e, I, prms, samplesCount, sampleNumber, out counter, 0);
+                        List<Sample> samples = DoWorkInternal(I, prms, samplesCount, sampleNumber, out counter, 0);
                         if (samples == null)
                             return;
 
@@ -186,54 +194,31 @@ namespace MR.BinPacking.App
                 }
             }
 
-            e.Result = result;
-        }
-
-        void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            ExperimentState state = e.UserState as ExperimentState;
-
-            //laRepeat.Content = String.Format("Powtórzenie: {0}", state.Repeat + 1);
-            laStep.Content = String.Format("Liczba elementów: {0}", state.N);
-
-            //TODO: poprawić wyświetlane nazwy dla rozkładu i sortowania
-            laDistribution.Content = String.Format("Rozkład: {0}", state.Distribution.ToString());
-            laSorting.Content = String.Format("Sortowanie: {0}", state.Sorting.ToString());
-
-            laAlgorithm.Content = String.Format("Algorytm: {0}", state.AlgorithmName);
-
-            laPart.Content = String.Format("Krok: {0} z {1}", state.ActualSample, state.Samples);
-            pbPart.Maximum = 1.0;
-            pbPart.Value = (double)(state.ActualSample) / state.Samples;
-        }
-
-        void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (!e.Cancelled && (e.Error == null))
-            {
-                ExperimentResult result = e.Result as ExperimentResult;
-                guiChart.DataSource = result;
-
-                spExperimentProgress.Visibility = Visibility.Collapsed;
-                guiChart.Visibility = Visibility.Visible;
-
-                this.Width = 600;
-                this.Height = 450;
-
-                guiChart.GetParamsAndRefresh();
-            }
+            Complete(result);
         }
 
         private void bCancel_Click(object sender, RoutedEventArgs e)
         {
-            if (bw.WorkerSupportsCancellation)
-                bw.CancelAsync();
+            if ((workerThread != null) && workerThread.IsAlive)
+                workerThread.Abort();
         }
 
         private void bRun_Click(object sender, RoutedEventArgs e)
         {
-            if (!bw.IsBusy)
-                bw.RunWorkerAsync(experimentParams);
+            if (experimentInstance == null)
+                workerThread = new Thread(this.DoWorkGenerator);
+            else
+                workerThread = new Thread(this.DoWorkFile);
+
+            workerThread.Start();
+
+            while (!workerThread.IsAlive) ;
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            if ((workerThread != null) && workerThread.IsAlive)
+                workerThread.Abort();
         }
     }
 }
