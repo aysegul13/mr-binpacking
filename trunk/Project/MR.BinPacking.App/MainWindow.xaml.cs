@@ -168,6 +168,10 @@ namespace MR.BinPacking.App
                     BinSize = instance.BinSize;
                     Elements = instance.Elements;
 
+                    ntbElementsNumber.Text = Elements.Count.ToString();
+                    ntbBinSize.Text = ntbMaxValue.Text = BinSize.ToString();
+                    ntbMinValue.Text = "1";
+
                     RefreshElements();
                     RefreshPreview();
                 }
