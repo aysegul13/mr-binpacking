@@ -114,7 +114,29 @@ namespace MR.BinPacking.Test
             //Reduction red = new Reduction();
             //red.Execute(I.Elements, c);
 
-            int L3 = Program.L3(I.Elements, c);
+            //int L3 = Program.L3(I.Elements, c);
+
+            //List<int> elems = new List<int>() { 50, 60, 40, 20, 30 };
+            //List<int> elems = new List<int>() { 50, 60, 40, 20, 30, 25 };
+            //List<int> elems = new List<int>() { 99, 94, 79, 64, 50, 46, 43, 37, 32, 19, 18, 7, 6, 3 };
+            //List<int> elems = new List<int>() { 60, 50, 40, 40, 30, 30, 30, 25, 25, 20, 20 };
+            //List<int> elems = new List<int>() { 49, 41, 34, 33, 29, 26, 26, 22, 20, 19 };
+
+            Random rand = new Random();
+            List<int> elemsRaw = new List<int>();
+            for (int i = 0; i < 20; i++)
+                elemsRaw.Add(rand.Next(1, 50));
+
+            var elems = (from elem in elemsRaw
+                         orderby elem descending
+                         select elem).ToList();
+
+            //List<int> elemsRelaxed = new List<int>() { 29, 26, 26, 22, 20, 19, 90, 34, 33 };
+            //int L2 = Bounds.L2(elems, c);
+            //int L2r = Bounds.L2(elemsRelaxed, c);
+
+            BruteForce bf = new BruteForce();
+            bf.Execute(elems, c);
         }
     }
 }
