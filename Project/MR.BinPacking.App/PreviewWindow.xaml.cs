@@ -197,30 +197,6 @@ namespace MR.BinPacking.App
             workerThread.Start();
 
             while (!workerThread.IsAlive) ;
-
-
-            //this.Dispatcher.Invoke((Action)(() =>
-            //{
-            //    result = Algorithm.Execute(Elements, BinSize);
-            //}));
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            if ((Algorithm is ListAlgorithm) && (Algorithm as ListAlgorithm).IsPresentation)
-            {
-                DrawPreview();
-                Execute();
-            }
-            else
-            {
-                DoWork();
-                Elements = Algorithm.Result.Elements;
-
-                DrawPreview();
-                Draw(result);
-                ShowInfo();
-            }
         }
 
         private bool first = true;
@@ -344,6 +320,24 @@ namespace MR.BinPacking.App
         private void bSaveElements_Click(object sender, RoutedEventArgs e)
         {
             Loader.SaveToImg(spElements, spElements.ActualWidth, spElements.ActualHeight);
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            if ((Algorithm is ListAlgorithm) && (Algorithm as ListAlgorithm).IsPresentation)
+            {
+                DrawPreview();
+                Execute();
+            }
+            else
+            {
+                DoWork();
+                Elements = Algorithm.Result.Elements;
+
+                DrawPreview();
+                Draw(result);
+                ShowInfo();
+            }
         }
     }
 }
