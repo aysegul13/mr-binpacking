@@ -116,27 +116,45 @@ namespace MR.BinPacking.Test
 
             //int L3 = Program.L3(I.Elements, c);
 
-            //List<int> elems = new List<int>() { 50, 60, 40, 20, 30 };
-            //List<int> elems = new List<int>() { 50, 60, 40, 20, 30, 25 };
-            //List<int> elems = new List<int>() { 99, 94, 79, 64, 50, 46, 43, 37, 32, 19, 18, 7, 6, 3 };
-            //List<int> elems = new List<int>() { 60, 50, 40, 40, 30, 30, 30, 25, 25, 20, 20 };
-            //List<int> elems = new List<int>() { 49, 41, 34, 33, 29, 26, 26, 22, 20, 19 };
+            
 
-            Random rand = new Random();
-            List<int> elemsRaw = new List<int>();
-            for (int i = 0; i < 300; i++)
-                elemsRaw.Add(rand.Next(1, 30));
+            //Random rand = new Random();
+            //List<int> elemsRaw = new List<int>();
+            //for (int i = 0; i < 300; i++)
+            //    elemsRaw.Add(rand.Next(1, 30));
 
-            var elems = (from elem in elemsRaw
-                         orderby elem descending
-                         select elem).ToList();
+            //var elems = (from elem in elemsRaw
+            //             orderby elem descending
+            //             select elem).ToList();
+
 
             //List<int> elemsRelaxed = new List<int>() { 29, 26, 26, 22, 20, 19, 90, 34, 33 };
             //int L2 = Bounds.L2(elems, c);
             //int L2r = Bounds.L2(elemsRelaxed, c);
 
-            Exact bf = new Exact();
-            bf.Execute(elems, c);
+            c = 10;
+
+            List<int> elems = GetElements();
+            MetaHeuristic mh = new MetaHeuristic();
+            mh.Execute(elems, c);
+
+            //Exact bf = new Exact();
+            //bf.Execute(elems, c);
+        }
+
+        static List<int> GetElements()
+        {
+            //List<int> elems = new List<int>() { 50, 60, 40, 20, 30 };
+            //List<int> elems = new List<int>() { 50, 60, 40, 20, 30, 25 };
+            //List<int> elems = new List<int>() { 99, 94, 79, 64, 50, 46, 43, 37, 32, 19, 18, 7, 6, 3 };
+            //List<int> elems = new List<int>() { 60, 50, 40, 40, 30, 30, 30, 25, 25, 20, 20 };
+            //List<int> elems = new List<int>() { 49, 41, 34, 33, 29, 26, 26, 22, 20, 19 };
+            //List<int> elems = new List<int>() { 60, 55, 55, 51, 45, 43, 34, 25, 13, 12 };
+            //List<int> elems = new List<int>() { 35, 46, 40, 35, 46, 28, 20, 46, 23, 25, 33, 41, 32, 36 };
+            //List<int> elems = new List<int>() { 5, 4, 2, 9, 4, 2, 3, 2, 6, 10, 8, 1, 10, 1, 5, 9, 10, 9, 6, 3 };
+            int[] elems = { 6, 2, 7, 7, 3, 4, 1, 1, 7, 8, 8, 6, 1, 10, 9, 5, 2, 2, 6, 10, 5, 5, 2, 1, 5, 6, 6, 3, 8, 3 };
+
+            return elems.ToList();
         }
     }
 }
