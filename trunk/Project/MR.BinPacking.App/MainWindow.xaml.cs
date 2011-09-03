@@ -402,17 +402,6 @@ namespace MR.BinPacking.App
             RefreshPreview();
         }
 
-        private void bLoad3_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openDialog = new OpenFileDialog();
-            if (openDialog.ShowDialog() == true)
-            {
-                ESLoader.LoadFromFile2(openDialog.FileName);
-                //ExperimentParamsFile experimentParams = Loader.LoadExperimentParams(openDialog.FileName);
-                //SetParamsToUI(experimentParams);
-            }
-        }
-
         private void bSavePreview_Click(object sender, RoutedEventArgs e)
         {
             Loader.SaveToImg(spPreview, spPreview.ActualWidth, spPreview.ActualHeight);
