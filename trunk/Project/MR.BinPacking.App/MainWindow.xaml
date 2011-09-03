@@ -130,12 +130,12 @@
                     </StackPanel>
                     <Label Grid.Row="1" Content="Inne algorytmy:"/>
                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                        <CheckBox x:Name="cbAAS" Content="AAS" Margin="4" Checked="cbAAS_CheckedChanged" Unchecked="cbAAS_CheckedChanged"/>
+                        <CheckBox x:Name="cbAAS" Content="AAS" Margin="4" Checked="cbNonListAlgorithm_CheckedChanged" Unchecked="cbNonListAlgorithm_CheckedChanged"/>
                         <Border Grid.Row="4" Grid.Column="0" Style="{StaticResource tbBorderStyle}">
                             <gui:NumberTextBox x:Name="ntbAASEpsilon" IntsOnly="False" Style="{StaticResource tbStyle}" MinWidth="48" MinValue="0.0001" MaxValue="100" Text="0,3333"/>
                         </Border>
-                        <CheckBox x:Name="cbReduction" Content="Redukcji" Margin="4" Checked="cbReduction_CheckedChanged" Unchecked="cbReduction_CheckedChanged"/>
-                        <CheckBox x:Name="cbExact" Content="Dokładny" Margin="4" Checked="cbExact_CheckedChanged" Unchecked="cbExact_CheckedChanged"/>
+                        <CheckBox x:Name="cbReduction" Content="Redukcji" Margin="4" Checked="cbNonListAlgorithm_CheckedChanged" Unchecked="cbNonListAlgorithm_CheckedChanged"/>
+                        <CheckBox x:Name="cbExact" Content="Dokładny" Margin="4" Checked="cbNonListAlgorithm_CheckedChanged" Unchecked="cbNonListAlgorithm_CheckedChanged"/>
                     </StackPanel>
                 </Grid>
                 <Grid>

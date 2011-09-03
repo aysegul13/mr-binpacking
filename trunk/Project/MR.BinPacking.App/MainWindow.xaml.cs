@@ -459,23 +459,11 @@ namespace MR.BinPacking.App
             }
         }
 
-        private void cbAAS_CheckedChanged(object sender, RoutedEventArgs e)
+        private void cbNonListAlgorithm_CheckedChanged(object sender, RoutedEventArgs e)
         {
             bPresentation.IsEnabled = !((bool)cbAAS.IsChecked
                 || (bool)cbReduction.IsChecked
                 || (bool)cbExact.IsChecked);
-        }
-
-        private void cbReduction_CheckedChanged(object sender, RoutedEventArgs e)
-        {
-            bPresentation.IsEnabled = !((bool)cbAAS.IsChecked
-                || (bool)cbReduction.IsChecked
-                || (bool)cbExact.IsChecked);
-        }
-
-        private void cbExact_CheckedChanged(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
