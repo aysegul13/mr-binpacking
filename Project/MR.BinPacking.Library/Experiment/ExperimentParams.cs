@@ -18,8 +18,8 @@ namespace MR.BinPacking.Library.Experiment
         BestFitDecreasing,
         RandomFit,
         AsymptoticApproximationScheme,
-        MTRP,
-        BruteForce
+        Reduction,
+        Exact
     };
 
     public class ExperimentParamsFile
@@ -93,11 +93,10 @@ namespace MR.BinPacking.Library.Experiment
                     return new RandomFit() { IsPresentation = isPresentation };
                 case Algorithm.AsymptoticApproximationScheme:
                     return new AAS() { Epsilon = AASEpsilon };
-                case Algorithm.MTRP:
+                case Algorithm.Reduction:
                     return new Reduction();
-                case Algorithm.BruteForce:
-                    throw new NotImplementedException();
-                    //return new NextFit() { IsPresentation = isPresentation };
+                case Algorithm.Exact:
+                    return new Exact();
                 default:    //NextFit
                     return new NextFit() { IsPresentation = isPresentation };
             }
