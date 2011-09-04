@@ -828,7 +828,18 @@ namespace MR.BinPacking.App.Chart
 
         private void bSaveImg_Click(object sender, RoutedEventArgs e)
         {
-            Loader.SaveToImg(Canvas, Canvas.ActualWidth, Canvas.ActualHeight);
+            if (exLegend.IsExpanded)
+            {
+                Size size = gChart.RenderSize;
+                gChart.Measure(size);
+                gChart.Arrange(new Rect(size));
+
+                Loader.SaveToImg(gChart, gChart.ActualWidth, Canvas.ActualHeight);
+            }
+            else
+            {
+                Loader.SaveToImg(Canvas, Canvas.ActualWidth, Canvas.ActualHeight);
+            }
         }
 
 
