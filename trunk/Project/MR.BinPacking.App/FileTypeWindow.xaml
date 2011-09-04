@@ -5,6 +5,7 @@
         xmlns:props="clr-namespace:MR.BinPacking.App.Properties"
         Title="Wybór instancji" Height="350" Width="600"
         MinWidth="500"
+        WindowStartupLocation="CenterScreen" Icon="/MR.BinPacking.App;component/images/bin32.ico"
         Loaded="Window_Loaded"
         Closing="Window_Closing">
     <Window.Resources>

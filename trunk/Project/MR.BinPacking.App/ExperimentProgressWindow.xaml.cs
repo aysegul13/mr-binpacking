@@ -54,7 +54,7 @@ namespace MR.BinPacking.App
                 {
                     guiChart.DataSource = result;
 
-                    spExperimentProgress.Visibility = Visibility.Collapsed;
+                    spExperimentProgress.Visibility = pbPart.Visibility = bRun.Visibility = bCancel.Visibility = Visibility.Collapsed;
                     guiChart.Visibility = Visibility.Visible;
 
                     this.Width = 600;
@@ -199,10 +199,16 @@ namespace MR.BinPacking.App
         {
             if ((workerThread != null) && workerThread.IsAlive)
                 workerThread.Abort();
+
+            bCancel.IsEnabled = false;
+            bRun.IsEnabled = false;
         }
 
         private void bRun_Click(object sender, RoutedEventArgs e)
         {
+            bCancel.IsEnabled = true;
+            bRun.IsEnabled = false;
+
             if (experimentInstance == null)
                 workerThread = new Thread(this.DoWorkGenerator);
             else
