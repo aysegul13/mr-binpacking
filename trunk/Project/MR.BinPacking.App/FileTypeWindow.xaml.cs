@@ -116,13 +116,13 @@ namespace MR.BinPacking.App
             else if (rbElemCountBinSize.IsChecked == true) { elemCountIdx = 0; binSizeIdx = 1; }
             else if (rbBinSizeElemCount.IsChecked == true) { elemCountIdx = 1; binSizeIdx = 0; }
 
-            result = ESLoader.LoadFromFile1(filename, elemCountIdx, binSizeIdx, binSize);
+            result = Loader.LoadFromFile1(filename, elemCountIdx, binSizeIdx, binSize);
             this.Close();
         }
 
         private void bFileTypeMulti_Click(object sender, RoutedEventArgs e)
         {
-            List<ExperimentInstance> instances = ESLoader.LoadFromFile2(filename);
+            List<ExperimentInstance> instances = Loader.LoadFromFile2(filename);
             tabFileTypes.IsEnabled = false;
 
             lbInstances.ItemsSource = instances;
@@ -134,7 +134,7 @@ namespace MR.BinPacking.App
 
         private void bFiletypeMultiWithWeights_Click(object sender, RoutedEventArgs e)
         {
-            List<ExperimentInstance> instances = ESLoader.LoadFromFile3(filename);
+            List<ExperimentInstance> instances = Loader.LoadFromFile3(filename);
             tabFileTypes.IsEnabled = false;
 
             lbInstances.ItemsSource = instances;
