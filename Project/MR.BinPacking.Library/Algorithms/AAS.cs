@@ -156,11 +156,10 @@ namespace MR.BinPacking.Library.Algorithms
                     //solve
                     lpsolve.solve(lp);
 
-                    //TODO: obsługa błędu
                     int N = lpsolve.get_Ncolumns(lp);
                     double[] resultLP = new double[N];
                     if (!lpsolve.get_variables(lp, resultLP))
-                        throw new Exception("Błąd!!!");
+                        throw new Exception("Wystąpił błąd!!!");
 
                     for (int i = 0; i < N; i++)
                     {
