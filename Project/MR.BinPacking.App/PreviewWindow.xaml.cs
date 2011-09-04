@@ -60,6 +60,7 @@ namespace MR.BinPacking.App
 
             this.Dispatcher.BeginInvoke(new Action(delegate
                 {
+                    vbLoading.Visibility = Visibility.Collapsed;
                     Elements = Algorithm.Result.Elements;
 
                     DrawPreview();
@@ -269,6 +270,7 @@ namespace MR.BinPacking.App
             {
                 exPreview.IsExpanded = Settings.Default.PRE_ExpandPreviewInPresentation;
                 exSideBar.IsExpanded = Settings.Default.PRE_ExpandSideBarInPresentation;
+                vbLoading.Visibility = Visibility.Collapsed;
 
                 DrawPreview();
                 Execute();
@@ -277,6 +279,7 @@ namespace MR.BinPacking.App
             {
                 exPreview.IsExpanded = Settings.Default.PRE_ExpandPreviewInResult;
                 exSideBar.IsExpanded = Settings.Default.PRE_ExpandSideBarInResult;
+                vbLoading.Visibility = Visibility.Visible;
 
                 Execute();
             }

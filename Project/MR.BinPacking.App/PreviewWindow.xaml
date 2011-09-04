@@ -14,7 +14,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Border Grid.ColumnSpan="2" BorderThickness="0,0,0,1" BorderBrush="SlateGray">
-            <Expander x:Name="exPreview" IsExpanded="True">
+            <Expander x:Name="exPreview" IsExpanded="False">
                 <Expander.Header>
                     <Grid Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}">
                         <Grid.ColumnDefinitions>
@@ -38,7 +38,7 @@
             <StackPanel x:Name="spResult" Orientation="Horizontal"/>
         </ScrollViewer>
         <Border Grid.Row="1" Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="SlateGray">
-            <Expander x:Name="exSideBar" ExpandDirection="Left" IsExpanded="True">
+            <Expander x:Name="exSideBar" ExpandDirection="Left" IsExpanded="False">
                 <Border BorderThickness="0,0,1,0" BorderBrush="SlateGray">
                     <StackPanel Width="150">
                         <Button x:Name="bNext" Content="Dalej" MinWidth="75" Margin="2,1" Click="bNext_Click"/>
@@ -59,6 +59,33 @@
                 </Border>
             </Expander>
         </Border>
+        <Viewbox Grid.Row="1" x:Name="vbLoading" HorizontalAlignment="Center" VerticalAlignment="Center" Width="64">
+            <Canvas RenderTransformOrigin="0.5,0.5" Width="120" Height="120" x:Name="cSpinner">
+                <Ellipse Width="21.835" Height="21.862" Canvas.Left="47.2783" Canvas.Top="0.5" Stretch="Fill" Fill="#FF6495ED"/>
+                <Ellipse Width="21.835" Height="21.862" Canvas.Left="20.1696" Canvas.Top="9.76358" Stretch="Fill" Fill="#E66495ED"/>
+                <Ellipse Width="21.835" Height="21.862" Canvas.Left="2.86816" Canvas.Top="29.9581" Stretch="Fill" Fill="#CD6495ED"/>
+                <Ellipse Width="21.835" Height="21.862" Canvas.Left="5.03758e-006" Canvas.Top="57.9341" Stretch="Fill" Fill="#B36495ED"/>
+                <Ellipse Width="21.835" Height="21.862" Canvas.Left="12.1203" Canvas.Top="83.3163" Stretch="Fill" Fill="#9A6495ED"/>
+                <Ellipse Width="21.835" Height="21.862" Canvas.Left="36.5459" Canvas.Top="98.138" Stretch="Fill" Fill="#806495ED"/>
+                <Ellipse Width="21.835" Height="21.862" Canvas.Left="64.6723" Canvas.Top="96.8411" Stretch="Fill" Fill="#676495ED"/>
+                <Ellipse Width="21.835" Height="21.862" Canvas.Left="87.6176" Canvas.Top="81.2783" Stretch="Fill" Fill="#4D6495ED"/>
+                <Ellipse Width="21.835" Height="21.862" Canvas.Left="98.165" Canvas.Top="54.414" Stretch="Fill" Fill="#346495ED"/>
+                <Ellipse Width="21.835" Height="21.862" Canvas.Left="92.9838" Canvas.Top="26.9938" Stretch="Fill" Fill="#1A6495ED"/>
+                <Canvas.RenderTransform>
+                    <RotateTransform x:Name="SpinnerRotate" Angle="0" />
+                </Canvas.RenderTransform>
+                <Canvas.Triggers>
+                    <EventTrigger RoutedEvent="ContentControl.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="SpinnerRotate" Storyboard.TargetProperty="(RotateTransform.Angle)" From="0" To="360" Duration="0:0:01" RepeatBehavior="Forever" />
+                                <DoubleAnimation Storyboard.TargetName="cSpinner" Storyboard.TargetProperty="Opacity" From="1.0" To="0.5" Duration="0:0:2" AutoReverse="True" RepeatBehavior="Forever" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Canvas.Triggers>
+            </Canvas>
+        </Viewbox>
         <Button Grid.Row="1" x:Name="bSaveResult" Height="22px" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" Click="bSaveResult_Click">
             <Image Source="/MR.BinPacking.App;component/images/base_picture_32.png" />
         </Button>
