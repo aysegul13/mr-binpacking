@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MR.BinPacking.Library", "MR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MR.BinPacking.Test", "MR.BinPacking.Test\MR.BinPacking.Test.csproj", "{3E397C5E-9264-4778-A0AA-92F09858637A}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MR.BinPacking.Installer", "MR.BinPacking.Installer\MR.BinPacking.Installer.vdproj", "{F9030B1D-6735-4361-AEF5-0FFF90B4723A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,12 @@ Global
 		{3E397C5E-9264-4778-A0AA-92F09858637A}.Release|Mixed Platforms.Build.0 = Release|x86
 		{3E397C5E-9264-4778-A0AA-92F09858637A}.Release|x86.ActiveCfg = Release|x86
 		{3E397C5E-9264-4778-A0AA-92F09858637A}.Release|x86.Build.0 = Release|x86
+		{F9030B1D-6735-4361-AEF5-0FFF90B4723A}.Debug|Any CPU.ActiveCfg = Debug
+		{F9030B1D-6735-4361-AEF5-0FFF90B4723A}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{F9030B1D-6735-4361-AEF5-0FFF90B4723A}.Debug|x86.ActiveCfg = Debug
+		{F9030B1D-6735-4361-AEF5-0FFF90B4723A}.Release|Any CPU.ActiveCfg = Release
+		{F9030B1D-6735-4361-AEF5-0FFF90B4723A}.Release|Mixed Platforms.ActiveCfg = Release
+		{F9030B1D-6735-4361-AEF5-0FFF90B4723A}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
