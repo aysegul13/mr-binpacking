@@ -188,7 +188,7 @@ namespace MR.BinPacking.App
                     Elements = this.Elements
                 };
 
-                Loader.SaveToFile(instance, saveDialog.FileName);
+                Loader.SaveInstance(instance, saveDialog.FileName);
             }
         }
 
@@ -257,7 +257,8 @@ namespace MR.BinPacking.App
             }
         }
 
-        private void SetParamsToUI(ExperimentParamsFile experimentParams)
+
+        private void SetUIFromExpParams(ExperimentParamsFile experimentParams)
         {
             ntbExpMinN.Text = experimentParams.MinN.ToString();
             ntbExpMaxN.Text = experimentParams.MaxN.ToString();
@@ -371,6 +372,8 @@ namespace MR.BinPacking.App
                 if (childWindow.IsVisible)
                     childWindow.Close();
             }
+
+            Properties.Settings.Default.Save();
         }
 
         private void ntbBinSize_LostFocus(object sender, RoutedEventArgs e)
@@ -418,7 +421,7 @@ namespace MR.BinPacking.App
 
         private void bSavePreview_Click(object sender, RoutedEventArgs e)
         {
-            Loader.SaveToImg(spPreview, spPreview.ActualWidth, spPreview.ActualHeight);
+            Loader.SaveControlImage(spPreview, spPreview.ActualWidth, spPreview.ActualHeight);
         }
 
         private void bLoadGenSettings_Click(object sender, RoutedEventArgs e)
@@ -427,7 +430,7 @@ namespace MR.BinPacking.App
             if (openDialog.ShowDialog() == true)
             {
                 ExperimentParamsFile experimentParams = Loader.LoadExperimentParams(openDialog.FileName);
-                SetParamsToUI(experimentParams);
+                SetUIFromExpParams(experimentParams);
             }
         }
 
@@ -455,6 +458,9 @@ namespace MR.BinPacking.App
 
         private void cbNonListAlgorithm_CheckedChanged(object sender, RoutedEventArgs e)
         {
+            if (bPresentation == null)
+                return;
+
             bPresentation.IsEnabled = !((bool)cbAAS.IsChecked
                 || (bool)cbReduction.IsChecked
                 || (bool)cbExact.IsChecked

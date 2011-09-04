@@ -834,11 +834,11 @@ namespace MR.BinPacking.App.Chart
                 gChart.Measure(size);
                 gChart.Arrange(new Rect(size));
 
-                Loader.SaveToImg(gChart, gChart.ActualWidth, Canvas.ActualHeight);
+                Loader.SaveControlImage(gChart, gChart.ActualWidth, Canvas.ActualHeight);
             }
             else
             {
-                Loader.SaveToImg(Canvas, Canvas.ActualWidth, Canvas.ActualHeight);
+                Loader.SaveControlImage(Canvas, Canvas.ActualWidth, Canvas.ActualHeight);
             }
         }
 
@@ -953,7 +953,7 @@ namespace MR.BinPacking.App.Chart
 
         private void bSaveTableImg_Click(object sender, RoutedEventArgs e)
         {
-            Loader.SaveToImg(gTable, gTable.ActualWidth, gTable.ActualHeight);
+            Loader.SaveControlImage(gTable, gTable.ActualWidth, gTable.ActualHeight);
         }
     }
 }

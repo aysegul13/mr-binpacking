@@ -13,11 +13,11 @@ using System.Windows.Media;
 
 namespace MR.BinPacking.App.Utils
 {
-    internal enum FileType { Simple, Multi, MultiWithWeights };
+    public enum FileType { Simple, Multi, MultiWithWeights };
 
     internal static class Loader
     {
-        public static ExperimentInstance LoadFromFile1(string filename, int elemCountIdx, int binSizeIdx, int binSize)
+        public static ExperimentInstance LoadInstance1(string filename, int elemCountIdx, int binSizeIdx, int binSize)
         {
             using (StreamReader sr = new StreamReader(filename))
             {
@@ -57,7 +57,7 @@ namespace MR.BinPacking.App.Utils
             }
         }
 
-        public static List<ExperimentInstance> LoadFromFile2(string filename)
+        public static List<ExperimentInstance> LoadInstance2(string filename)
         {
             List<ExperimentInstance> result = new List<ExperimentInstance>();
 
@@ -105,7 +105,7 @@ namespace MR.BinPacking.App.Utils
             }
         }
 
-        public static List<ExperimentInstance> LoadFromFile3(string filename)
+        public static List<ExperimentInstance> LoadInstance3(string filename)
         {
             List<ExperimentInstance> result = new List<ExperimentInstance>();
 
@@ -154,7 +154,7 @@ namespace MR.BinPacking.App.Utils
             }
         }
 
-        public static void SaveToFile(Instance instance, string filename)
+        public static void SaveInstance(Instance instance, string filename)
         {
             using (StreamWriter sw = new StreamWriter(filename))
             {
@@ -165,6 +165,45 @@ namespace MR.BinPacking.App.Utils
                     sw.WriteLine(elem);
             }
         }
+
+
+        //public static Settings LoadSettings(string filename)
+        //{
+        //    try
+        //    {
+        //        string xml = null;
+        //        using (StreamReader sr = new StreamReader(filename))
+        //            xml = sr.ReadToEnd();
+
+        //        XmlSerializer serializer = new XmlSerializer(typeof(Settings));
+        //        StringReader stringReader = new StringReader(xml);
+
+        //        Settings settings = serializer.Deserialize(stringReader) as Settings;
+        //        stringReader.Close();
+
+        //        return settings;
+        //    }
+        //    catch
+        //    {
+        //        return new Settings();
+        //    }
+        //}
+
+        //public static void SaveSettings(Settings settings, string filename)
+        //{
+        //    XmlSerializer serializer = new XmlSerializer(typeof(Settings));
+        //    MemoryStream ms = new MemoryStream();
+
+        //    serializer.Serialize(ms, settings);
+
+        //    byte[] bytes = ms.ToArray();
+        //    ms.Close();
+
+        //    string xml = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+        //    using (StreamWriter sw = new StreamWriter(filename))
+        //        sw.Write(xml);
+        //}
+
 
         public static ExperimentParamsFile LoadExperimentParams(string filename)
         {
@@ -181,7 +220,7 @@ namespace MR.BinPacking.App.Utils
             return experimentParams;
         }
 
-        public static void SaveExperimentParams(ExperimentParamsFile experimentParams, string fileName)
+        public static void SaveExperimentParams(ExperimentParamsFile experimentParams, string filename)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ExperimentParamsFile));
             MemoryStream ms = new MemoryStream();
@@ -192,11 +231,12 @@ namespace MR.BinPacking.App.Utils
             ms.Close();
 
             string xml = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-            using (StreamWriter sw = new StreamWriter(fileName))
+            using (StreamWriter sw = new StreamWriter(filename))
                 sw.Write(xml);
         }
 
-        public static void SaveToImg(UIElement control, double width, double height)
+        
+        public static void SaveControlImage(UIElement control, double width, double height)
         {
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.DefaultExt = ".png";
