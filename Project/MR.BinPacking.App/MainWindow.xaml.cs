@@ -23,6 +23,7 @@ using System.Diagnostics;
 using MR.BinPacking.Library.Algorithms;
 using MR.BinPacking.Library.Utils;
 using MR.BinPacking.Library.Experiment;
+using MR.BinPacking.App.Properties;
 
 namespace MR.BinPacking.App
 {
@@ -89,6 +90,7 @@ namespace MR.BinPacking.App
                 bin.Insert(elem);
 
                 BinControl newBin = new BinControl();
+                newBin.ShowScaled = Settings.Default.PRE_ScaleElements;
                 newBin.ShowFiller = false;
                 newBin.ShowAsElement = true;
                 newBin.Bin = bin;
@@ -465,6 +467,14 @@ namespace MR.BinPacking.App
                 || (bool)cbReduction.IsChecked
                 || (bool)cbExact.IsChecked
                 || (bool)cbMetaHeuristic.IsChecked);
+        }
+
+        private void cbScaleElements_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            foreach (BinControl binControl in spPreview.Children)
+            {
+                binControl.ShowScaled = Settings.Default.PRE_ScaleElements;
+            }
         }
     }
 }

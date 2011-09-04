@@ -22,7 +22,6 @@ namespace MR.BinPacking.App.Controls
     /// </summary>
     public partial class BinControl : UserControl
     {
-        public bool ShowScaled = false;
         public bool ShowFiller = true;
         public bool ShowAsElement = false;
 
@@ -40,8 +39,31 @@ namespace MR.BinPacking.App.Controls
             }
         }
 
+        private bool showScaled = false;
+        public bool ShowScaled
+        {
+            get
+            {
+                return showScaled;
+            }
+            set
+            {
+                showScaled = value;
 
-        public Bin bin;
+                if (bin != null)
+                {
+                    if (showScaled)
+                        FreeSpace = (bin != null) ? ((double)bin.FreeSpace() / bin.Size).ToString("0.####") : "";
+                    else
+                        FreeSpace = (bin != null) ? bin.FreeSpace().ToString() : "";
+
+                    UpdateGrid();
+                }
+            }
+        }
+
+
+        private Bin bin;
         public Bin Bin
         {
             get
@@ -53,7 +75,7 @@ namespace MR.BinPacking.App.Controls
                 bin = value;
 
                 if (ShowScaled)
-                    FreeSpace = (bin != null) ? ((double)bin.FreeSpace() / bin.Size).ToString("0.00") : "";
+                    FreeSpace = (bin != null) ? ((double)bin.FreeSpace() / bin.Size).ToString("0.####") : "";
                 else
                     FreeSpace = (bin != null) ? bin.FreeSpace().ToString() : "";
 
@@ -109,7 +131,7 @@ namespace MR.BinPacking.App.Controls
                     newElemControl.Border.BorderThickness = new Thickness(0, 3, 0, 3);
 
                 if (ShowScaled)
-                    newElemControl.Message = ((double)elem / Bin.Size).ToString("0.00");
+                    newElemControl.Message = ((double)elem / Bin.Size).ToString("0.####");
                 else
                     newElemControl.Message = elem.ToString();
 
