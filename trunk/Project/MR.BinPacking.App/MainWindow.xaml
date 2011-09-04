@@ -343,11 +343,15 @@
         <TabItem Name="tabSettings" Header="Ustawienia" MinHeight="32">
             <StackPanel>
                 <CheckBox x:Name="cbScaleElements" Content="skaluj rozmiary elementów przy wyświetlaniu" Margin="4" 
-                          IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=ScaleElements, Mode=TwoWay}"/>
+                          IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ScaleElements, Mode=TwoWay}"/>
                 <CheckBox x:Name="cbExpandPreviewPresentation" Content="rozwijaj podgląd elementów (prezentacja)" Margin="4"
-                          IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=ExpandPreviewInPresentation, Mode=TwoWay}"/>
+                          IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ExpandPreviewInPresentation, Mode=TwoWay}"/>
                 <CheckBox x:Name="cbExpandPreviewResult" Content="rozwijaj podgląd elementów (wynik)" Margin="4"
-                          IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=ExpandPreviewInResult, Mode=TwoWay}"/>
+                          IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ExpandPreviewInResult, Mode=TwoWay}"/>
+                <CheckBox x:Name="cbExpandSideBarPresentation" Content="rozwijaj sidebar opisujący prezentację (prezentacja)" Margin="4"
+                          IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ExpandSideBarInPresentation, Mode=TwoWay}"/>
+                <CheckBox x:Name="cbExpandSideBarResult" Content="rozwijaj sidebar ze statystykami (wynik)" Margin="4"
+                          IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ExpandSideBarInResult, Mode=TwoWay}"/>
             </StackPanel>
         </TabItem>
         <TabItem Name="tabAbout" Header="Informacje" MinHeight="32">

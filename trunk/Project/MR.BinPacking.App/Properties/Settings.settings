@@ -2,13 +2,13 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MR.BinPacking.App.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="ScaleElements" Type="System.Boolean" Scope="User">
+    <Setting Name="PRE_ScaleElements" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="ExpandPreviewInPresentation" Type="System.Boolean" Scope="User">
+    <Setting Name="PRE_ExpandPreviewInPresentation" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="ExpandPreviewInResult" Type="System.Boolean" Scope="User">
+    <Setting Name="PRE_ExpandPreviewInResult" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="LastFileType" Type="MR.BinPacking.App.Utils.FileType" Scope="User">
@@ -137,8 +137,11 @@
     <Setting Name="EXP_IsCheckedMetaheuristic" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="Setting" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+    <Setting Name="PRE_ExpandSideBarInPresentation" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PRE_ExpandSideBarInResult" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

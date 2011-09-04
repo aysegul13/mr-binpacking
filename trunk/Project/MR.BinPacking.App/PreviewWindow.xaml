@@ -14,7 +14,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Border Grid.ColumnSpan="2" BorderThickness="0,0,0,1" BorderBrush="SlateGray">
-            <Expander IsExpanded="True">
+            <Expander x:Name="exPreview" IsExpanded="True">
                 <Expander.Header>
                     <Grid Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}">
                         <Grid.ColumnDefinitions>
@@ -38,7 +38,7 @@
             <StackPanel x:Name="spResult" Orientation="Horizontal"/>
         </ScrollViewer>
         <Border Grid.Row="1" Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="SlateGray">
-            <Expander ExpandDirection="Left" IsExpanded="True">
+            <Expander x:Name="exSideBar" ExpandDirection="Left" IsExpanded="True">
                 <Border BorderThickness="0,0,1,0" BorderBrush="SlateGray">
                     <StackPanel Width="150">
                         <Button x:Name="bNext" Content="Dalej" MinWidth="75" Margin="2,1" Click="bNext_Click"/>
