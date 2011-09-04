@@ -702,7 +702,7 @@ namespace MR.BinPacking.App.Chart
                         {
                             border.BorderThickness = new Thickness(0.5);
                             double value = VisibleDataSeries[i - 1].Points[j - 1].Y;
-                            textBlock.Text = value.ToString("0.###");
+                            textBlock.Text = value.ToString("0.####");
                             textBlock.ToolTip = value.ToString();
                             textBlock.HorizontalAlignment = HorizontalAlignment.Right;
                         }

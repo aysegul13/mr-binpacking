@@ -86,6 +86,7 @@ namespace MR.BinPacking.App
                 bin.Insert(elem);
 
                 BinControl newBin = new BinControl();
+                newBin.ShowScaled = Settings.Default.PRE_ScaleElements;
                 newBin.ShowFiller = false;
                 newBin.ShowAsElement = true;
                 newBin.Bin = bin;
@@ -118,6 +119,7 @@ namespace MR.BinPacking.App
             foreach (var bin in instance.Bins)
             {
                 BinControl newBin = new BinControl();
+                newBin.ShowScaled = Settings.Default.PRE_ScaleElements;
                 newBin.Bin = bin;
 
                 spResult.Children.Add(newBin);

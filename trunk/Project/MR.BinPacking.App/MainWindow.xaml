@@ -343,7 +343,8 @@
         <TabItem Name="tabSettings" Header="Ustawienia" MinHeight="32">
             <StackPanel>
                 <CheckBox x:Name="cbScaleElements" Content="skaluj rozmiary elementów przy wyświetlaniu" Margin="4" 
-                          IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ScaleElements, Mode=TwoWay}"/>
+                          IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ScaleElements, Mode=TwoWay}"
+                          Checked="cbScaleElements_CheckedChanged" Unchecked="cbScaleElements_CheckedChanged"/>
                 <CheckBox x:Name="cbExpandPreviewPresentation" Content="rozwijaj podgląd elementów (prezentacja)" Margin="4"
                           IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ExpandPreviewInPresentation, Mode=TwoWay}"/>
                 <CheckBox x:Name="cbExpandPreviewResult" Content="rozwijaj podgląd elementów (wynik)" Margin="4"
