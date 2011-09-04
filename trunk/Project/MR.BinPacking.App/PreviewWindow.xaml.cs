@@ -55,6 +55,16 @@ namespace MR.BinPacking.App
             stopWatch.Start();
             result = Algorithm.Execute(Elements, BinSize);
             stopWatch.Stop();
+
+
+            this.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    Elements = Algorithm.Result.Elements;
+
+                    DrawPreview();
+                    Draw(result);
+                    ShowInfo();
+                }));
         }
 
         public void GoAhead()
@@ -170,10 +180,7 @@ namespace MR.BinPacking.App
                 foreach (var bin in Algorithm.Result.Bins)
                 {
                     Bin newBin = new Bin(Algorithm.Result.BinSize);
-
-                    foreach (var elem in bin.Elements)
-                        newBin.Insert(elem);
-
+                    newBin.Elements.AddRange(bin.Elements);
                     inst.Bins.Add(newBin);
                 }
 
@@ -186,10 +193,6 @@ namespace MR.BinPacking.App
             else
             {
                 bNext.IsEnabled = false;
-
-                workerThread.Join();
-                Draw(result);
-                ShowInfo();
             }
         }
 
@@ -207,14 +210,6 @@ namespace MR.BinPacking.App
                 (Algorithm as ListAlgorithm).IsPresentation = false;
 
             GoAhead();
-
-            workerThread.Join();
-
-            Elements = Algorithm.Result.Elements;
-
-            DrawPreview();
-            Draw(result);
-            ShowInfo();
         }
 
         private void UpdateOpacity()
@@ -274,12 +269,7 @@ namespace MR.BinPacking.App
             }
             else
             {
-                DoWork();
-                Elements = Algorithm.Result.Elements;
-
-                DrawPreview();
-                Draw(result);
-                ShowInfo();
+                Execute();
             }
         }
     }
