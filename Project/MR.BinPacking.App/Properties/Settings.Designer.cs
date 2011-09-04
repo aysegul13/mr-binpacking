@@ -26,36 +26,36 @@ namespace MR.BinPacking.App.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ScaleElements {
+        public bool PRE_ScaleElements {
             get {
-                return ((bool)(this["ScaleElements"]));
+                return ((bool)(this["PRE_ScaleElements"]));
             }
             set {
-                this["ScaleElements"] = value;
+                this["PRE_ScaleElements"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ExpandPreviewInPresentation {
+        public bool PRE_ExpandPreviewInPresentation {
             get {
-                return ((bool)(this["ExpandPreviewInPresentation"]));
+                return ((bool)(this["PRE_ExpandPreviewInPresentation"]));
             }
             set {
-                this["ExpandPreviewInPresentation"] = value;
+                this["PRE_ExpandPreviewInPresentation"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ExpandPreviewInResult {
+        public bool PRE_ExpandPreviewInResult {
             get {
-                return ((bool)(this["ExpandPreviewInResult"]));
+                return ((bool)(this["PRE_ExpandPreviewInResult"]));
             }
             set {
-                this["ExpandPreviewInResult"] = value;
+                this["PRE_ExpandPreviewInResult"] = value;
             }
         }
         
@@ -565,13 +565,25 @@ namespace MR.BinPacking.App.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Setting {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PRE_ExpandSideBarInPresentation {
             get {
-                return ((bool)(this["Setting"]));
+                return ((bool)(this["PRE_ExpandSideBarInPresentation"]));
             }
             set {
-                this["Setting"] = value;
+                this["PRE_ExpandSideBarInPresentation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PRE_ExpandSideBarInResult {
+            get {
+                return ((bool)(this["PRE_ExpandSideBarInResult"]));
+            }
+            set {
+                this["PRE_ExpandSideBarInResult"] = value;
             }
         }
     }

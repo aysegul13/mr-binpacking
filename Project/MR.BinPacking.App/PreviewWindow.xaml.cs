@@ -19,6 +19,7 @@ using System.Threading;
 using Microsoft.Win32;
 using System.IO;
 using MR.BinPacking.App.Utils;
+using MR.BinPacking.App.Properties;
 
 namespace MR.BinPacking.App
 {
@@ -264,11 +265,17 @@ namespace MR.BinPacking.App
         {
             if ((Algorithm is ListAlgorithm) && (Algorithm as ListAlgorithm).IsPresentation)
             {
+                exPreview.IsExpanded = Settings.Default.PRE_ExpandPreviewInPresentation;
+                exSideBar.IsExpanded = Settings.Default.PRE_ExpandSideBarInPresentation;
+
                 DrawPreview();
                 Execute();
             }
             else
             {
+                exPreview.IsExpanded = Settings.Default.PRE_ExpandPreviewInResult;
+                exSideBar.IsExpanded = Settings.Default.PRE_ExpandSideBarInResult;
+
                 Execute();
             }
         }
