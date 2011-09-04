@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MR.BinPacking.Library.Base;
 
 namespace MR.BinPacking.Library.Experiment
 {
@@ -13,6 +14,7 @@ namespace MR.BinPacking.Library.Experiment
         public Distribution Distribution { get; set; }
         public Sorting Sorting { get; set; }
         public Algorithm Algorithm { get; set; }
+        public BaseAlgorithm Alg { get; set; }
 
         public double QualityEstimation { get; set; }
         public double ErrorEstimation { get; set; }

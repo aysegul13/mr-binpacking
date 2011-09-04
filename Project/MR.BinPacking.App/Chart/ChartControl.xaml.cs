@@ -701,7 +701,9 @@ namespace MR.BinPacking.App.Chart
                         else
                         {
                             border.BorderThickness = new Thickness(0.5);
-                            textBlock.Text = VisibleDataSeries[i - 1].Points[j - 1].Y.ToString();
+                            double value = VisibleDataSeries[i - 1].Points[j - 1].Y;
+                            textBlock.Text = value.ToString("0.###");
+                            textBlock.ToolTip = value.ToString();
                             textBlock.HorizontalAlignment = HorizontalAlignment.Right;
                         }
                     }
@@ -726,6 +728,7 @@ namespace MR.BinPacking.App.Chart
             {
                 ID = first.ID,
                 Algorithm = first.Algorithm,
+                Alg = first.Alg,
                 Distribution = first.Distribution,
                 N = first.N,
                 Sorting = first.Sorting,
@@ -767,20 +770,24 @@ namespace MR.BinPacking.App.Chart
         private string GetSerieName(IEnumerable<Sample> serie, ChartDataType type)
         {
             Sample first = serie.First();
+            string alg = first.Alg.Name;
+            string dist = ExperimentUtils.GetDistributionDisplayName(first.Distribution);
+            string sort = ExperimentUtils.GetSortingDisplayName(first.Sorting);
+
             switch (type)
             {
                 case ChartDataType.Distribution:
-                    return first.Distribution.ToString();
+                    return dist;
                 case ChartDataType.Sorting:
-                    return first.Sorting.ToString();
+                    return sort;
                 case ChartDataType.AlgorithmDistribution:
-                    return first.Algorithm.ToString() + ", " + first.Distribution.ToString();
+                    return alg + ", " + dist;
                 case ChartDataType.AlgorithmSorting:
-                    return first.Algorithm.ToString() + ", " + first.Sorting.ToString();
+                    return alg + ", " + sort;
                 case ChartDataType.DistributionSorting:
-                    return first.Distribution.ToString() + ", " + first.Sorting.ToString();
-                default:
-                    return first.Algorithm.ToString();
+                    return dist + ", " + sort;
+                default:    //ChartDataType.Algorithm
+                    return alg;
             }
         }
 

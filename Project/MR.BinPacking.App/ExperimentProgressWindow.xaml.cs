@@ -34,12 +34,11 @@ namespace MR.BinPacking.App
         {
             this.Dispatcher.BeginInvoke(new Action(delegate
                 {
-                    //laRepeat.Content = String.Format("Powtórzenie: {0}", state.Repeat + 1);
+                    laRepeat.Content = String.Format("Powtórzenie: {0}", state.Repeat + 1);
                     laStep.Content = String.Format("Liczba elementów: {0}", state.N);
 
-                    //TODO: poprawić wyświetlane nazwy dla rozkładu i sortowania
-                    laDistribution.Content = String.Format("Rozkład: {0}", state.Distribution.ToString());
-                    laSorting.Content = String.Format("Sortowanie: {0}", state.Sorting.ToString());
+                    laDistribution.Content = String.Format("Rozkład: {0}", ExperimentUtils.GetDistributionDisplayName(state.Distribution));
+                    laSorting.Content = String.Format("Sortowanie: {0}", ExperimentUtils.GetSortingDisplayName(state.Sorting));
 
                     laAlgorithm.Content = String.Format("Algorytm: {0}", state.AlgorithmName);
 
@@ -76,7 +75,6 @@ namespace MR.BinPacking.App
             {
                 List<int> elements = Experiment.GetElementsWithSorting(I.Elements, S);
 
-                //TODO: algorytm z innego źródła
                 for (int i = 0; i < prms.Algorithms.Count; i++)
                 {
                     BaseAlgorithm A = prms.Algs[i];
@@ -104,7 +102,6 @@ namespace MR.BinPacking.App
                     double quality = (double)res / L2;
                     double error = 100.0 * (res - L2) / L2;
 
-                    //TODO: dopisać info o algorytmie
                     Sample stats = new Sample()
                     {
                         ID = sampleNumber + counter,
@@ -112,6 +109,7 @@ namespace MR.BinPacking.App
                         Distribution = I.Dist,
                         Sorting = S,
                         Algorithm = prms.Algorithms[i],
+                        Alg = prms.Algs[i],
                         QualityEstimation = quality,
                         ErrorEstimation = error,
                         Result = res,
@@ -182,7 +180,7 @@ namespace MR.BinPacking.App
                         };
 
                         int counter = 0;
-                        List<Sample> samples = DoWorkInternal(I, prms, samplesCount, sampleNumber, out counter, 0);
+                        List<Sample> samples = DoWorkInternal(I, prms, samplesCount, sampleNumber, out counter, R);
                         if (samples == null)
                             return;
 
