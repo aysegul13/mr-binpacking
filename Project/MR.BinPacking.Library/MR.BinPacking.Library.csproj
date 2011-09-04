@@ -51,10 +51,14 @@
     <Compile Include="Algorithms\BestFitDecreasing.cs" />
     <Compile Include="Bounds.cs" />
     <Compile Include="Experiment\AlgorithmResult.cs" />
+    <Compile Include="Experiment\Enums.cs" />
     <Compile Include="Experiment\Experiment.cs" />
+    <Compile Include="Experiment\ExperimentInstance.cs" />
     <Compile Include="Experiment\ExperimentParams.cs" />
+    <Compile Include="Experiment\ExperimentParamsFile.cs" />
     <Compile Include="Experiment\ExperimentResult.cs" />
     <Compile Include="Experiment\ExperimentState.cs" />
+    <Compile Include="Experiment\ExperimentUtils.cs" />
     <Compile Include="Experiment\StatField.cs" />
     <Compile Include="Experiment\Sample.cs" />
     <Compile Include="Algorithms\FirstFit.cs" />
