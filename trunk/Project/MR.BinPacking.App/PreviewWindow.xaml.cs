@@ -45,6 +45,7 @@ namespace MR.BinPacking.App
             BinSize = binSize;
 
             this.Title = algorithm.Name;
+            showExecutionTime = (!(Algorithm is ListAlgorithm) || !(Algorithm as ListAlgorithm).IsPresentation);
         }
 
 
@@ -61,8 +62,6 @@ namespace MR.BinPacking.App
             if (Algorithm is ListAlgorithm)
                 (Algorithm as ListAlgorithm).IsWaiting = false;
         }
-
-        Instance result = null;
 
         private void DrawPreview()
         {
@@ -145,51 +144,10 @@ namespace MR.BinPacking.App
             }
         }
 
-        private void Old()
-        {
-            //originalHeight = cnResult.ActualHeight;
-            //cnResult.RenderTransform = new ScaleTransform(1.0, 3.0);
 
-            Title = Algorithm.Name;
-
-
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            //Instance result = Algorithm.Execute(Elements, BinSize);
-            sw.Stop();
-
-            laBinCount.Content = "Liczba pudełek: " + result.Bins.Count;
-            laExecutionTime.Content = "Czas obliczeń [ms]: " + sw.ElapsedMilliseconds;
-
-            int minBound = Math.Min(Bounds.L1(Elements, BinSize), Bounds.L2(Elements, BinSize));
-            //laQualityEstimation.Content = "Oszacowanie jakości: " + (result.Bins.Count / (double)minBound).ToString("0.000");
-            //laErrorEstimation.Content = "Oszacowanie błędu: " + (100.0 * (result.Bins.Count - minBound) / (double)minBound).ToString("0.000");
-
-
-            //laLowerBound.Content = "L1: " + Bounds.LowerBound(Elements, BinSize);
-            //laStrongerLowerBound.Content = "L2: " + Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
-
-
-            sw.Reset();
-            sw.Start();
-
-
-
-
-            //cnResult.Children.Clear();
-            //cnResult.Width = 32 * result.Bins.Count;
-
-
-            //double totalHeight = Math.Max(100.0, cnResult.ActualHeight - 32 - 4);
-            //int binCnt = 0;
-
-
-            sw.Stop();
-
-            //laDrawingTime.Content = "Czas rysowania: " + sw.ElapsedMilliseconds;
-        }
-
-
+        bool showExecutionTime = false;
+        bool first = true;
+        Instance result = null;
         Thread workerThread = null;
         private void Execute()
         {
@@ -199,7 +157,6 @@ namespace MR.BinPacking.App
             while (!workerThread.IsAlive) ;
         }
 
-        private bool first = true;
         private void bNext_Click(object sender, RoutedEventArgs e)
         {
             if (Algorithm is ListAlgorithm)
@@ -244,6 +201,8 @@ namespace MR.BinPacking.App
 
         private void bEnd_Click(object sender, RoutedEventArgs e)
         {
+            showExecutionTime = false;
+
             if (Algorithm is ListAlgorithm)
                 (Algorithm as ListAlgorithm).IsPresentation = false;
 
@@ -273,8 +232,7 @@ namespace MR.BinPacking.App
             laQualityEstimations.Visibility = Visibility.Visible;
             laErrorEstimations.Visibility = Visibility.Visible;
 
-            //TODO: poprawić - powinno być tylko jeżeli IsPresentation było od początku
-            if (!(Algorithm is ListAlgorithm) || !(Algorithm as ListAlgorithm).IsPresentation)
+            if (showExecutionTime)
                 laExecutionTime.Visibility = Visibility.Visible;
 
             tblMessage.Visibility = Visibility.Collapsed;
@@ -295,21 +253,6 @@ namespace MR.BinPacking.App
             tblErrorEstimations.Text = String.Format("Oszac. błędu L1/L2 [%]: {0:0.00}/{1:0.00}",
                 (100.0 * (result.Bins.Count - L1) / (double)L1),
                 (100.0 * (result.Bins.Count - L2) / (double)L2));
-
-            //int minBound = Math.Min(Bounds.LowerBound(Elements, BinSize), Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1));
-            //laQualityEstimation.Content = "Oszacowanie jakości: " + (result.Bins.Count / (double)minBound).ToString("0.000");
-            //laErrorEstimation.Content = "Oszacowanie błędu: " + (100.0 * (result.Bins.Count - minBound) / (double)minBound).ToString("0.000");
-
-
-            //laLowerBound.Content = "L1: " + Bounds.LowerBound(Elements, BinSize);
-            //laStrongerLowerBound.Content = "L2: " + Bounds.StrongerLowerBound(Elements, BinSize, BinSize / 2 - 1);
-
-
-            //<Label x:Name="laBinCount" Content="Liczba pudełek: " Visibility="Collapsed" />
-            //            <Label x:Name="laExecutionTime" Content="Czas obliczeń: " Visibility="Collapsed" />
-            //            <Label x:Name="laLowerBounds" Content="L1/L2: " Visibility="Collapsed" />
-            //            <Label x:Name="laQualityEstimations" Content="Oszac. jakości L1/L2: " Visibility="Collapsed" />
-            //            <Label x:Name="laErrorEstimations" Content="Oszac. błędu L1/L2: " Visibility="Collapsed" />
         }
 
         private void bSaveResult_Click(object sender, RoutedEventArgs e)
