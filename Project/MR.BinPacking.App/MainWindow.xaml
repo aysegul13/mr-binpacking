@@ -298,7 +298,16 @@
             </StackPanel>
         </TabItem>
         <TabItem Name="tabSettings" Header="Ustawienia" MinHeight="32">
-
+            <StackPanel>
+                <CheckBox Content="skaluj rozmiary elementów przy wyświetlaniu" Margin="4"/>
+                <CheckBox Content="nie rozwijaj podglądu elementów (prezentacja)" Margin="4"/>
+                <CheckBox Content="nie rozwijaj podglądu elementów (wynik)" IsChecked="True" Margin="4"/>
+            </StackPanel>
+        </TabItem>
+        <TabItem Name="tabAbout" Header="Informacje" MinHeight="32">
+            <StackPanel>
+                
+            </StackPanel>
         </TabItem>
     </TabControl>
     <!--<ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
