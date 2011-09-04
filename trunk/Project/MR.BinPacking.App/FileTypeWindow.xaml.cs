@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using System.IO;
 using MR.BinPacking.Library.Base;
 using MR.BinPacking.App.Utils;
+using MR.BinPacking.Library.Experiment;
 
 namespace MR.BinPacking.App
 {
