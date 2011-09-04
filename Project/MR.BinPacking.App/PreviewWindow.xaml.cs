@@ -69,7 +69,7 @@ namespace MR.BinPacking.App
                 }));
         }
 
-        public void GoAhead()
+        public void Resume()
         {
             if (Algorithm is ListAlgorithm)
                 (Algorithm as ListAlgorithm).IsWaiting = false;
@@ -192,7 +192,7 @@ namespace MR.BinPacking.App
                     DrawPreview();
                 first = false;
                 Draw(inst);
-                GoAhead();
+                Resume();
             }
             else
             {
@@ -213,7 +213,7 @@ namespace MR.BinPacking.App
             if (Algorithm is ListAlgorithm)
                 (Algorithm as ListAlgorithm).IsPresentation = false;
 
-            GoAhead();
+            Resume();
         }
 
         private void UpdateOpacity()

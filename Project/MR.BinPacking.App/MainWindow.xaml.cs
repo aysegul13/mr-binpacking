@@ -153,7 +153,7 @@ namespace MR.BinPacking.App
                 expWindow = new ExperimentProgressWindow(expParams, Instance);
 
             ChildWindows.Add(expWindow);
-            expWindow.Show();
+            expWindow.ShowDialog();
         }
 
         private void bLoad_Click(object sender, RoutedEventArgs e)

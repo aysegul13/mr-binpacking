@@ -2,8 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Prezentacja" Height="400" Width="480"
+        WindowStartupLocation="CenterScreen" Icon="/MR.BinPacking.App;component/images/bin32.ico"
         ContentRendered="Window_ContentRendered"
-        Closing="Window_Closing" WindowStartupLocation="CenterOwner">
+        Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
