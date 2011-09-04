@@ -100,7 +100,7 @@ namespace MR.BinPacking.App.Utils
                 encoder = new BmpBitmapEncoder();
             else if (Extension == ".png")
                 encoder = new PngBitmapEncoder();
-            else if (Extension == ".jpg")
+            else if ((Extension == ".jpg") || (Extension == ".jpeg"))
             {
                 encoder = new JpegBitmapEncoder();
                 (encoder as JpegBitmapEncoder).QualityLevel = 100;
