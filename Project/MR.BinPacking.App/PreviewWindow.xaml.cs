@@ -252,12 +252,12 @@ namespace MR.BinPacking.App
 
         private void bSaveResult_Click(object sender, RoutedEventArgs e)
         {
-            Loader.SaveToImg(spResult, spResult.ActualWidth, spResult.ActualHeight);
+            Loader.SaveControlImage(spResult, spResult.ActualWidth, spResult.ActualHeight);
         }
 
         private void bSaveElements_Click(object sender, RoutedEventArgs e)
         {
-            Loader.SaveToImg(spElements, spElements.ActualWidth, spElements.ActualHeight);
+            Loader.SaveControlImage(spElements, spElements.ActualWidth, spElements.ActualHeight);
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)

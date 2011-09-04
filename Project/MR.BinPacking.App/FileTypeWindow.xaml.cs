@@ -14,6 +14,7 @@ using System.IO;
 using MR.BinPacking.Library.Base;
 using MR.BinPacking.App.Utils;
 using MR.BinPacking.Library.Experiment;
+using MR.BinPacking.App.Properties;
 
 namespace MR.BinPacking.App
 {
@@ -35,12 +36,12 @@ namespace MR.BinPacking.App
             InitializeComponent();
         }
 
-        public FileTypeWindow(string filename) : this()
+        public FileTypeWindow(string filename)
+            : this()
         {
             InitTextBoxes();
 
             this.filename = filename;
-
             using (StreamReader sr = new StreamReader(filename))
                 tbFile.Text = sr.ReadToEnd();
         }
@@ -103,6 +104,25 @@ namespace MR.BinPacking.App
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             InitTextBoxes();
+
+            switch (Settings.Default.LastFileType)
+            {
+                case FileType.Simple:
+                    tabFileTypes.SelectedIndex = 0;
+                    break;
+                case FileType.Multi:
+                    tabFileTypes.SelectedIndex = 1;
+                    break;
+                case FileType.MultiWithWeights:
+                    tabFileTypes.SelectedIndex = 2;
+                    break;
+            }
+
+            rbHeaderEmpty.IsChecked = (Settings.Default.LastFileHeaderType == 0);
+            rbOnlyBinSize.IsChecked = (Settings.Default.LastFileHeaderType == 1);
+            rbOnlyElemCount.IsChecked = (Settings.Default.LastFileHeaderType == 2);
+            rbBinSizeElemCount.IsChecked = (Settings.Default.LastFileHeaderType == 3);
+            rbElemCountBinSize.IsChecked = (Settings.Default.LastFileHeaderType == 4);
         }
 
         private void bFileTypeSimple_Click(object sender, RoutedEventArgs e)
@@ -116,13 +136,13 @@ namespace MR.BinPacking.App
             else if (rbElemCountBinSize.IsChecked == true) { elemCountIdx = 0; binSizeIdx = 1; }
             else if (rbBinSizeElemCount.IsChecked == true) { elemCountIdx = 1; binSizeIdx = 0; }
 
-            result = Loader.LoadFromFile1(filename, elemCountIdx, binSizeIdx, binSize);
+            result = Loader.LoadInstance1(filename, elemCountIdx, binSizeIdx, binSize);
             this.Close();
         }
 
         private void bFileTypeMulti_Click(object sender, RoutedEventArgs e)
         {
-            List<ExperimentInstance> instances = Loader.LoadFromFile2(filename);
+            List<ExperimentInstance> instances = Loader.LoadInstance2(filename);
             tabFileTypes.IsEnabled = false;
 
             lbInstances.ItemsSource = instances;
@@ -134,7 +154,7 @@ namespace MR.BinPacking.App
 
         private void bFiletypeMultiWithWeights_Click(object sender, RoutedEventArgs e)
         {
-            List<ExperimentInstance> instances = Loader.LoadFromFile3(filename);
+            List<ExperimentInstance> instances = Loader.LoadInstance3(filename);
             tabFileTypes.IsEnabled = false;
 
             lbInstances.ItemsSource = instances;
@@ -182,6 +202,27 @@ namespace MR.BinPacking.App
         private void lbInstances_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             bSelect.IsEnabled = (lbInstances.SelectedItem != null) && (lbInstances.SelectedItem is ExperimentInstance);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (tabFileTypes.SelectedIndex == 2)
+                Settings.Default.LastFileType = FileType.MultiWithWeights;
+            else if (tabFileTypes.SelectedIndex == 1)
+                Settings.Default.LastFileType = FileType.Multi;
+            else
+                Settings.Default.LastFileType = FileType.Simple;
+
+            if (rbHeaderEmpty.IsChecked == true)
+                Settings.Default.LastFileHeaderType = 0;
+            else if (rbOnlyBinSize.IsChecked == true)
+                Settings.Default.LastFileHeaderType = 1;
+            else if (rbOnlyElemCount.IsChecked == true)
+                Settings.Default.LastFileHeaderType = 2;
+            else if (rbBinSizeElemCount.IsChecked == true)
+                Settings.Default.LastFileHeaderType = 3;
+            else if (rbElemCountBinSize.IsChecked == true)
+                Settings.Default.LastFileHeaderType = 4;
         }
     }
 }
