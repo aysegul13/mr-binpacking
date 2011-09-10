@@ -170,9 +170,9 @@ namespace MR.BinPacking.App
                     BinSize = instance.BinSize;
                     Elements = instance.Elements;
 
-                    ntbElementsNumber.Text = Elements.Count.ToString();
-                    ntbBinSize.Text = ntbMaxValue.Text = BinSize.ToString();
-                    ntbMinValue.Text = "1";
+                    //ntbElementsNumber.Text = Elements.Count.ToString();
+                    //ntbBinSize.Text = ntbMaxValue.Text = BinSize.ToString();
+                    //ntbMinValue.Text = "1";
 
                     RefreshElements();
                     RefreshPreview();
@@ -380,29 +380,35 @@ namespace MR.BinPacking.App
 
         private void ntbBinSize_LostFocus(object sender, RoutedEventArgs e)
         {
-            ntbMinValue.MaxValue = ntbMaxValue.MaxValue = Int32.Parse(ntbBinSize.Text);
+            int binSize = Int32.Parse(ntbBinSize.Text);
+            ntbMaxValue.MaxValue = binSize;
+
+            int maxVal = Int32.Parse(ntbMaxValue.Text);
+            ntbMinValue.MaxValue = maxVal;
+
+            int minVal = Int32.Parse(ntbMinValue.Text);
+            ntbMaxValue.MinValue = minVal;
         }
 
         private void ntbMinValue_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (Int32.Parse(ntbMinValue.Text) > Int32.Parse(ntbMaxValue.Text))
-                ntbMinValue.Text = ntbMaxValue.Text;
+            int minVal = Int32.Parse(ntbMinValue.Text);
+            ntbMaxValue.MinValue = minVal;
         }
 
         private void ntbMaxValue_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (Int32.Parse(ntbMaxValue.Text) < Int32.Parse(ntbMinValue.Text))
-                ntbMaxValue.Text = ntbMinValue.Text;
+            int maxVal = Int32.Parse(ntbMaxValue.Text);
+            ntbMinValue.MaxValue = maxVal;
         }
 
         private void tbElements_LostFocus(object sender, RoutedEventArgs e)
         {
-            BinSize = Int32.Parse(ntbBinSize.Text);
             int parse;
-
             Elements = (from elemStr in tbElements.Text.Split()
-                        where (Int32.TryParse(elemStr, out parse) && (Int32.Parse(elemStr) < BinSize))
+                        where Int32.TryParse(elemStr, out parse)
                         select Int32.Parse(elemStr)).ToList();
+            BinSize = Elements.Max();
 
             RefreshElements();
             RefreshPreview();
