@@ -159,7 +159,7 @@
                                   IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=VIS_IsCheckedMetaheuristic, Mode=TwoWay}"/>
                     </WrapPanel>
                 </Grid>
-                <Grid>
+                <Grid Margin="0,8,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -325,7 +325,7 @@
                         </Button>
                     </StackPanel>
                 </Grid>
-                <Grid>
+                <Grid Margin="0,8,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -357,7 +357,11 @@
         </TabItem>
         <TabItem Name="tabAbout" Header="Informacje" MinHeight="32">
             <StackPanel>
-                
+                <Label Content="BinPacking" FontSize="24" FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <Label Content="Autorem programu jest: "/>
+                    <Label Content="Marcin Robaszyński [marcin.robaszynski@gmail.com]" FontWeight="Bold"/>
+                </StackPanel>
             </StackPanel>
         </TabItem>
     </TabControl>
