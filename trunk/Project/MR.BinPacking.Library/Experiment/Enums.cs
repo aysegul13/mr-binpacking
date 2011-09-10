@@ -18,6 +18,6 @@ namespace MR.BinPacking.Library.Experiment
         AsymptoticApproximationScheme,
         Reduction,
         Exact,
-        Metaheuristic
+        PBI
     };
 }

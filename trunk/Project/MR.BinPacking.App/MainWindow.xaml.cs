@@ -327,8 +327,8 @@ namespace MR.BinPacking.App
                     algorithms.Add(new Reduction());
                 if (cbExact.IsChecked == true)
                     algorithms.Add(new Exact());
-                if (cbMetaHeuristic.IsChecked == true)
-                    algorithms.Add(new MetaHeuristic());
+                if (cbPBI.IsChecked == true)
+                    algorithms.Add(new PBI());
 
                 foreach (var alg in algorithms)
                 {
@@ -381,7 +381,7 @@ namespace MR.BinPacking.App
                 cbExpAAS.IsChecked = experimentParams.Algorithms.Contains(Algorithm.AsymptoticApproximationScheme);
                 cbExpReduction.IsChecked = experimentParams.Algorithms.Contains(Algorithm.Reduction);
                 cbExpExact.IsChecked = experimentParams.Algorithms.Contains(Algorithm.Exact);
-                cbExpMetaHeuristic.IsChecked = experimentParams.Algorithms.Contains(Algorithm.Metaheuristic);
+                cbExpPBI.IsChecked = experimentParams.Algorithms.Contains(Algorithm.PBI);
             }
             catch (ThreadAbortException) { }
             catch (Exception exc)
@@ -454,8 +454,8 @@ namespace MR.BinPacking.App
                     algorithms.Add(Algorithm.Reduction);
                 if (cbExpExact.IsChecked == true)
                     algorithms.Add(Algorithm.Exact);
-                if (cbExpMetaHeuristic.IsChecked == true)
-                    algorithms.Add(Algorithm.Metaheuristic);
+                if (cbExpPBI.IsChecked == true)
+                    algorithms.Add(Algorithm.PBI);
 
                 if (algorithms.Count == 0)
                 {
@@ -670,7 +670,7 @@ namespace MR.BinPacking.App
                 bPresentation.IsEnabled = !((bool)cbAAS.IsChecked
                     || (bool)cbReduction.IsChecked
                     || (bool)cbExact.IsChecked
-                    || (bool)cbMetaHeuristic.IsChecked);
+                    || (bool)cbPBI.IsChecked);
             }
             catch (ThreadAbortException) { }
             catch (Exception exc)
