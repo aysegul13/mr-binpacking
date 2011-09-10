@@ -371,7 +371,14 @@ namespace MR.BinPacking.App
                     childWindow.Close();
             }
 
-            Properties.Settings.Default.Save();
+            Settings.Default.VIS_MinValue = ntbMinValue.Text;
+            Settings.Default.VIS_MaxValue = ntbMaxValue.Text;
+            Settings.Default.EXP_From = ntbExpMinN.Text;
+            Settings.Default.EXP_To = ntbExpMaxN.Text;
+            Settings.Default.EXP_MinValue = ntbExpMinVal.Text;
+            Settings.Default.EXP_MaxValue = ntbExpMaxVal.Text;
+
+            Settings.Default.Save();
         }
 
         private void ntbBinSize_LostFocus(object sender, RoutedEventArgs e)
@@ -489,6 +496,18 @@ namespace MR.BinPacking.App
         {
             int maxVal = Int32.Parse(ntbExpMaxN.Text);
             ntbExpMinN.MaxValue = maxVal;
+        }
+
+        private void ntbExpMinVal_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double minVal = Double.Parse(ntbExpMinVal.Text);
+            ntbExpMaxVal.MinValue = minVal;
+        }
+
+        private void ntbExpMaxVal_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double maxVal = Double.Parse(ntbExpMaxVal.Text);
+            ntbExpMinVal.MaxValue = maxVal;
         }
     }
 }

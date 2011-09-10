@@ -239,12 +239,12 @@
                             </Border>
                             <Label Grid.Row="2" Grid.Column="1" Content="Min:"/>
                             <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                                <gui:NumberTextBox x:Name="ntbExpMinVal" Style="{StaticResource tbStyle}" MinWidth="48"
+                                <gui:NumberTextBox x:Name="ntbExpMinVal" Style="{StaticResource tbStyle}" MinWidth="48" LostFocus="ntbExpMinVal_LostFocus"
                                                    MinValue="0.00001" MaxValue="1" Text="{Binding Source={x:Static props:Settings.Default}, Path=EXP_MinValue, Mode=TwoWay}" IntsOnly="false" />
                             </Border>
                             <Label Grid.Row="3" Grid.Column="1" Content="Max:"/>
                             <Border Grid.Row="3" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                                <gui:NumberTextBox x:Name="ntbExpMaxVal" Style="{StaticResource tbStyle}" MinWidth="48"
+                                <gui:NumberTextBox x:Name="ntbExpMaxVal" Style="{StaticResource tbStyle}" MinWidth="48" LostFocus="ntbExpMaxVal_LostFocus"
                                                    MinValue="0.00001" MaxValue="1" Text="{Binding Source={x:Static props:Settings.Default}, Path=EXP_MaxValue, Mode=TwoWay}" IntsOnly="False"/>
                             </Border>
 
