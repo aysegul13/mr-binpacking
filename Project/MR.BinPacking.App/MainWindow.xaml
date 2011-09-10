@@ -155,7 +155,7 @@
                                   IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=VIS_IsCheckedReduction, Mode=TwoWay}"/>
                         <CheckBox x:Name="cbExact" Content="dokładny" Margin="4" Checked="cbNonListAlgorithm_CheckedChanged" Unchecked="cbNonListAlgorithm_CheckedChanged"
                                   IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=VIS_IsCheckedExact, Mode=TwoWay}"/>
-                        <CheckBox x:Name="cbMetaHeuristic" Content="metaheurystyka" Margin="4" Checked="cbNonListAlgorithm_CheckedChanged" Unchecked="cbNonListAlgorithm_CheckedChanged"
+                        <CheckBox x:Name="cbPBI" Content="PBI" Margin="4" Checked="cbNonListAlgorithm_CheckedChanged" Unchecked="cbNonListAlgorithm_CheckedChanged"
                                   IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=VIS_IsCheckedMetaheuristic, Mode=TwoWay}"/>
                     </WrapPanel>
                 </Grid>
@@ -313,7 +313,7 @@
                                   IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=EXP_IsCheckedReduction, Mode=TwoWay}"/>
                         <CheckBox x:Name="cbExpExact" Content="dokładny" Margin="4"
                                   IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=EXP_IsCheckedExact, Mode=TwoWay}"/>
-                        <CheckBox x:Name="cbExpMetaHeuristic" Content="metaheurystyka" Margin="4"
+                        <CheckBox x:Name="cbExpPBI" Content="PBI" Margin="4"
                                   IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=EXP_IsCheckedMetaheuristic, Mode=TwoWay}"/>
                     </WrapPanel>
                     <Label Grid.Row="4" Content="Źródło danych:" FontWeight="Bold"/>

@@ -6,11 +6,11 @@ using MR.BinPacking.Library.Base;
 
 namespace MR.BinPacking.Library.Algorithms
 {
-    public class MetaHeuristic : BaseAlgorithm
+    public class PBI : BaseAlgorithm
     {
-        public MetaHeuristic()
+        public PBI()
         {
-            Name = "Metaheurystyka";
+            Name = "PBI";
         }
 
         public override Instance Execute(List<int> elements, int binSize)

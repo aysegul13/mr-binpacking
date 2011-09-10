@@ -57,8 +57,8 @@ namespace MR.BinPacking.Library.Experiment
                     return new Reduction();
                 case Algorithm.Exact:
                     return new Exact();
-                case Algorithm.Metaheuristic:
-                    return new MetaHeuristic();
+                case Algorithm.PBI:
+                    return new PBI();
                 default:    //NextFit
                     return new NextFit() { IsPresentation = isPresentation };
             }
