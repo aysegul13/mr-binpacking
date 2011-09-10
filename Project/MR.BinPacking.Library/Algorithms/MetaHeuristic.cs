@@ -29,7 +29,7 @@ namespace MR.BinPacking.Library.Algorithms
                 instance = Improve(instance, L2);
 
                 if (instance.Bins.Count < prev)
-                    attempts = 5;
+                    attempts = 3;
 
                 prev = instance.Bins.Count;
             }

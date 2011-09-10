@@ -15,6 +15,8 @@ using MR.BinPacking.Library.Base;
 using MR.BinPacking.App.Utils;
 using MR.BinPacking.Library.Experiment;
 using MR.BinPacking.App.Properties;
+using System.Reflection;
+using System.Threading;
 
 namespace MR.BinPacking.App
 {
@@ -41,9 +43,17 @@ namespace MR.BinPacking.App
         {
             InitTextBoxes();
 
-            this.filename = filename;
-            using (StreamReader sr = new StreamReader(filename))
-                tbFile.Text = sr.ReadToEnd();
+            try
+            {
+                this.filename = filename;
+                using (StreamReader sr = new StreamReader(filename))
+                    tbFile.Text = sr.ReadToEnd();
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
 
@@ -118,50 +128,82 @@ namespace MR.BinPacking.App
                     break;
             }
 
-            rbHeaderEmpty.IsChecked = (Settings.Default.LastFileHeaderType == 0);
-            rbOnlyBinSize.IsChecked = (Settings.Default.LastFileHeaderType == 1);
-            rbOnlyElemCount.IsChecked = (Settings.Default.LastFileHeaderType == 2);
-            rbBinSizeElemCount.IsChecked = (Settings.Default.LastFileHeaderType == 3);
-            rbElemCountBinSize.IsChecked = (Settings.Default.LastFileHeaderType == 4);
+            try
+            {
+                rbHeaderEmpty.IsChecked = (Settings.Default.LastFileHeaderType == 0);
+                rbOnlyBinSize.IsChecked = (Settings.Default.LastFileHeaderType == 1);
+                rbOnlyElemCount.IsChecked = (Settings.Default.LastFileHeaderType == 2);
+                rbBinSizeElemCount.IsChecked = (Settings.Default.LastFileHeaderType == 3);
+                rbElemCountBinSize.IsChecked = (Settings.Default.LastFileHeaderType == 4);
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void bFileTypeSimple_Click(object sender, RoutedEventArgs e)
         {
-            int elemCountIdx = -1;
-            int binSizeIdx = -1;
-            int binSize = Int32.Parse(ntbBinSize.Text);
+            try
+            {
+                int elemCountIdx = -1;
+                int binSizeIdx = -1;
+                int binSize = Int32.Parse(ntbBinSize.Text);
 
-            if (rbOnlyElemCount.IsChecked == true) { elemCountIdx = 0; }
-            else if (rbOnlyBinSize.IsChecked == true) { binSizeIdx = 0; }
-            else if (rbElemCountBinSize.IsChecked == true) { elemCountIdx = 0; binSizeIdx = 1; }
-            else if (rbBinSizeElemCount.IsChecked == true) { elemCountIdx = 1; binSizeIdx = 0; }
+                if (rbOnlyElemCount.IsChecked == true) { elemCountIdx = 0; }
+                else if (rbOnlyBinSize.IsChecked == true) { binSizeIdx = 0; }
+                else if (rbElemCountBinSize.IsChecked == true) { elemCountIdx = 0; binSizeIdx = 1; }
+                else if (rbBinSizeElemCount.IsChecked == true) { elemCountIdx = 1; binSizeIdx = 0; }
 
-            result = Loader.LoadInstance1(filename, elemCountIdx, binSizeIdx, binSize);
-            this.Close();
+                result = Loader.LoadInstance1(filename, elemCountIdx, binSizeIdx, binSize);
+                this.Close();
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void bFileTypeMulti_Click(object sender, RoutedEventArgs e)
         {
-            List<ExperimentInstance> instances = Loader.LoadInstance2(filename);
-            tabFileTypes.IsEnabled = false;
+            try
+            {
+                List<ExperimentInstance> instances = Loader.LoadInstance2(filename);
+                tabFileTypes.IsEnabled = false;
 
-            lbInstances.ItemsSource = instances;
-            if (instances.Count > 0)
-                lbInstances.SelectedIndex = 0;
+                lbInstances.ItemsSource = instances;
+                if (instances.Count > 0)
+                    lbInstances.SelectedIndex = 0;
 
-            gInstances.Visibility = Visibility.Visible;
+                gInstances.Visibility = Visibility.Visible;
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void bFiletypeMultiWithWeights_Click(object sender, RoutedEventArgs e)
         {
-            List<ExperimentInstance> instances = Loader.LoadInstance3(filename);
-            tabFileTypes.IsEnabled = false;
+            try
+            {
+                List<ExperimentInstance> instances = Loader.LoadInstance3(filename);
+                tabFileTypes.IsEnabled = false;
 
-            lbInstances.ItemsSource = instances;
-            if (instances.Count > 0)
-                lbInstances.SelectedIndex = 0;
+                lbInstances.ItemsSource = instances;
+                if (instances.Count > 0)
+                    lbInstances.SelectedIndex = 0;
 
-            gInstances.Visibility = Visibility.Visible;
+                gInstances.Visibility = Visibility.Visible;
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void rbHeaderEmpty_Checked(object sender, RoutedEventArgs e)

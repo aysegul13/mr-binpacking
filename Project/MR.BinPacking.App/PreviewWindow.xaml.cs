@@ -20,6 +20,7 @@ using Microsoft.Win32;
 using System.IO;
 using MR.BinPacking.App.Utils;
 using MR.BinPacking.App.Properties;
+using System.Reflection;
 
 namespace MR.BinPacking.App
 {
@@ -52,21 +53,28 @@ namespace MR.BinPacking.App
 
         public void DoWork()
         {
-            stopWatch.Reset();
-            stopWatch.Start();
-            result = Algorithm.Execute(Elements, BinSize);
-            stopWatch.Stop();
+            try
+            {
+                stopWatch.Reset();
+                stopWatch.Start();
+                result = Algorithm.Execute(Elements, BinSize);
+                stopWatch.Stop();
 
+                this.Dispatcher.BeginInvoke(new Action(delegate
+                    {
+                        vbLoading.Visibility = Visibility.Collapsed;
+                        Elements = Algorithm.Result.Elements;
 
-            this.Dispatcher.BeginInvoke(new Action(delegate
-                {
-                    vbLoading.Visibility = Visibility.Collapsed;
-                    Elements = Algorithm.Result.Elements;
-
-                    DrawPreview();
-                    Draw(result);
-                    ShowInfo();
-                }));
+                        DrawPreview();
+                        Draw(result);
+                        ShowInfo();
+                    }));
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         public void Resume()
@@ -77,84 +85,108 @@ namespace MR.BinPacking.App
 
         private void DrawPreview()
         {
-            spElements.Children.Clear();
-            previewBins.Clear();
-
-            for (int i = 0; i < Elements.Count; i++)
+            try
             {
-                int elem = Elements[i];
-                Bin bin = new Bin(BinSize);
-                bin.Insert(elem);
+                spElements.Children.Clear();
+                previewBins.Clear();
 
-                BinControl newBin = new BinControl();
-                newBin.ShowScaled = Settings.Default.PRE_ScaleElements;
-                newBin.ShowFiller = false;
-                newBin.ShowAsElement = true;
-                newBin.Bin = bin;
-
-                newBin.LayoutTransform = new ScaleTransform(0.8, 0.8);
-                newBin.Border.BorderThickness = new Thickness(0);
-                newBin.Border.Background = Brushes.Transparent;
-                newBin.laFreeSpace.Visibility = Visibility.Collapsed;
-
-                if (previewBins.Count < Elements.Count)
+                for (int i = 0; i < Elements.Count; i++)
                 {
-                    spElements.Children.Add(newBin);
-                    previewBins.Add(newBin);
-                }
-                else
-                {
-                    spElements.Children.RemoveAt(i);
-                    spElements.Children.Insert(i, newBin);
+                    int elem = Elements[i];
+                    Bin bin = new Bin(BinSize);
+                    bin.Insert(elem);
 
-                    previewBins[i] = newBin;
+                    BinControl newBin = new BinControl();
+                    newBin.ShowScaled = Settings.Default.PRE_ScaleElements;
+                    newBin.ShowFiller = false;
+                    newBin.ShowAsElement = true;
+                    newBin.Bin = bin;
+
+                    newBin.LayoutTransform = new ScaleTransform(0.8, 0.8);
+                    newBin.Border.BorderThickness = new Thickness(0);
+                    newBin.Border.Background = Brushes.Transparent;
+                    newBin.laFreeSpace.Visibility = Visibility.Collapsed;
+
+                    if (previewBins.Count < Elements.Count)
+                    {
+                        spElements.Children.Add(newBin);
+                        previewBins.Add(newBin);
+                    }
+                    else
+                    {
+                        spElements.Children.RemoveAt(i);
+                        spElements.Children.Insert(i, newBin);
+
+                        previewBins[i] = newBin;
+                    }
                 }
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
         }
 
         private void Draw(Instance instance)
         {
-            spResult.Children.Clear();
-            algorithmBins.Clear();
-
-            foreach (var bin in instance.Bins)
+            try
             {
-                BinControl newBin = new BinControl();
-                newBin.ShowScaled = Settings.Default.PRE_ScaleElements;
-                newBin.Bin = bin;
+                spResult.Children.Clear();
+                algorithmBins.Clear();
 
-                spResult.Children.Add(newBin);
-                algorithmBins.Add(newBin);
+                foreach (var bin in instance.Bins)
+                {
+                    BinControl newBin = new BinControl();
+                    newBin.ShowScaled = Settings.Default.PRE_ScaleElements;
+                    newBin.Bin = bin;
 
-                newBin.UpdateGrid();
+                    spResult.Children.Add(newBin);
+                    algorithmBins.Add(newBin);
+
+                    newBin.UpdateGrid();
+                }
+
+                UpdateSelection();
             }
-
-            UpdateSelection();
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         void UpdateSelection()
         {
-            if (!(Algorithm is ListAlgorithm))
-                return;
-
-            ListAlgorithm listAlgorithm = Algorithm as ListAlgorithm;
-
-            if (listAlgorithm.PrevSelectedElement >= 0)
+            try
             {
-                previewBins[listAlgorithm.PrevSelectedElement].StopAnimation();
-                previewBins[listAlgorithm.PrevSelectedElement].Border.Opacity = 0.5;
+                if (!(Algorithm is ListAlgorithm))
+                    return;
+
+                ListAlgorithm listAlgorithm = Algorithm as ListAlgorithm;
+
+                if (listAlgorithm.PrevSelectedElement >= 0)
+                {
+                    previewBins[listAlgorithm.PrevSelectedElement].StopAnimation();
+                    previewBins[listAlgorithm.PrevSelectedElement].Border.Opacity = 0.5;
+                }
+
+                if (listAlgorithm.SelectedElement >= 0)
+                    previewBins[listAlgorithm.SelectedElement].StartAnimation();
+
+                if (listAlgorithm.SelectedBin >= 0)
+                    algorithmBins[listAlgorithm.SelectedBin].StartAnimation();
+
+                if (result != null)
+                {
+                    previewBins[listAlgorithm.SelectedElement].StopAnimation();
+                    algorithmBins[listAlgorithm.SelectedBin].StopAnimation();
+                }
             }
-
-            if (listAlgorithm.SelectedElement >= 0)
-                previewBins[listAlgorithm.SelectedElement].StartAnimation();
-
-            if (listAlgorithm.SelectedBin >= 0)
-                algorithmBins[listAlgorithm.SelectedBin].StartAnimation();
-
-            if (result != null)
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
             {
-                previewBins[listAlgorithm.SelectedElement].StopAnimation();
-                algorithmBins[listAlgorithm.SelectedBin].StopAnimation();
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
         }
 
@@ -165,123 +197,195 @@ namespace MR.BinPacking.App
         Thread workerThread = null;
         private void Execute()
         {
-            workerThread = new Thread(this.DoWork);
-            workerThread.Start();
+            try
+            {
+                workerThread = new Thread(this.DoWork);
+                workerThread.Start();
 
-            while (!workerThread.IsAlive) ;
+                //while (!workerThread.IsAlive) ;
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void bNext_Click(object sender, RoutedEventArgs e)
         {
-            if (Algorithm is ListAlgorithm)
-                tblMessage.Text = (Algorithm as ListAlgorithm).Message;
-
-            if (result == null)
+            try
             {
-                Elements = Algorithm.Result.Elements;
+                if (Algorithm is ListAlgorithm)
+                    tblMessage.Text = (Algorithm as ListAlgorithm).Message;
 
-                Instance inst = new Instance(Algorithm.Result.BinSize);
-                foreach (var bin in Algorithm.Result.Bins)
+                if (result == null)
                 {
-                    Bin newBin = new Bin(Algorithm.Result.BinSize);
-                    newBin.Elements.AddRange(bin.Elements);
-                    inst.Bins.Add(newBin);
-                }
+                    Elements = Algorithm.Result.Elements;
 
-                if (first)
-                    DrawPreview();
-                first = false;
-                Draw(inst);
-                Resume();
+                    Instance inst = new Instance(Algorithm.Result.BinSize);
+                    foreach (var bin in Algorithm.Result.Bins)
+                    {
+                        Bin newBin = new Bin(Algorithm.Result.BinSize);
+                        newBin.Elements.AddRange(bin.Elements);
+                        inst.Bins.Add(newBin);
+                    }
+
+                    if (first)
+                        DrawPreview();
+                    first = false;
+                    Draw(inst);
+                    Resume();
+                }
+                else
+                {
+                    bNext.IsEnabled = false;
+                }
             }
-            else
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
             {
-                bNext.IsEnabled = false;
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if ((workerThread != null) && workerThread.IsAlive)
-                workerThread.Abort();
+            try
+            {
+                if ((workerThread != null) && workerThread.IsAlive)
+                    workerThread.Abort();
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void bEnd_Click(object sender, RoutedEventArgs e)
         {
-            showExecutionTime = false;
+            try
+            {
+                showExecutionTime = false;
 
-            if (Algorithm is ListAlgorithm)
-                (Algorithm as ListAlgorithm).IsPresentation = false;
+                if (Algorithm is ListAlgorithm)
+                    (Algorithm as ListAlgorithm).IsPresentation = false;
 
-            Resume();
+                Resume();
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void UpdateOpacity()
         {
-            foreach (var bin in previewBins)
-                bin.Border.Opacity = 1.0;
+            try
+            {
+                foreach (var bin in previewBins)
+                    bin.Border.Opacity = 1.0;
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void ShowInfo()
         {
-            UpdateOpacity();
+            try
+            {
+                UpdateOpacity();
 
-            laBinCount.Visibility = Visibility.Visible;
-            laLowerBounds.Visibility = Visibility.Visible;
-            laQualityEstimations.Visibility = Visibility.Visible;
-            laErrorEstimations.Visibility = Visibility.Visible;
+                laBinCount.Visibility = Visibility.Visible;
+                laLowerBounds.Visibility = Visibility.Visible;
+                laQualityEstimations.Visibility = Visibility.Visible;
+                laErrorEstimations.Visibility = Visibility.Visible;
 
-            if (showExecutionTime)
-                laExecutionTime.Visibility = Visibility.Visible;
+                if (showExecutionTime)
+                    laExecutionTime.Visibility = Visibility.Visible;
 
-            tblMessage.Visibility = Visibility.Collapsed;
-            bNext.Visibility = Visibility.Collapsed;
-            bEnd.Visibility = Visibility.Collapsed;
+                tblMessage.Visibility = Visibility.Collapsed;
+                bNext.Visibility = Visibility.Collapsed;
+                bEnd.Visibility = Visibility.Collapsed;
 
 
-            laBinCount.Content = "Liczba pudełek: " + result.Bins.Count;
-            laExecutionTime.Content = "Czas obliczeń [ms]: " + stopWatch.ElapsedMilliseconds;
+                laBinCount.Content = "Liczba pudełek: " + result.Bins.Count;
+                laExecutionTime.Content = "Czas obliczeń [ms]: " + stopWatch.ElapsedMilliseconds;
 
-            int L1 = Bounds.L1(Elements, BinSize);
-            int L2 = Bounds.L2(Elements, BinSize);
+                int L1 = Bounds.L1(Elements, BinSize);
+                int L2 = Bounds.L2(Elements, BinSize);
 
-            laLowerBounds.Content = String.Format("L1/L2: {0}/{1}", L1, L2);
-            tblQualityEstimations.Text = String.Format("Oszac. jakości L1/L2: {0:0.00}/{1:0.00}",
-                (result.Bins.Count / (double)L1), (result.Bins.Count / (double)L2));
+                laLowerBounds.Content = String.Format("L1/L2: {0}/{1}", L1, L2);
+                tblQualityEstimations.Text = String.Format("Oszac. jakości L1/L2: {0:0.00}/{1:0.00}",
+                    (result.Bins.Count / (double)L1), (result.Bins.Count / (double)L2));
 
-            tblErrorEstimations.Text = String.Format("Oszac. błędu L1/L2 [%]: {0:0.00}/{1:0.00}",
-                (100.0 * (result.Bins.Count - L1) / (double)L1),
-                (100.0 * (result.Bins.Count - L2) / (double)L2));
+                tblErrorEstimations.Text = String.Format("Oszac. błędu L1/L2 [%]: {0:0.00}/{1:0.00}",
+                    (100.0 * (result.Bins.Count - L1) / (double)L1),
+                    (100.0 * (result.Bins.Count - L2) / (double)L2));
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void bSaveResult_Click(object sender, RoutedEventArgs e)
         {
-            Loader.SaveControlImage(spResult, spResult.ActualWidth, spResult.ActualHeight);
+            try
+            {
+                Loader.SaveControlImage(spResult, spResult.ActualWidth, spResult.ActualHeight);
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void bSaveElements_Click(object sender, RoutedEventArgs e)
         {
-            Loader.SaveControlImage(spElements, spElements.ActualWidth, spElements.ActualHeight);
+            try
+            {
+                Loader.SaveControlImage(spElements, spElements.ActualWidth, spElements.ActualHeight);
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
         {
-            if ((Algorithm is ListAlgorithm) && (Algorithm as ListAlgorithm).IsPresentation)
+            try
             {
-                exPreview.IsExpanded = Settings.Default.PRE_ExpandPreviewInPresentation;
-                exSideBar.IsExpanded = Settings.Default.PRE_ExpandSideBarInPresentation;
-                vbLoading.Visibility = Visibility.Collapsed;
+                if ((Algorithm is ListAlgorithm) && (Algorithm as ListAlgorithm).IsPresentation)
+                {
+                    exPreview.IsExpanded = Settings.Default.PRE_ExpandPreviewInPresentation;
+                    exSideBar.IsExpanded = Settings.Default.PRE_ExpandSideBarInPresentation;
+                    vbLoading.Visibility = Visibility.Collapsed;
 
-                DrawPreview();
-                Execute();
+                    DrawPreview();
+                    Execute();
+                }
+                else
+                {
+                    exPreview.IsExpanded = Settings.Default.PRE_ExpandPreviewInResult;
+                    exSideBar.IsExpanded = Settings.Default.PRE_ExpandSideBarInResult;
+                    vbLoading.Visibility = Visibility.Visible;
+
+                    Execute();
+                }
             }
-            else
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
             {
-                exPreview.IsExpanded = Settings.Default.PRE_ExpandPreviewInResult;
-                exSideBar.IsExpanded = Settings.Default.PRE_ExpandSideBarInResult;
-                vbLoading.Visibility = Visibility.Visible;
-
-                Execute();
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
         }
     }

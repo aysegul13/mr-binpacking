@@ -5,6 +5,7 @@ using System.Text;
 using MR.BinPacking.Library.Base;
 using MR.BinPacking.Library.Utils;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace MR.BinPacking.Library.Algorithms
 {
@@ -179,7 +180,8 @@ namespace MR.BinPacking.Library.Algorithms
                 }
                 catch (Exception exc)
                 {
-                    Debug.WriteLine(exc.Message + exc.StackTrace);
+                    throw exc;
+                    //MessageBox.Show(exc.Message + exc.StackTrace, MethodBase.GetCurrentMethod().Name, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
                 List<int> leftK = new List<int>();

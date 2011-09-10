@@ -11,6 +11,8 @@ using MR.BinPacking.Library.Experiment;
 using Microsoft.Win32;
 using System.IO;
 using MR.BinPacking.App.Utils;
+using System.Reflection;
+using System.Threading;
 
 namespace MR.BinPacking.App.Chart
 {
@@ -72,311 +74,350 @@ namespace MR.BinPacking.App.Chart
 
         private void DrawValue(double centerX, double width, double Y, Brush brush, string value)
         {
-            TextBlock tblValue = new TextBlock()
+            try
             {
-                Width = width,
-                Background = Brushes.Transparent,
-                Foreground = brush,
-                FontWeight = FontWeights.Bold,
-                Text = value,
-                TextAlignment = TextAlignment.Center
-            };
-            Canvas.SetLeft(tblValue, centerX - 0.5 * width);
-            Canvas.SetTop(tblValue, Y);
-            Canvas.Children.Add(tblValue);
+                TextBlock tblValue = new TextBlock()
+                {
+                    Width = width,
+                    Background = Brushes.Transparent,
+                    Foreground = brush,
+                    FontWeight = FontWeights.Bold,
+                    Text = value,
+                    TextAlignment = TextAlignment.Center
+                };
+                Canvas.SetLeft(tblValue, centerX - 0.5 * width);
+                Canvas.SetTop(tblValue, Y);
+                Canvas.Children.Add(tblValue);
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void DrawPoint(Point2D point, Brush brush, string name)
         {
-            double d = 8;
-
-            double X1 = ConvertX(point.X);
-            double Y1 = ConvertY(point.Y);
-
-            double X2 = ConvertX(point.X + intervalWidthX);
-
-
-            Ellipse ellipse = new Ellipse()
+            try
             {
-                StrokeThickness = 2,
-                Width = d,
-                Height = d,
-                Fill = brush,
-                Stroke = brush,
-                ToolTip = String.Format("{0} ({1}; {2})", name, point.X, point.Y)
-            };
+                double d = 8;
+                double X1 = ConvertX(point.X);
+                double Y1 = ConvertY(point.Y);
+                double X2 = ConvertX(point.X + intervalWidthX);
 
-            Canvas.SetLeft(ellipse, X1 - d / 2);
-            Canvas.SetTop(ellipse, Y1 - d / 2);
-            Canvas.Children.Add(ellipse);
+                Ellipse ellipse = new Ellipse()
+                {
+                    StrokeThickness = 2,
+                    Width = d,
+                    Height = d,
+                    Fill = brush,
+                    Stroke = brush,
+                    ToolTip = String.Format("{0} ({1}; {2})", name, point.X, point.Y)
+                };
 
-            double w = 2.0 * (X2 - X1);
-            if (w >= 40.0)
-                DrawValue(X1, w, Y1 - 20.0, brush, point.Y.ToString("0.##"));
+                Canvas.SetLeft(ellipse, X1 - d / 2);
+                Canvas.SetTop(ellipse, Y1 - d / 2);
+                Canvas.Children.Add(ellipse);
+
+                double w = 2.0 * (X2 - X1);
+                if (w >= 40.0)
+                    DrawValue(X1, w, Y1 - 20.0, brush, point.Y.ToString("0.##"));
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void DrawRect(Point2D point, Brush brush, int number, int count, string name)
         {
-            double barWidth = 0.9 * intervalWidthX / count;
-            double barOffset = 0.05 * intervalWidthX + number * barWidth;
-
-            double X1 = ConvertX(point.X + barOffset);
-            double Y1 = ConvertY(0);
-
-            double X2 = ConvertX(point.X + barOffset + barWidth);
-            double Y2 = ConvertY(point.Y);
-
-            Rectangle rect = new Rectangle()
+            try
             {
-                Width = X2 - X1,
-                Height = Y1 - Y2,
-                Fill = brush,
-                ToolTip = String.Format("{0} ({1}; {2})", name, point.X, point.Y)
-            };
+                double barWidth = 0.9 * intervalWidthX / count;
+                double barOffset = 0.05 * intervalWidthX + number * barWidth;
 
-            Canvas.SetLeft(rect, X1);
-            Canvas.SetTop(rect, Y2);
-            Canvas.Children.Add(rect);
+                double X1 = ConvertX(point.X + barOffset);
+                double Y1 = ConvertY(0);
+                double X2 = ConvertX(point.X + barOffset + barWidth);
+                double Y2 = ConvertY(point.Y);
 
-            double w = 2.0 * (X2 - X1);
-            if (w >= 40.0)
-                DrawValue((X2 + X1) / 2.0, w, Y2 - 20.0, brush, point.Y.ToString("0.##"));
+                Rectangle rect = new Rectangle()
+                {
+                    Width = X2 - X1,
+                    Height = Y1 - Y2,
+                    Fill = brush,
+                    ToolTip = String.Format("{0} ({1}; {2})", name, point.X, point.Y)
+                };
+
+                Canvas.SetLeft(rect, X1);
+                Canvas.SetTop(rect, Y2);
+                Canvas.Children.Add(rect);
+
+                double w = 2.0 * (X2 - X1);
+                if (w >= 40.0)
+                    DrawValue((X2 + X1) / 2.0, w, Y2 - 20.0, brush, point.Y.ToString("0.##"));
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void DrawFunction(FunctionHandler function)
         {
-            //double max = 0.0000001;
-            //foreach (var series in DataSeries)
-            //    max = Math.Max(max, series.Points.Select(p => p.Y).Max());
-
-            int count = (DataSeries[0].Points.Count - 1) * 8;
-            if (chartType == ChartType.Bars)
-                count += 8;
-
-            double maxX = minX + (count - 1) * intervalWidthX / 8;
-
-            double X = minX;
-            double Y;
-            if ((fieldType == StatField.ExecutionTime) || (fieldType == StatField.Result))
-                Y = function.Function(X, maxX);
-            else
-                Y = function.Function(X, maxY);
-            Y = maxY * Y;
-
-            PathFigure myPathFigure = new PathFigure();
-            myPathFigure.StartPoint = new Point(ConvertX(X), ConvertY(Y));
-            PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
-
-            for (int i = 1; i < count; i++)
+            try
             {
-                X = minX + ((double)(i * intervalWidthX) / 8);
+                int count = (DataSeries[0].Points.Count - 1) * 8;
+                if (chartType == ChartType.Bars)
+                    count += 8;
 
+                double maxX = minX + (count - 1) * intervalWidthX / 8;
+                double X = minX;
+                double Y;
                 if ((fieldType == StatField.ExecutionTime) || (fieldType == StatField.Result))
                     Y = function.Function(X, maxX);
                 else
                     Y = function.Function(X, maxY);
                 Y = maxY * Y;
 
-                LineSegment myLineSegment = new LineSegment();
-                myLineSegment.Point = new Point(ConvertX(X), ConvertY(Y));
-                myPathSegmentCollection.Add(myLineSegment);
+                PathFigure myPathFigure = new PathFigure();
+                myPathFigure.StartPoint = new Point(ConvertX(X), ConvertY(Y));
+                PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
 
-                if (Y > maxY)
-                    break;
+                for (int i = 1; i < count; i++)
+                {
+                    X = minX + ((double)(i * intervalWidthX) / 8);
+
+                    if ((fieldType == StatField.ExecutionTime) || (fieldType == StatField.Result))
+                        Y = function.Function(X, maxX);
+                    else
+                        Y = function.Function(X, maxY);
+                    Y = maxY * Y;
+
+                    LineSegment myLineSegment = new LineSegment();
+                    myLineSegment.Point = new Point(ConvertX(X), ConvertY(Y));
+                    myPathSegmentCollection.Add(myLineSegment);
+
+                    if (Y > maxY)
+                        break;
+                }
+
+                myPathFigure.Segments = myPathSegmentCollection;
+                PathFigureCollection myPathFigureCollection = new PathFigureCollection();
+                myPathFigureCollection.Add(myPathFigure);
+                PathGeometry myPathGeometry = new PathGeometry();
+                myPathGeometry.Figures = myPathFigureCollection;
+
+                System.Windows.Shapes.Path myPath = new System.Windows.Shapes.Path()
+                {
+                    Stroke = function.Color,
+                    ToolTip = function.Name,
+                    StrokeDashArray = new DoubleCollection { 6, 3 },
+                    StrokeThickness = 2,
+                    Data = myPathGeometry
+                };
+
+                Canvas.Children.Add(myPath);
             }
-
-            myPathFigure.Segments = myPathSegmentCollection;
-            PathFigureCollection myPathFigureCollection = new PathFigureCollection();
-            myPathFigureCollection.Add(myPathFigure);
-            PathGeometry myPathGeometry = new PathGeometry();
-            myPathGeometry.Figures = myPathFigureCollection;
-
-            System.Windows.Shapes.Path myPath = new System.Windows.Shapes.Path()
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
             {
-                Stroke = function.Color,
-                ToolTip = function.Name,
-                StrokeDashArray = new DoubleCollection { 6, 3 },
-                StrokeThickness = 2,
-                Data = myPathGeometry
-            };
-
-            Canvas.Children.Add(myPath);
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private void DrawXAxis()
         {
-            double Y = Canvas.ActualHeight - offsetY;
-
-            //axis line
-            Line axisX = new Line()
+            try
             {
-                X1 = offsetX,
-                X2 = Canvas.ActualWidth - 0.5 * offsetX,
-                Y1 = Y,
-                Y2 = Y,
-                StrokeThickness = 2,
-                Stroke = Brushes.Black
-            };
-            Canvas.Children.Add(axisX);
+                double Y = Canvas.ActualHeight - offsetY;
 
-            //arrow
-            axisX = new Line()
-            {
-                X1 = Canvas.ActualWidth - 0.5 * offsetX - 10,
-                X2 = Canvas.ActualWidth - 0.5 * offsetX,
-                Y1 = Y - 5,
-                Y2 = Y,
-                StrokeThickness = 2,
-                Stroke = Brushes.Black
-            };
-            Canvas.Children.Add(axisX);
-
-            axisX = new Line()
-            {
-                X1 = Canvas.ActualWidth - 0.5 * offsetX - 10,
-                X2 = Canvas.ActualWidth - 0.5 * offsetX,
-                Y1 = Y + 5,
-                Y2 = Y,
-                StrokeThickness = 2,
-                Stroke = Brushes.Black
-            };
-            Canvas.Children.Add(axisX);
-
-            TextBlock tblUnitX = new TextBlock()
-            {
-                Text = "N",
-                FontWeight = FontWeights.Bold
-            };
-            Canvas.SetLeft(tblUnitX, Canvas.ActualWidth - 0.5 * offsetX + 10);
-            Canvas.SetTop(tblUnitX, Y + 8);
-            Canvas.Children.Add(tblUnitX);
-
-
-            int count = DataSeries[0].Points.Count;
-            int gap = Math.Max(count / 10 - 1, 0);
-            if (chartType == ChartType.Bars)
-                count++;
-
-            int actGap = gap;
-            for (int i = 0; i < count; i++)
-            {
-                double X = ConvertX(minX + i * intervalWidthX);
-                Line newLine = new Line()
+                //axis line
+                Line axisX = new Line()
                 {
-                    X1 = X,
-                    X2 = X,
-                    Y1 = Y,
-                    Y2 = Y + 5,
-                    StrokeThickness = 2,
-                    Stroke = Brushes.Black
-                };
-                Canvas.Children.Add(newLine);
-
-                if (actGap >= gap)
-                {
-                    //double w = ConvertX(intervalWidthX) - ConvertX(0);
-                    if (chartType == ChartType.Bars)
-                    {
-                        double centerX = ConvertX(minX + (i + 0.5) * intervalWidthX);
-                        if (i < count - 1)
-                            DrawValue(centerX, 40.0, Y + 8, Brushes.Black, DataSeries[0].Points[i].X.ToString("0.##"));
-                    }
-                    else
-                    {
-                        double centerX = X;
-                        DrawValue(centerX, 40.0, Y + 8, Brushes.Black, DataSeries[0].Points[i].X.ToString("0.##"));
-                    }
-
-                    actGap = 0;
-                }
-                else
-                {
-                    actGap++;
-                }
-            }
-        }
-
-        private void DrawYAxis()
-        {
-            //axis line
-            Line axisY = new Line()
-            {
-                X1 = offsetX,
-                X2 = offsetX,
-                Y1 = offsetY,
-                Y2 = Canvas.ActualHeight - offsetY,
-                StrokeThickness = 2,
-                Stroke = Brushes.Black
-            };
-            Canvas.Children.Add(axisY);
-
-            //arrow
-            axisY = new Line()
-            {
-                X1 = offsetX - 5,
-                X2 = offsetX,
-                Y1 = offsetY + 10,
-                Y2 = offsetY,
-                StrokeThickness = 2,
-                Stroke = Brushes.Black
-            };
-            Canvas.Children.Add(axisY);
-
-            axisY = new Line()
-            {
-                X1 = offsetX + 5,
-                X2 = offsetX,
-                Y1 = offsetY + 10,
-                Y2 = offsetY,
-                StrokeThickness = 2,
-                Stroke = Brushes.Black
-            };
-            Canvas.Children.Add(axisY);
-
-            TextBlock tblUnitY = new TextBlock()
-            {
-                //Width = offsetX - 8,
-                Width = offsetX + 8,
-                Text = StatFieldToString((StatField)cbField.SelectedValue),
-                FontWeight = FontWeights.Bold,
-                TextAlignment = TextAlignment.Center,
-                TextWrapping = TextWrapping.Wrap
-            };
-            Canvas.SetLeft(tblUnitY, 0);
-            Canvas.SetTop(tblUnitY, offsetY - 32.0);
-            Canvas.Children.Add(tblUnitY);
-
-            double h = chartHeight / (intervalsY + 1);
-            for (int i = 0; i < intervalsY + 1; i++)
-            {
-                double Y = Canvas.ActualHeight - offsetY - i * h;
-                Line newLine = new Line()
-                {
-                    X1 = offsetX - 5,
-                    X2 = offsetX,
+                    X1 = offsetX,
+                    X2 = Canvas.ActualWidth - 0.5 * offsetX,
                     Y1 = Y,
                     Y2 = Y,
                     StrokeThickness = 2,
                     Stroke = Brushes.Black
                 };
-                Canvas.Children.Add(newLine);
+                Canvas.Children.Add(axisX);
 
-
-                TextBlock tblAxisVal = new TextBlock()
+                //arrow
+                axisX = new Line()
                 {
-                    Width = offsetX - 8,
-                    FontWeight = FontWeights.Bold,
-                    TextAlignment = TextAlignment.Right
+                    X1 = Canvas.ActualWidth - 0.5 * offsetX - 10,
+                    X2 = Canvas.ActualWidth - 0.5 * offsetX,
+                    Y1 = Y - 5,
+                    Y2 = Y,
+                    StrokeThickness = 2,
+                    Stroke = Brushes.Black
                 };
+                Canvas.Children.Add(axisX);
 
-                if (logScale)
-                    tblAxisVal.Text = Math.Pow(maxY, (double)i / intervalsY).ToString("0.##");
-                else
-                    tblAxisVal.Text = (i * maxY / intervalsY).ToString("0.##");
+                axisX = new Line()
+                {
+                    X1 = Canvas.ActualWidth - 0.5 * offsetX - 10,
+                    X2 = Canvas.ActualWidth - 0.5 * offsetX,
+                    Y1 = Y + 5,
+                    Y2 = Y,
+                    StrokeThickness = 2,
+                    Stroke = Brushes.Black
+                };
+                Canvas.Children.Add(axisX);
 
-                Canvas.SetLeft(tblAxisVal, 0);
-                Canvas.SetTop(tblAxisVal, Y - 10.0);
-                Canvas.Children.Add(tblAxisVal);
+                TextBlock tblUnitX = new TextBlock()
+                {
+                    Text = "N",
+                    FontWeight = FontWeights.Bold
+                };
+                Canvas.SetLeft(tblUnitX, Canvas.ActualWidth - 0.5 * offsetX + 10);
+                Canvas.SetTop(tblUnitX, Y + 8);
+                Canvas.Children.Add(tblUnitX);
+
+
+                int count = DataSeries[0].Points.Count;
+                int gap = Math.Max(count / 10 - 1, 0);
+                if (chartType == ChartType.Bars)
+                    count++;
+
+                int actGap = gap;
+                for (int i = 0; i < count; i++)
+                {
+                    double X = ConvertX(minX + i * intervalWidthX);
+                    Line newLine = new Line()
+                    {
+                        X1 = X,
+                        X2 = X,
+                        Y1 = Y,
+                        Y2 = Y + 5,
+                        StrokeThickness = 2,
+                        Stroke = Brushes.Black
+                    };
+                    Canvas.Children.Add(newLine);
+
+                    if (actGap >= gap)
+                    {
+                        //double w = ConvertX(intervalWidthX) - ConvertX(0);
+                        if (chartType == ChartType.Bars)
+                        {
+                            double centerX = ConvertX(minX + (i + 0.5) * intervalWidthX);
+                            if (i < count - 1)
+                                DrawValue(centerX, 40.0, Y + 8, Brushes.Black, DataSeries[0].Points[i].X.ToString("0.##"));
+                        }
+                        else
+                        {
+                            double centerX = X;
+                            DrawValue(centerX, 40.0, Y + 8, Brushes.Black, DataSeries[0].Points[i].X.ToString("0.##"));
+                        }
+
+                        actGap = 0;
+                    }
+                    else
+                    {
+                        actGap++;
+                    }
+                }
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
+        }
+
+        private void DrawYAxis()
+        {
+            try
+            {
+                //axis line
+                Line axisY = new Line()
+                {
+                    X1 = offsetX,
+                    X2 = offsetX,
+                    Y1 = offsetY,
+                    Y2 = Canvas.ActualHeight - offsetY,
+                    StrokeThickness = 2,
+                    Stroke = Brushes.Black
+                };
+                Canvas.Children.Add(axisY);
+
+                //arrow
+                axisY = new Line()
+                {
+                    X1 = offsetX - 5,
+                    X2 = offsetX,
+                    Y1 = offsetY + 10,
+                    Y2 = offsetY,
+                    StrokeThickness = 2,
+                    Stroke = Brushes.Black
+                };
+                Canvas.Children.Add(axisY);
+
+                axisY = new Line()
+                {
+                    X1 = offsetX + 5,
+                    X2 = offsetX,
+                    Y1 = offsetY + 10,
+                    Y2 = offsetY,
+                    StrokeThickness = 2,
+                    Stroke = Brushes.Black
+                };
+                Canvas.Children.Add(axisY);
+
+                TextBlock tblUnitY = new TextBlock()
+                {
+                    //Width = offsetX - 8,
+                    Width = offsetX + 8,
+                    Text = StatFieldToString((StatField)cbField.SelectedValue),
+                    FontWeight = FontWeights.Bold,
+                    TextAlignment = TextAlignment.Center,
+                    TextWrapping = TextWrapping.Wrap
+                };
+                Canvas.SetLeft(tblUnitY, 0);
+                Canvas.SetTop(tblUnitY, offsetY - 32.0);
+                Canvas.Children.Add(tblUnitY);
+
+                double h = chartHeight / (intervalsY + 1);
+                for (int i = 0; i < intervalsY + 1; i++)
+                {
+                    double Y = Canvas.ActualHeight - offsetY - i * h;
+                    Line newLine = new Line()
+                    {
+                        X1 = offsetX - 5,
+                        X2 = offsetX,
+                        Y1 = Y,
+                        Y2 = Y,
+                        StrokeThickness = 2,
+                        Stroke = Brushes.Black
+                    };
+                    Canvas.Children.Add(newLine);
+
+
+                    TextBlock tblAxisVal = new TextBlock()
+                    {
+                        Width = offsetX - 8,
+                        FontWeight = FontWeights.Bold,
+                        TextAlignment = TextAlignment.Right
+                    };
+
+                    if (logScale)
+                        tblAxisVal.Text = Math.Pow(maxY, (double)i / intervalsY).ToString("0.##");
+                    else
+                        tblAxisVal.Text = (i * maxY / intervalsY).ToString("0.##");
+
+                    Canvas.SetLeft(tblAxisVal, 0);
+                    Canvas.SetTop(tblAxisVal, Y - 10.0);
+                    Canvas.Children.Add(tblAxisVal);
+                }
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
         }
 
@@ -392,24 +433,31 @@ namespace MR.BinPacking.App.Chart
 
         public void GetParamsAndRefresh()
         {
-            if (cbDataType.SelectedValue != null)
-                chartDataType = (ChartDataType)cbDataType.SelectedValue;
-
-            if (cbField.SelectedValue != null)
-                fieldType = (StatField)cbField.SelectedValue;
-
-            if (DataSource != null)
+            try
             {
-                DataSeries = GetDataSeries(chartDataType, fieldType);
-                intervalWidthX = DataSource.Params.Step;
-                //minX = DataSource.Params.MinN;
-                minX = DataSource.Samples.Select(s => s.N).Min();
+                if (cbDataType.SelectedValue != null)
+                    chartDataType = (ChartDataType)cbDataType.SelectedValue;
 
-                AddFunctions();
+                if (cbField.SelectedValue != null)
+                    fieldType = (StatField)cbField.SelectedValue;
 
-                RefreshChart();
-                RefreshTable();
-                lbLegend.ItemsSource = DataSeries;
+                if (DataSource != null)
+                {
+                    DataSeries = GetDataSeries(chartDataType, fieldType);
+                    intervalWidthX = DataSource.Params.Step;
+                    minX = DataSource.Samples.Select(s => s.N).Min();
+
+                    AddFunctions();
+
+                    RefreshChart();
+                    RefreshTable();
+                    lbLegend.ItemsSource = DataSeries;
+                }
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
         }
 
@@ -580,70 +628,97 @@ namespace MR.BinPacking.App.Chart
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            AddChartDataTypes();
-            AddStatFields();
-            AddFunctions();
+            try
+            {
+                AddChartDataTypes();
+                AddStatFields();
+                AddFunctions();
 
-            cbDataType.SelectedIndex = 0;
-            cbField.SelectedIndex = 0;
+                cbDataType.SelectedIndex = 0;
+                cbField.SelectedIndex = 0;
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         void DrawDataSerie(DataSerie serie, int number, int count)
         {
-            for (int j = 0; j < serie.Points.Count; j++)
+            try
             {
-                if (chartType != ChartType.Bars)
+                for (int j = 0; j < serie.Points.Count; j++)
                 {
-                    if ((chartType == ChartType.Lines) && (j > 0))
+                    if (chartType != ChartType.Bars)
                     {
-                        Line newLine = new Line()
+                        if ((chartType == ChartType.Lines) && (j > 0))
                         {
-                            X1 = ConvertX(serie.Points[j - 1].X),
-                            Y1 = ConvertY(serie.Points[j - 1].Y),
-                            X2 = ConvertX(serie.Points[j].X),
-                            Y2 = ConvertY(serie.Points[j].Y),
-                            Stroke = serie.Color,
-                            StrokeThickness = 2.0,
-                            ToolTip = serie.Name
-                        };
-                        Canvas.Children.Add(newLine);
-                    }
+                            Line newLine = new Line()
+                            {
+                                X1 = ConvertX(serie.Points[j - 1].X),
+                                Y1 = ConvertY(serie.Points[j - 1].Y),
+                                X2 = ConvertX(serie.Points[j].X),
+                                Y2 = ConvertY(serie.Points[j].Y),
+                                Stroke = serie.Color,
+                                StrokeThickness = 2.0,
+                                ToolTip = serie.Name
+                            };
+                            Canvas.Children.Add(newLine);
+                        }
 
-                    DrawPoint(serie.Points[j], serie.Color, serie.Name);
+                        DrawPoint(serie.Points[j], serie.Color, serie.Name);
+                    }
+                    else
+                    {
+                        DrawRect(serie.Points[j], serie.Color, number, count, serie.Name);
+                    }
                 }
-                else
-                {
-                    DrawRect(serie.Points[j], serie.Color, number, count, serie.Name);
-                }
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
         }
 
         public void RefreshChart()
         {
-            Canvas.Children.Clear();
+            if (DataSeries == null)
+                return;
 
-            chartWidth = Canvas.ActualWidth - 1.5 * offsetX;
-            chartHeight = Canvas.ActualHeight - 2 * offsetY;
-
-            if ((fieldType == StatField.ErrorEstimation) || (fieldType == StatField.QualityEstimation))
-                maxY = 2;
-            else
-                maxY = 0.01;
-
-            IEnumerable<DataSerie> VisibleDataSeries = DataSeries.Where(ds => ds.Visible == true);
-            foreach (var series in VisibleDataSeries)
-                maxY = Math.Max(maxY, series.Points.Select(p => p.Y).Max());
-
-            for (int i = 0; i < VisibleDataSeries.Count(); i++)
+            try
             {
-                DataSerie serie = VisibleDataSeries.ElementAt(i);
-                DrawDataSerie(serie, i, VisibleDataSeries.Count());
-            }
+                Canvas.Children.Clear();
 
-            lbFunctions.ItemsSource = Functions;
-            IEnumerable<FunctionHandler> VisibleFunctions = Functions.Where(f => f.Visible == true);
-            foreach (var func in VisibleFunctions)
-                DrawFunction(func);
+                chartWidth = Canvas.ActualWidth - 1.5 * offsetX;
+                chartHeight = Canvas.ActualHeight - 2 * offsetY;
+
+                if ((fieldType == StatField.ErrorEstimation) || (fieldType == StatField.QualityEstimation))
+                    maxY = 2;
+                else
+                    maxY = 0.01;
+
+                IEnumerable<DataSerie> VisibleDataSeries = DataSeries.Where(ds => ds.Visible == true);
+                foreach (var series in VisibleDataSeries)
+                    maxY = Math.Max(maxY, series.Points.Select(p => p.Y).Max());
+
+                for (int i = 0; i < VisibleDataSeries.Count(); i++)
+                {
+                    DataSerie serie = VisibleDataSeries.ElementAt(i);
+                    DrawDataSerie(serie, i, VisibleDataSeries.Count());
+                }
+
+                lbFunctions.ItemsSource = Functions;
+                IEnumerable<FunctionHandler> VisibleFunctions = Functions.Where(f => f.Visible == true);
+                foreach (var func in VisibleFunctions)
+                    DrawFunction(func);
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
 
             DrawXAxis();
             DrawYAxis();
@@ -655,63 +730,70 @@ namespace MR.BinPacking.App.Chart
             gTable.RowDefinitions.Clear();
             gTable.ColumnDefinitions.Clear();
 
-            List<DataSerie> VisibleDataSeries = DataSeries.Where(ds => ds.Visible == true).ToList();
-
-            for (int i = 0; i < VisibleDataSeries.Count + 1; i++)
+            try
             {
-                gTable.RowDefinitions.Add(new RowDefinition());
-
-                for (int j = 0; j < DataSeries[0].Points.Count + 1; j++)
+                List<DataSerie> VisibleDataSeries = DataSeries.Where(ds => ds.Visible == true).ToList();
+                for (int i = 0; i < VisibleDataSeries.Count + 1; i++)
                 {
-                    Border border = new Border()
-                    {
-                        BorderBrush = Brushes.Black
-                    };
+                    gTable.RowDefinitions.Add(new RowDefinition());
 
-                    TextBlock textBlock = new TextBlock();
-                    textBlock.Margin = new Thickness(2.0);
-                    border.Child = textBlock;
-
-                    if (i == 0)
+                    for (int j = 0; j < DataSeries[0].Points.Count + 1; j++)
                     {
-                        gTable.ColumnDefinitions.Add(new ColumnDefinition() { MaxWidth = 100.0 });
-                        border.BorderThickness = new Thickness(1.0);
-                        textBlock.FontWeight = FontWeights.Bold;
+                        Border border = new Border()
+                        {
+                            BorderBrush = Brushes.Black
+                        };
 
-                        if (j == 0)
+                        TextBlock textBlock = new TextBlock();
+                        textBlock.Margin = new Thickness(2.0);
+                        border.Child = textBlock;
+
+                        if (i == 0)
                         {
-                            gTable.ColumnDefinitions.Last().Width = new GridLength(1.0, GridUnitType.Auto);
-                            textBlock.Text = "Seria danych \\ N";
-                        }
-                        else
-                        {
-                            int N = DataSource.Params.MinN + (j - 1) * DataSource.Params.Step;
-                            textBlock.Text = N.ToString();
-                            textBlock.HorizontalAlignment = HorizontalAlignment.Right;
-                        }
-                    }
-                    else
-                    {
-                        if (j == 0)
-                        {
+                            gTable.ColumnDefinitions.Add(new ColumnDefinition() { MaxWidth = 100.0 });
                             border.BorderThickness = new Thickness(1.0);
                             textBlock.FontWeight = FontWeights.Bold;
-                            textBlock.Text = VisibleDataSeries[i - 1].Name;
+
+                            if (j == 0)
+                            {
+                                gTable.ColumnDefinitions.Last().Width = new GridLength(1.0, GridUnitType.Auto);
+                                textBlock.Text = "Seria danych \\ N";
+                            }
+                            else
+                            {
+                                int N = DataSource.Params.MinN + (j - 1) * DataSource.Params.Step;
+                                textBlock.Text = N.ToString();
+                                textBlock.HorizontalAlignment = HorizontalAlignment.Right;
+                            }
                         }
                         else
                         {
-                            border.BorderThickness = new Thickness(0.5);
-                            double value = VisibleDataSeries[i - 1].Points[j - 1].Y;
-                            textBlock.Text = value.ToString("0.####");
-                            textBlock.ToolTip = value.ToString();
-                            textBlock.HorizontalAlignment = HorizontalAlignment.Right;
+                            if (j == 0)
+                            {
+                                border.BorderThickness = new Thickness(1.0);
+                                textBlock.FontWeight = FontWeights.Bold;
+                                textBlock.Text = VisibleDataSeries[i - 1].Name;
+                            }
+                            else
+                            {
+                                border.BorderThickness = new Thickness(0.5);
+                                double value = VisibleDataSeries[i - 1].Points[j - 1].Y;
+                                textBlock.Text = value.ToString("0.####");
+                                textBlock.ToolTip = value.ToString();
+                                textBlock.HorizontalAlignment = HorizontalAlignment.Right;
+                            }
                         }
-                    }
 
-                    Grid.SetRow(border, i);
-                    Grid.SetColumn(border, j);
-                    gTable.Children.Add(border);
+                        Grid.SetRow(border, i);
+                        Grid.SetColumn(border, j);
+                        gTable.Children.Add(border);
+                    }
                 }
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
         }
 
@@ -793,28 +875,36 @@ namespace MR.BinPacking.App.Chart
 
         private List<DataSerie> GetDataSeries(ChartDataType type, StatField field)
         {
-            IEnumerable<Sample> avgSamples = GetAvgSamples();
-
-            var rawSeries = from s in avgSamples
-                            group s by GetGroupingKey(s, type) into g
-                            select (from n in g
-                                    group n by n.N into ng
-                                    select GetAvg(ng));
-
-
-
             List<DataSerie> result = new List<DataSerie>();
-            for (int i = 0; i < rawSeries.Count(); i++)
+            try
             {
-                IEnumerable<Sample> serie = rawSeries.ElementAt(i);
-                DataSerie newSerie = new DataSerie()
-                {
-                    Color = brushes[i % brushes.Length],
-                    Name = GetSerieName(serie, type),
-                    Points = serie.Select(r => new Point2D(r.N, r[field])).ToList()
-                };
+                IEnumerable<Sample> avgSamples = GetAvgSamples();
 
-                result.Add(newSerie);
+                var rawSeries = from s in avgSamples
+                                group s by GetGroupingKey(s, type) into g
+                                select (from n in g
+                                        group n by n.N into ng
+                                        select GetAvg(ng));
+
+                for (int i = 0; i < rawSeries.Count(); i++)
+                {
+                    IEnumerable<Sample> serie = rawSeries.ElementAt(i);
+                    DataSerie newSerie = new DataSerie()
+                    {
+                        Color = brushes[i % brushes.Length],
+                        Name = GetSerieName(serie, type),
+                        Points = serie.Select(r => new Point2D(r.N, r[field])).ToList()
+                    };
+
+                    result.Add(newSerie);
+                }
+
+                return result;
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
 
             return result;
@@ -828,17 +918,25 @@ namespace MR.BinPacking.App.Chart
 
         private void bSaveImg_Click(object sender, RoutedEventArgs e)
         {
-            if (exLegend.IsExpanded)
+            try
             {
-                Size size = gChart.RenderSize;
-                gChart.Measure(size);
-                gChart.Arrange(new Rect(size));
+                if (exLegend.IsExpanded)
+                {
+                    Size size = gChart.RenderSize;
+                    gChart.Measure(size);
+                    gChart.Arrange(new Rect(size));
 
-                Loader.SaveControlImage(gChart, gChart.ActualWidth, Canvas.ActualHeight);
+                    Loader.SaveControlImage(gChart, gChart.ActualWidth, Canvas.ActualHeight);
+                }
+                else
+                {
+                    Loader.SaveControlImage(Canvas, Canvas.ActualWidth, Canvas.ActualHeight);
+                }
             }
-            else
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
             {
-                Loader.SaveControlImage(Canvas, Canvas.ActualWidth, Canvas.ActualHeight);
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
         }
 
@@ -847,16 +945,24 @@ namespace MR.BinPacking.App.Chart
         private double prevH = -10.0;
         private void svScroll_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if ((e.WidthChanged) || (e.HeightChanged))
+            try
             {
-                double maxChange = Math.Max(Math.Abs(e.NewSize.Width - prevW), Math.Abs(e.NewSize.Height - prevH));
-                if (maxChange > 4.0)
+                if ((e.WidthChanged) || (e.HeightChanged))
                 {
-                    prevW = e.NewSize.Width;
-                    prevH = e.NewSize.Height;
-                    //GetParamsAndRefresh();
-                    RefreshChart();
+                    double maxChange = Math.Max(Math.Abs(e.NewSize.Width - prevW), Math.Abs(e.NewSize.Height - prevH));
+                    if (maxChange > 4.0)
+                    {
+                        prevW = e.NewSize.Width;
+                        prevH = e.NewSize.Height;
+                        //GetParamsAndRefresh();
+                        RefreshChart();
+                    }
                 }
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
         }
 
@@ -867,9 +973,17 @@ namespace MR.BinPacking.App.Chart
 
         private void bSaveTable_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveDialog = new SaveFileDialog();
-            if (saveDialog.ShowDialog() == true)
-                SaveResultsToFile(saveDialog.FileName);
+            try
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                if (saveDialog.ShowDialog() == true)
+                    SaveResultsToFile(saveDialog.FileName);
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
 
         private string GetTableName()
@@ -914,46 +1028,61 @@ namespace MR.BinPacking.App.Chart
 
         public void SaveResultsToFile(string filename)
         {
-            string separator = ";";
-
-            using (StreamWriter sw = new StreamWriter(filename))
+            try
             {
-                sw.WriteLine(GetTableName() + ";");
-
-                List<DataSerie> VisibleDataSeries = DataSeries.Where(ds => ds.Visible == true).ToList();
-                for (int j = 0; j < DataSeries[0].Points.Count + 1; j++)
+                string separator = ";";
+                using (StreamWriter sw = new StreamWriter(filename))
                 {
-                    for (int i = 0; i < VisibleDataSeries.Count + 1; i++)
-                    {
-                        if (i == 0)
-                        {
-                            if (j == 0)
-                            {
-                                sw.Write(@"N \ Seria danych" + separator);
-                            }
-                            else
-                            {
-                                int N = DataSource.Params.MinN + (j - 1) * DataSource.Params.Step;
-                                sw.Write(N.ToString() + separator);
-                            }
-                        }
-                        else
-                        {
-                            if (j == 0)
-                                sw.Write(VisibleDataSeries[i - 1].Name + separator);
-                            else
-                                sw.Write(VisibleDataSeries[i - 1].Points[j - 1].Y.ToString() + separator);
-                        }
-                    }
+                    sw.WriteLine(GetTableName() + ";");
 
-                    sw.WriteLine();
+                    List<DataSerie> VisibleDataSeries = DataSeries.Where(ds => ds.Visible == true).ToList();
+                    for (int j = 0; j < DataSeries[0].Points.Count + 1; j++)
+                    {
+                        for (int i = 0; i < VisibleDataSeries.Count + 1; i++)
+                        {
+                            if (i == 0)
+                            {
+                                if (j == 0)
+                                {
+                                    sw.Write(@"N \ Seria danych" + separator);
+                                }
+                                else
+                                {
+                                    int N = DataSource.Params.MinN + (j - 1) * DataSource.Params.Step;
+                                    sw.Write(N.ToString() + separator);
+                                }
+                            }
+                            else
+                            {
+                                if (j == 0)
+                                    sw.Write(VisibleDataSeries[i - 1].Name + separator);
+                                else
+                                    sw.Write(VisibleDataSeries[i - 1].Points[j - 1].Y.ToString() + separator);
+                            }
+                        }
+
+                        sw.WriteLine();
+                    }
                 }
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
         }
 
         private void bSaveTableImg_Click(object sender, RoutedEventArgs e)
         {
-            Loader.SaveControlImage(gTable, gTable.ActualWidth, gTable.ActualHeight);
+            try
+            {
+                Loader.SaveControlImage(gTable, gTable.ActualWidth, gTable.ActualHeight);
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception exc)
+            {
+                MainWindow.ShowError(exc, MethodBase.GetCurrentMethod().Name);
+            }
         }
     }
 }
