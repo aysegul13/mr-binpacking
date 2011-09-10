@@ -71,16 +71,12 @@ namespace MR.BinPacking.Library
                     break;
 
                 B = Reduction.MTRP(w, N, c, B, ref zr);
-                int L2;
 
+                int L2;
                 if (B.Where(b => b == 0).Count() == 0)
-                {
                     L2 = 0;
-                }
                 else
-                {
                     L2 = Bounds.L2(N.Select(sn => w.ElementAt(sn - 1)), c);
-                }
 
                 L3 = Math.Max(L3, zr + L2);
 
