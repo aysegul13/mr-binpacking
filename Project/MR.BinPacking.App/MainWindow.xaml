@@ -217,12 +217,12 @@
                             <Label Content="Liczba elementów (n)" FontWeight="Bold"/>
                             <Label Grid.Row="1" Content="Od:"/>
                             <Border Grid.Row="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                                <gui:NumberTextBox x:Name="ntbExpMinN" Style="{StaticResource tbStyle}" MinWidth="48"
+                                <gui:NumberTextBox x:Name="ntbExpMinN" Style="{StaticResource tbStyle}" MinWidth="48" LostFocus="ntbExpMinN_LostFocus" 
                                                    MinValue="1" MaxValue="1000000" Text="{Binding Source={x:Static props:Settings.Default}, Path=EXP_From, Mode=TwoWay}"/>
                             </Border>
                             <Label Grid.Row="2" Content="Do:"/>
                             <Border Grid.Row="2" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
-                                <gui:NumberTextBox x:Name="ntbExpMaxN" Style="{StaticResource tbStyle}" MinWidth="48"
+                                <gui:NumberTextBox x:Name="ntbExpMaxN" Style="{StaticResource tbStyle}" MinWidth="48" LostFocus="ntbExpMaxN_LostFocus"
                                                    MinValue="10" MaxValue="1000000" Text="{Binding Source={x:Static props:Settings.Default}, Path=EXP_To, Mode=TwoWay}" />
                             </Border>
                             <Label Grid.Row="3" Content="Krok:"/>
@@ -259,7 +259,7 @@
                             <Label Grid.Row="4" Content="Powtórzenia:" FontWeight="Bold"/>
                             <Border Grid.Row="4" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
                                 <gui:NumberTextBox x:Name="ntbExpRepeat" Style="{StaticResource tbStyle}" MinWidth="48"
-                                                   MinValue="1" MaxValue="1000" Text="{Binding Source={x:Static props:Settings.Default}, Path=EXP_Repeat, Mode=TwoWay}"/>
+                                                   MinValue="1" MaxValue="10000" Text="{Binding Source={x:Static props:Settings.Default}, Path=EXP_Repeat, Mode=TwoWay}"/>
                             </Border>
                         </Grid>
                     </Expander>

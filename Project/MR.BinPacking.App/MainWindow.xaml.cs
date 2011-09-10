@@ -170,10 +170,6 @@ namespace MR.BinPacking.App
                     BinSize = instance.BinSize;
                     Elements = instance.Elements;
 
-                    //ntbElementsNumber.Text = Elements.Count.ToString();
-                    //ntbBinSize.Text = ntbMaxValue.Text = BinSize.ToString();
-                    //ntbMinValue.Text = "1";
-
                     RefreshElements();
                     RefreshPreview();
                 }
@@ -481,6 +477,18 @@ namespace MR.BinPacking.App
             {
                 binControl.ShowScaled = Settings.Default.PRE_ScaleElements;
             }
+        }
+
+        private void ntbExpMinN_LostFocus(object sender, RoutedEventArgs e)
+        {
+            int minVal = Int32.Parse(ntbExpMinN.Text);
+            ntbExpMaxN.MinValue = minVal;
+        }
+
+        private void ntbExpMaxN_LostFocus(object sender, RoutedEventArgs e)
+        {
+            int maxVal = Int32.Parse(ntbExpMaxN.Text);
+            ntbExpMinN.MaxValue = maxVal;
         }
     }
 }
