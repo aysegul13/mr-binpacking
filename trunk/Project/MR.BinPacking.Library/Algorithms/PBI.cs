@@ -56,7 +56,7 @@ namespace MR.BinPacking.Library.Algorithms
                 tmpElems.AddRange(binsSorted[i].Elements);
             binsSorted = binsSorted.Skip(C1).ToList();
 
-            int C2 = C1;
+            int C2 = 2;
             if (binsSorted.Count >= C2)
             {
                 binsSorted = (from bin in binsSorted
@@ -65,6 +65,17 @@ namespace MR.BinPacking.Library.Algorithms
                 for (int i = 0; i < C2; i++)
                     tmpElems.AddRange(binsSorted[i].Elements);
                 binsSorted = binsSorted.Skip(C2).ToList();
+            }
+
+            Random rand = new Random();
+            for (int i = 0; i < 2; i++)
+            {
+                if (binsSorted.Count > 0)
+                {
+                    int idx = rand.Next(1, Math.Max(1, binsSorted.Count / 2));
+                    tmpElems.AddRange(binsSorted[idx].Elements);
+                    binsSorted.RemoveAt(idx);
+                }
             }
 
             Reduction exact = new Reduction();

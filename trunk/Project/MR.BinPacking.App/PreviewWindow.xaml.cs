@@ -171,16 +171,21 @@ namespace MR.BinPacking.App
                     previewBins[listAlgorithm.PrevSelectedElement].Border.Opacity = 0.5;
                 }
 
-                if (listAlgorithm.SelectedElement >= 0)
-                    previewBins[listAlgorithm.SelectedElement].StartAnimation();
+                if (result == null)
+                {
+                    if (listAlgorithm.SelectedElement >= 0)
+                        previewBins[listAlgorithm.SelectedElement].StartAnimation();
 
-                if (listAlgorithm.SelectedBin >= 0)
-                    algorithmBins[listAlgorithm.SelectedBin].StartAnimation();
-
+                    if (listAlgorithm.SelectedBin >= 0)
+                        algorithmBins[listAlgorithm.SelectedBin].StartAnimation();
+                }
                 if (result != null)
                 {
-                    previewBins[listAlgorithm.SelectedElement].StopAnimation();
-                    algorithmBins[listAlgorithm.SelectedBin].StopAnimation();
+                    if (listAlgorithm.SelectedElement >= 0)
+                        previewBins[listAlgorithm.SelectedElement].StopAnimation();
+
+                    if (listAlgorithm.SelectedBin >= 0)
+                        algorithmBins[listAlgorithm.SelectedBin].StopAnimation();
                 }
             }
             catch (ThreadAbortException) { }
