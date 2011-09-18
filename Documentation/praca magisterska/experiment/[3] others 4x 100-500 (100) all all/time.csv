@@ -1,0 +1,7 @@
+PORÓWNANIE ALGORYTMÓW - czas działania [ms];
+N \ Seria danych;Next Fit;Best Fit Decreasing;Asymptotyczny Schemat Aproksymacyjny;Algorytm Redukcji;PBI;
+100;0;0;36;115;117;
+200;0;9;26;1268;471;
+300;0;13;56;7582;887;
+400;0;22;58;27715;1707;
+500;0;30;55;61854;2299;

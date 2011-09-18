@@ -1,0 +1,7 @@
+PORÓWNANIE ALGORYTMÓW - wynik [liczba elementów];
+N \ Seria danych;Next Fit;Best Fit Decreasing;Asymptotyczny Schemat Aproksymacyjny;Algorytm Redukcji;PBI;
+100;54;43;47;43;45;
+200;111;88;98;88;95;
+300;155;120;134;121;130;
+400;199;156;174;158;169;
+500;258;201;223;202;218;
