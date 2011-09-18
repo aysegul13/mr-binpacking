@@ -56,7 +56,7 @@ namespace MR.BinPacking.Library.Algorithms
                 tmpElems.AddRange(binsSorted[i].Elements);
             binsSorted = binsSorted.Skip(C1).ToList();
 
-            int C2 = 2;
+            int C2 = 3;
             if (binsSorted.Count >= C2)
             {
                 binsSorted = (from bin in binsSorted
@@ -68,7 +68,7 @@ namespace MR.BinPacking.Library.Algorithms
             }
 
             Random rand = new Random();
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 if (binsSorted.Count > 0)
                 {
