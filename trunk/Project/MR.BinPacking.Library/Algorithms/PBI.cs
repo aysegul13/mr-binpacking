@@ -20,7 +20,7 @@ namespace MR.BinPacking.Library.Algorithms
             int L2 = Bounds.L2(elements, binSize);
 
             int prev = instance.Bins.Count;
-            int allAttempts = instance.Bins.Count;
+            int allAttempts = Math.Max(instance.Bins.Count / 2, 3);
             int attempts = 3;
             while ((attempts > 0) && (allAttempts > 0))
             {
