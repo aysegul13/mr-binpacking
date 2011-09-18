@@ -69,6 +69,12 @@ namespace MR.BinPacking.Library.Algorithms
                 #endregion
             }
 
+            #region UI
+            if (IsPresentation)
+                Wait(-1, -1);
+            #endregion
+
+
             return Result;
         }
     }

@@ -28,6 +28,7 @@ namespace MR.BinPacking.Library.Algorithms
 
             Search(elems, 0, new List<List<int>>(), binSize);
 
+            int a = 5;
             foreach (var bin in best)
             {
                 Bin newBin = new Bin(binSize);
@@ -42,9 +43,11 @@ namespace MR.BinPacking.Library.Algorithms
         int L2;
         int L3;
         List<List<int>> best = null;
+        int nodes = 0;
 
         bool Search(List<int> elements, int elemIdx, List<List<int>> bins, int c)
         {
+            nodes++;
             if (elemIdx < elements.Count)
             {
                 for (int i = 0; i < bins.Count; i++)
