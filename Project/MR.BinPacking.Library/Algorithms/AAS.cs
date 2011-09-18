@@ -6,6 +6,7 @@ using MR.BinPacking.Library.Base;
 using MR.BinPacking.Library.Utils;
 using System.Diagnostics;
 using System.Reflection;
+using System.Collections;
 
 namespace MR.BinPacking.Library.Algorithms
 {
@@ -21,6 +22,7 @@ namespace MR.BinPacking.Library.Algorithms
 
         void PreparePackings(int[] weights, int[] counts, int c)
         {
+            T = new List<int[]>();
             int[] packing = new int[weights.Length];
             Work(weights, counts, packing, 0, c);
         }
@@ -144,7 +146,8 @@ namespace MR.BinPacking.Library.Algorithms
                     {
                         try
                         {
-                            double[] constraintRaw = T.Select(t => (t.Length > i) ? (double)t[i] : 0).ToArray();
+                            double[] constraintRaw = T.Select(t => (double)t[i]).ToArray();
+                            //double[] constraintRaw = T.Select(t => (t.Length > i) ? (double)t[i] : 0).ToArray();
                             double[] constraint = new double[packings + 1];
                             constraintRaw.CopyTo(constraint, 1);
                             lpsolve.add_constraint(lp, constraint, lpsolve.lpsolve_constr_types.GE, Kcounts[i]);
@@ -178,21 +181,35 @@ namespace MR.BinPacking.Library.Algorithms
                         int[] packing = T[i];
                         for (int p = 0; p < x; p++)
                         {
+                            bool addBin = true;
+                            for (int elemNumber = 0; elemNumber < packing.Length; elemNumber++)
+                            {
+                                if (K[elemNumber].Count < packing[elemNumber])
+                                {
+                                    addBin = false;
+                                    break;
+                                }
+                            }
+
+                            if (!addBin)
+                                continue;
+
                             Bin bin = new Bin(c);
 
-                            for (int elemNumber = 0; elemNumber < Math.Min(K.Count, packing.Length); elemNumber++)
+                            //for (int elemNumber = 0; elemNumber < Math.Min(K.Count, packing.Length); elemNumber++)
+                            for (int elemNumber = 0; elemNumber < packing.Length; elemNumber++)
                             {
                                 try
                                 {
-                                    if (K[elemNumber].Count < packing[elemNumber])
-                                        continue;
+                                    //    if (K[elemNumber].Count < packing[elemNumber])
+                                    //        continue;
 
                                     bin.Elements.AddRange(K[elemNumber].Take(packing[elemNumber]));
                                     K[elemNumber].RemoveRange(0, packing[elemNumber]);
                                 }
                                 catch (Exception exc)
                                 {
-                                    
+
                                 }
                             }
 

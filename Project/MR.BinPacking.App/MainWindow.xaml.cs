@@ -514,12 +514,17 @@ namespace MR.BinPacking.App
 
                 int minVal = Int32.Parse(ntbMinValue.Text);
                 ntbMaxValue.MinValue = minVal;
+
+                BinSize = Int32.Parse(ntbBinSize.Text);
             }
             catch (ThreadAbortException) { }
             catch (Exception exc)
             {
                 ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
+
+            RefreshElements();
+            RefreshPreview();
         }
 
         private void ntbMinValue_LostFocus(object sender, RoutedEventArgs e)
@@ -558,7 +563,8 @@ namespace MR.BinPacking.App
                 Elements = (from elemStr in tbElements.Text.Split()
                             where Int32.TryParse(elemStr, out parse)
                             select Int32.Parse(elemStr)).ToList();
-                BinSize = Elements.Max();
+                //BinSize = Elements.Max();
+                BinSize = Int32.Parse(ntbBinSize.Text);
             }
             catch (ThreadAbortException) { }
             catch (Exception exc)
