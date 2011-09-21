@@ -144,18 +144,17 @@ namespace MR.BinPacking.Library.Algorithms
                     //add constraints
                     for (int i = 0; i < m; i++)
                     {
-                        try
-                        {
+                        //try
+                        //{
                             double[] constraintRaw = T.Select(t => (double)t[i]).ToArray();
-                            //double[] constraintRaw = T.Select(t => (t.Length > i) ? (double)t[i] : 0).ToArray();
                             double[] constraint = new double[packings + 1];
                             constraintRaw.CopyTo(constraint, 1);
                             lpsolve.add_constraint(lp, constraint, lpsolve.lpsolve_constr_types.GE, Kcounts[i]);
-                        }
-                        catch (Exception exc)
-                        {
+                        //}
+                        //catch (Exception exc)
+                        //{
 
-                        }
+                        //}
                     }
 
                     //set objective function
@@ -195,55 +194,20 @@ namespace MR.BinPacking.Library.Algorithms
                                 continue;
 
                             Bin bin = new Bin(c);
-
-                            //for (int elemNumber = 0; elemNumber < Math.Min(K.Count, packing.Length); elemNumber++)
                             for (int elemNumber = 0; elemNumber < packing.Length; elemNumber++)
                             {
-                                try
-                                {
-                                    //    if (K[elemNumber].Count < packing[elemNumber])
-                                    //        continue;
-
+                                //try
+                                //{
                                     bin.Elements.AddRange(K[elemNumber].Take(packing[elemNumber]));
                                     K[elemNumber].RemoveRange(0, packing[elemNumber]);
-                                }
-                                catch (Exception exc)
-                                {
+                                //}
+                                //catch (Exception exc)
+                                //{
 
-                                }
+                                //}
                             }
-
                             Result.Bins.Add(bin);
                         }
-
-                        //Bin bin = new Bin(c);
-                        //int[] pack = T[i];
-                        ////for (int j = 0; j < pack.Length; j++)
-                        //for (int j = 0; j < K.Count; j++)
-                        //{
-                        //    if (j >= pack.Length)
-                        //        continue;
-
-                        //    try
-                        //    {
-                        //        //bin.Elements.AddRange(K[j].GetRange(K[j].Count - pack[j], pack[j]));
-                        //        bin.Elements.AddRange(K[j].Take(pack[j]));
-                        //    }
-                        //    catch (Exception exc)
-                        //    {
-
-                        //    }
-                        //    try
-                        //    {
-                        //        //K[j].RemoveRange(K[j].Count - pack[j], pack[j]);
-                        //        K[j].RemoveRange(0, pack[j]);
-                        //    }
-                        //    catch (Exception exc)
-                        //    {
-
-                        //    }
-                        //}
-                        //Result.Bins.Add(bin);
                     }
                 }
                 catch (Exception exc)

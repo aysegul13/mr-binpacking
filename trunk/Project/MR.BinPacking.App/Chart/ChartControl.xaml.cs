@@ -975,7 +975,13 @@ namespace MR.BinPacking.App.Chart
         {
             try
             {
-                SaveFileDialog saveDialog = new SaveFileDialog();
+                SaveFileDialog saveDialog = new SaveFileDialog()
+                {
+                    DefaultExt = ".csv",
+                    Filter = "Plik przecinkowy (*.csv)|*.csv|Wszystkie pliki (*.*)|*.*",
+                    FilterIndex = 1
+                };
+
                 if (saveDialog.ShowDialog() == true)
                     SaveResultsToFile(saveDialog.FileName);
             }
@@ -992,22 +998,22 @@ namespace MR.BinPacking.App.Chart
             switch (chartDataType)
             {
                 case ChartDataType.Distribution:
-                    name = "PORÓWNANIE ROZKŁADÓW";
+                    name = "POROWNANIE ROZKLADOW";
                     break;
                 case ChartDataType.Sorting:
-                    name = "PORÓWNANIE SORTOWANIA";
+                    name = "POROWNANIE SORTOWANIA";
                     break;
                 case ChartDataType.AlgorithmDistribution:
-                    name = "PORÓWNANIE ALGORYTMÓW I ROZKŁADÓW";
+                    name = "POROWNANIE ALGORYTMOW I ROZKLADOW";
                     break;
                 case ChartDataType.AlgorithmSorting:
-                    name = "PORÓWNANIE ALGORYTMÓW I SORTOWANIA";
+                    name = "POROWNANIE ALGORYTMOW I SORTOWANIA";
                     break;
                 case ChartDataType.DistributionSorting:
-                    name = "PORÓWNANIE ROZKŁADÓW I SORTOWANIA";
+                    name = "POROWNANIE ROZKLADOW I SORTOWANIA";
                     break;
                 default:
-                    name = "PORÓWNANIE ALGORYTMÓW";
+                    name = "POROWNANIE ALGORYTMOW";
                     break;
             }
 
@@ -1016,13 +1022,13 @@ namespace MR.BinPacking.App.Chart
             switch (fieldType)
             {
                 case StatField.QualityEstimation:
-                    return name + "dolne ograniczenie [liczba elementów]";
+                    return name + "oszacowanie jakosci";
                 case StatField.ErrorEstimation:
-                    return name + "silniejsze dolne ograniczenie [liczba elementów]";
+                    return name + "oszacowanie bledu";
                 case StatField.Result:
-                    return name + "wynik [liczba elementów]";
+                    return name + "wynik [liczba elementow]";
                 default:
-                    return name + "czas działania [ms]";
+                    return name + "czas dzialania [ms]";
             }
         }
 
