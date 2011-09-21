@@ -167,44 +167,6 @@ namespace MR.BinPacking.App.Utils
         }
 
 
-        //public static Settings LoadSettings(string filename)
-        //{
-        //    try
-        //    {
-        //        string xml = null;
-        //        using (StreamReader sr = new StreamReader(filename))
-        //            xml = sr.ReadToEnd();
-
-        //        XmlSerializer serializer = new XmlSerializer(typeof(Settings));
-        //        StringReader stringReader = new StringReader(xml);
-
-        //        Settings settings = serializer.Deserialize(stringReader) as Settings;
-        //        stringReader.Close();
-
-        //        return settings;
-        //    }
-        //    catch
-        //    {
-        //        return new Settings();
-        //    }
-        //}
-
-        //public static void SaveSettings(Settings settings, string filename)
-        //{
-        //    XmlSerializer serializer = new XmlSerializer(typeof(Settings));
-        //    MemoryStream ms = new MemoryStream();
-
-        //    serializer.Serialize(ms, settings);
-
-        //    byte[] bytes = ms.ToArray();
-        //    ms.Close();
-
-        //    string xml = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-        //    using (StreamWriter sw = new StreamWriter(filename))
-        //        sw.Write(xml);
-        //}
-
-
         public static ExperimentParamsFile LoadExperimentParams(string filename)
         {
             string xml = null;
@@ -235,13 +197,15 @@ namespace MR.BinPacking.App.Utils
                 sw.Write(xml);
         }
 
-        
+
         public static void SaveControlImage(UIElement control, double width, double height)
         {
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.DefaultExt = ".png";
-            dialog.Filter = "Bitmapa (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|Pliki PNG (*.png)|*.png|Obrazki (*.bmp;*.jpg;*.png)|*.bmp;*.jpg;*.png|Wszystkie pliki (*.*)|*.*";
-            dialog.FilterIndex = 3;
+            SaveFileDialog dialog = new SaveFileDialog()
+            {
+                DefaultExt = ".png",
+                Filter = "Bitmapa (*.bmp)|*.bmp|JPEG (*.jpg)|*.jpg|Pliki PNG (*.png)|*.png|Obrazki (*.bmp;*.jpg;*.png)|*.bmp;*.jpg;*.png|Wszystkie pliki (*.*)|*.*",
+                FilterIndex = 3
+            };
 
             int Width = (int)Math.Floor(width);
             int Height = (int)Math.Floor(height);

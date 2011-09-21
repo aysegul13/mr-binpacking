@@ -210,7 +210,7 @@ namespace MR.BinPacking.App
                     expWindow = new ExperimentProgressWindow(expParams, Instance);
 
                 ChildWindows.Add(expWindow);
-                expWindow.ShowDialog();
+                expWindow.Show();
             }
             catch (ThreadAbortException) { }
             catch (Exception exc)
@@ -223,7 +223,13 @@ namespace MR.BinPacking.App
         {
             try
             {
-                OpenFileDialog openDialog = new OpenFileDialog();
+                OpenFileDialog openDialog = new OpenFileDialog()
+                {
+                    DefaultExt = ".bpp",
+                    Filter = "Plik z instancjami problemu pakowania (*.bpp)|*.bpp|Wszystkie pliki (*.*)|*.*",
+                    FilterIndex = 1
+                };
+
                 if (openDialog.ShowDialog() == true)
                 {
                     FileTypeWindow fileTypeWindow = new FileTypeWindow(openDialog.FileName);
@@ -251,7 +257,13 @@ namespace MR.BinPacking.App
         {
             try
             {
-                SaveFileDialog saveDialog = new SaveFileDialog();
+                SaveFileDialog saveDialog = new SaveFileDialog()
+                {
+                    DefaultExt = ".bpp",
+                    Filter = "Plik z instancjami problemu pakowania (*.bpp)|*.bpp|Wszystkie pliki (*.*)|*.*",
+                    FilterIndex = 1
+                };
+
                 if (saveDialog.ShowDialog() == true)
                 {
                     Instance instance = new Instance(BinSize)
@@ -650,7 +662,13 @@ namespace MR.BinPacking.App
         {
             try
             {
-                OpenFileDialog openDialog = new OpenFileDialog();
+                OpenFileDialog openDialog = new OpenFileDialog()
+                {
+                    DefaultExt = ".bpp",
+                    Filter = "Plik z instancjami problemu pakowania (*.bpp)|*.bpp|Wszystkie pliki (*.*)|*.*",
+                    FilterIndex = 1
+                };
+
                 if (openDialog.ShowDialog() == true)
                 {
                     FileTypeWindow fileTypeWindow = new FileTypeWindow(openDialog.FileName);
