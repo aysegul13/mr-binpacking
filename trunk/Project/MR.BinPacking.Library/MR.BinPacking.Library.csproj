@@ -50,9 +50,7 @@
     <Compile Include="Algorithms\BestFit.cs" />
     <Compile Include="Algorithms\BestFitDecreasing.cs" />
     <Compile Include="Bounds.cs" />
-    <Compile Include="Experiment\AlgorithmResult.cs" />
     <Compile Include="Experiment\Enums.cs" />
-    <Compile Include="Experiment\Experiment.cs" />
     <Compile Include="Experiment\ExperimentInstance.cs" />
     <Compile Include="Experiment\ExperimentParams.cs" />
     <Compile Include="Experiment\ExperimentParamsFile.cs" />
@@ -71,9 +69,13 @@
     <Compile Include="Algorithms\RandomFit.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Base\AlgorithmDiagram.cd" />
+    <None Include="Base\BaseDiagram.cd" />
+    <None Include="Experiment\ExperimentDiagram.cd" />
     <None Include="Libraries\lpsolve55.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Utils\GeneratorDiagram.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

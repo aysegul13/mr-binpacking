@@ -9,33 +9,21 @@ namespace MR.BinPacking.Library.Utils
 {
     public static class Generator
     {
-        public static List<ExperimentInstance> GenerateInstances(ExperimentParams prms)
+        public static List<int> GetElementsWithSorting(List<int> elements, Sorting sorting)
         {
-            List<ExperimentInstance> result = new List<ExperimentInstance>();
+            List<int> result = new List<int>(elements);
 
-            for (int R = 0; R < prms.Repeat; R++)
+            switch (sorting)
             {
-                int N = prms.MinN;
-                while (N <= prms.MaxN)
-                {
-                    int min = (int)Math.Ceiling(prms.MinVal * prms.BinSize);
-                    int max = (int)Math.Ceiling(prms.MaxVal * prms.BinSize);
-
-                    foreach (var D in prms.Distributions)
-                    {
-                        result.Add(new ExperimentInstance()
-                        {
-                            BinSize = prms.BinSize,
-                            Dist = D,
-                            Elements = Generator.GenerateData(N, min, max, D)
-                        });
-                    }
-
-                    N += prms.Step;
-                }
+                case Sorting.Ascending:
+                    result.Sort();
+                    return result;
+                case Sorting.Descending:
+                    result.Sort((x, y) => y.CompareTo(x));
+                    return result;
+                default:
+                    return result;
             }
-
-            return result;
         }
 
         public static List<int> GenerateData(int n, int min, int max, Distribution distribution)

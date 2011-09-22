@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="MR.BinPacking.Library.Utils.Generator">
+    <Position X="0.5" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACEIAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAIA=</HashCode>
+      <FileName>Utils\Generator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MR.BinPacking.Library.Utils.Probability">
+    <Position X="4" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAEIAAAAAAAAA=</HashCode>
+      <FileName>Utils\Probability.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
