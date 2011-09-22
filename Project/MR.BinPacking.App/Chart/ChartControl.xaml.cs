@@ -30,7 +30,7 @@ namespace MR.BinPacking.App.Chart
 
         SolidColorBrush[] brushes = { Brushes.YellowGreen, Brushes.OrangeRed, Brushes.Purple, Brushes.RoyalBlue, Brushes.Plum, Brushes.Red };
 
-        public ExperimentResult DataSource { get; set; }
+        public ExpResult DataSource { get; set; }
         public List<DataSerie> DataSeries;
         public List<FunctionHandler> Functions;
 
@@ -853,8 +853,8 @@ namespace MR.BinPacking.App.Chart
         {
             Sample first = serie.First();
             string alg = first.Alg.Name;
-            string dist = ExperimentUtils.GetDistributionDisplayName(first.Distribution);
-            string sort = ExperimentUtils.GetSortingDisplayName(first.Sorting);
+            string dist = ExpUtils.GetDistributionDisplayName(first.Distribution);
+            string sort = ExpUtils.GetSortingDisplayName(first.Sorting);
 
             switch (type)
             {

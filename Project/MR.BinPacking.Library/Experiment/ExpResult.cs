@@ -5,9 +5,9 @@ using System.Text;
 
 namespace MR.BinPacking.Library.Experiment
 {
-    public class ExperimentResult
+    public class ExpResult
     {
-        public ExperimentParams Params { get; set; }
+        public ExpParams Params { get; set; }
         public List<Sample> Samples { get; set; }
     }
 }

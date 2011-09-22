@@ -8,16 +8,16 @@ using MR.BinPacking.Library.Algorithms;
 
 namespace MR.BinPacking.Library.Experiment
 {
-    public class ExperimentParams : ExperimentParamsFile
+    public class ExpParams : ExpParamsFile
     {
         public List<BaseAlgorithm> Algs { get; set; }
 
-        public ExperimentParams()
+        public ExpParams()
         {
             Algs = new List<BaseAlgorithm>();
         }
 
-        public ExperimentParams(ExperimentParamsFile fileParams) : this()
+        public ExpParams(ExpParamsFile fileParams) : this()
         {
             MinN = fileParams.MinN;
             MaxN = fileParams.MaxN;

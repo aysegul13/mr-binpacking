@@ -195,13 +195,13 @@ namespace MR.BinPacking.App
             RefreshPreview();
         }
 
-        ExperimentInstance Instance = null;
+        ExpInstance Instance = null;
 
         private void bExperiment_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                ExperimentParams expParams = new ExperimentParams(GetExpParamsFromUI());
+                ExpParams expParams = new ExpParams(GetExpParamsFromUI());
                 ExperimentProgressWindow expWindow;
 
                 if (rbSourceGenerator.IsChecked == true)
@@ -363,7 +363,7 @@ namespace MR.BinPacking.App
         }
 
 
-        private void SetUIFromExpParams(ExperimentParamsFile experimentParams)
+        private void SetUIFromExpParams(ExpParamsFile experimentParams)
         {
             try
             {
@@ -402,11 +402,11 @@ namespace MR.BinPacking.App
             }
         }
 
-        private ExperimentParamsFile GetExpParamsFromUI()
+        private ExpParamsFile GetExpParamsFromUI()
         {
             try
             {
-                ExperimentParamsFile experimentParams = new ExperimentParamsFile()
+                ExpParamsFile experimentParams = new ExpParamsFile()
                 {
                     MinN = Int32.Parse(ntbExpMinN.Text),
                     MaxN = Int32.Parse(ntbExpMaxN.Text),
@@ -629,7 +629,7 @@ namespace MR.BinPacking.App
                 OpenFileDialog openDialog = new OpenFileDialog();
                 if (openDialog.ShowDialog() == true)
                 {
-                    ExperimentParamsFile experimentParams = Loader.LoadExperimentParams(openDialog.FileName);
+                    ExpParamsFile experimentParams = Loader.LoadExperimentParams(openDialog.FileName);
                     SetUIFromExpParams(experimentParams);
                 }
             }
@@ -647,7 +647,7 @@ namespace MR.BinPacking.App
                 SaveFileDialog saveDialog = new SaveFileDialog();
                 if (saveDialog.ShowDialog() == true)
                 {
-                    ExperimentParamsFile experimentParams = GetExpParamsFromUI();
+                    ExpParamsFile experimentParams = GetExpParamsFromUI();
                     Loader.SaveExperimentParams(experimentParams, saveDialog.FileName);
                 }
             }

@@ -25,8 +25,8 @@ namespace MR.BinPacking.App
     /// </summary>
     public partial class FileTypeWindow : Window
     {
-        ExperimentInstance result = null;
-        public ExperimentInstance Result
+        ExpInstance result = null;
+        public ExpInstance Result
         {
             get { return result; }
         }
@@ -170,7 +170,7 @@ namespace MR.BinPacking.App
         {
             try
             {
-                List<ExperimentInstance> instances = Loader.LoadInstance2(filename);
+                List<ExpInstance> instances = Loader.LoadInstance2(filename);
                 tabFileTypes.IsEnabled = false;
 
                 lbInstances.ItemsSource = instances;
@@ -190,7 +190,7 @@ namespace MR.BinPacking.App
         {
             try
             {
-                List<ExperimentInstance> instances = Loader.LoadInstance3(filename);
+                List<ExpInstance> instances = Loader.LoadInstance3(filename);
                 tabFileTypes.IsEnabled = false;
 
                 lbInstances.ItemsSource = instances;
@@ -234,16 +234,16 @@ namespace MR.BinPacking.App
 
         private void bSelect_Click(object sender, RoutedEventArgs e)
         {
-            if ((lbInstances.SelectedItem != null) && (lbInstances.SelectedItem is ExperimentInstance))
+            if ((lbInstances.SelectedItem != null) && (lbInstances.SelectedItem is ExpInstance))
             {
-                result = lbInstances.SelectedItem as ExperimentInstance;
+                result = lbInstances.SelectedItem as ExpInstance;
                 this.Close();
             }
         }
 
         private void lbInstances_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            bSelect.IsEnabled = (lbInstances.SelectedItem != null) && (lbInstances.SelectedItem is ExperimentInstance);
+            bSelect.IsEnabled = (lbInstances.SelectedItem != null) && (lbInstances.SelectedItem is ExpInstance);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MR.BinPacking.Library.Experiment
 {
-    public class ExperimentParamsFile
+    public class ExpParamsFile
     {
         public int MinN { get; set; }
         public int MaxN { get; set; }
@@ -23,7 +23,7 @@ namespace MR.BinPacking.Library.Experiment
         public List<Distribution> Distributions { get; set; }
         public List<Sorting> Sortings { get; set; }
 
-        public ExperimentParamsFile()
+        public ExpParamsFile()
         {
             Algorithms = new List<Algorithm>();
             Distributions = new List<Distribution>();
