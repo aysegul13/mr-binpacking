@@ -90,7 +90,7 @@ namespace MR.BinPacking.App
 
             foreach (var S in prms.Sortings)
             {
-                List<int> elements = Experiment.GetElementsWithSorting(I.Elements, S);
+                List<int> elements = Generator.GetElementsWithSorting(I.Elements, S);
 
                 for (int i = 0; i < prms.Algorithms.Count; i++)
                 {
