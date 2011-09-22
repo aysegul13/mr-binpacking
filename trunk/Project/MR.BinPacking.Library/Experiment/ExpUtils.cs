@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MR.BinPacking.Library.Experiment
 {
-    public static class ExperimentUtils
+    public static class ExpUtils
     {
         public static String GetDistributionDisplayName(Distribution distribution)
         {

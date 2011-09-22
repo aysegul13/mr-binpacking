@@ -17,7 +17,7 @@ namespace MR.BinPacking.App.Utils
 
     internal static class Loader
     {
-        public static ExperimentInstance LoadInstance1(string filename, int elemCountIdx, int binSizeIdx, int binSize)
+        public static ExpInstance LoadInstance1(string filename, int elemCountIdx, int binSizeIdx, int binSize)
         {
             using (StreamReader sr = new StreamReader(filename))
             {
@@ -27,7 +27,7 @@ namespace MR.BinPacking.App.Utils
                 while ((line = sr.ReadLine()) != null)
                     numbers.Add(Int32.Parse(line.Trim()));
 
-                ExperimentInstance result = new ExperimentInstance()
+                ExpInstance result = new ExpInstance()
                 {
                     Dist = Distribution.None,
                     BinSize = binSize
@@ -57,9 +57,9 @@ namespace MR.BinPacking.App.Utils
             }
         }
 
-        public static List<ExperimentInstance> LoadInstance2(string filename)
+        public static List<ExpInstance> LoadInstance2(string filename)
         {
-            List<ExperimentInstance> result = new List<ExperimentInstance>();
+            List<ExpInstance> result = new List<ExpInstance>();
 
             using (StreamReader sr = new StreamReader(filename))
             {
@@ -84,7 +84,7 @@ namespace MR.BinPacking.App.Utils
                     int elemCount = Int32.Parse(instanceInfo[1]);
                     //int bestKnownSolution = Int32.Parse(instanceInfo[2]);
 
-                    ExperimentInstance instance = new ExperimentInstance(binSize)
+                    ExpInstance instance = new ExpInstance(binSize)
                     {
                         Name = name,
                         Dist = Distribution.None
@@ -105,9 +105,9 @@ namespace MR.BinPacking.App.Utils
             }
         }
 
-        public static List<ExperimentInstance> LoadInstance3(string filename)
+        public static List<ExpInstance> LoadInstance3(string filename)
         {
-            List<ExperimentInstance> result = new List<ExperimentInstance>();
+            List<ExpInstance> result = new List<ExpInstance>();
 
             using (StreamReader sr = new StreamReader(filename))
             {
@@ -128,7 +128,7 @@ namespace MR.BinPacking.App.Utils
                         return result;
                     int binSize = Int32.Parse(line.Trim());
 
-                    ExperimentInstance instance = new ExperimentInstance(binSize)
+                    ExpInstance instance = new ExpInstance(binSize)
                     {
                         Name = name,
                         Dist = Distribution.None
@@ -167,24 +167,24 @@ namespace MR.BinPacking.App.Utils
         }
 
 
-        public static ExperimentParamsFile LoadExperimentParams(string filename)
+        public static ExpParamsFile LoadExperimentParams(string filename)
         {
             string xml = null;
             using (StreamReader sr = new StreamReader(filename))
                 xml = sr.ReadToEnd();
 
-            XmlSerializer serializer = new XmlSerializer(typeof(ExperimentParamsFile));
+            XmlSerializer serializer = new XmlSerializer(typeof(ExpParamsFile));
             StringReader stringReader = new StringReader(xml);
 
-            ExperimentParamsFile experimentParams = serializer.Deserialize(stringReader) as ExperimentParamsFile;
+            ExpParamsFile experimentParams = serializer.Deserialize(stringReader) as ExpParamsFile;
             stringReader.Close();
 
             return experimentParams;
         }
 
-        public static void SaveExperimentParams(ExperimentParamsFile experimentParams, string filename)
+        public static void SaveExperimentParams(ExpParamsFile experimentParams, string filename)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(ExperimentParamsFile));
+            XmlSerializer serializer = new XmlSerializer(typeof(ExpParamsFile));
             MemoryStream ms = new MemoryStream();
 
             serializer.Serialize(ms, experimentParams);

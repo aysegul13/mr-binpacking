@@ -6,11 +6,11 @@ using MR.BinPacking.Library.Base;
 
 namespace MR.BinPacking.Library.Experiment
 {
-    public class ExperimentInstance : Instance
+    public class ExpInstance : Instance
     {
         public Distribution Dist { get; set; }
 
-        public ExperimentInstance(int binSize)
+        public ExpInstance(int binSize)
         {
             Elements = new List<int>();
             Bins = new List<Bin>();
@@ -19,6 +19,6 @@ namespace MR.BinPacking.Library.Experiment
             Name = "";
         }
 
-        public ExperimentInstance() : this(10) { }
+        public ExpInstance() : this(10) { }
     }
 }

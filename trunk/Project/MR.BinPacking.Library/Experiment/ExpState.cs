@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MR.BinPacking.Library.Experiment
 {
-    public class ExperimentState
+    public class ExpState
     {
         public int Repeat { get; set; }
         public int N { get; set; }
