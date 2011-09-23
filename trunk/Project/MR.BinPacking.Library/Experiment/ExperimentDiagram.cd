@@ -1,77 +1,77 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="MR.BinPacking.Library.Experiment.ExpInstance">
-    <Position X="3.25" Y="1.5" Width="2.75" />
+    <Position X="6" Y="4.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
       <FileName>Experiment\ExpInstance.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MR.BinPacking.Library.Experiment.ExpParams">
-    <Position X="0.5" Y="4.5" Width="3.25" />
+    <Position X="2.25" Y="4.5" Width="3.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Experiment\ExpParams.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MR.BinPacking.Library.Experiment.ExpParamsFile">
-    <Position X="0.5" Y="0.5" Width="2.5" />
+    <Position X="3.5" Y="0.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAQAQAQIAAAAAICAAAAAgAAIAAAAAAAAIAIAAAAAAAQ=</HashCode>
       <FileName>Experiment\ExpParamsFile.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MR.BinPacking.Library.Experiment.ExpResult">
-    <Position X="6.25" Y="4.25" Width="2.25" />
+    <Position X="8.75" Y="4.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
       <FileName>Experiment\ExpResult.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MR.BinPacking.Library.Experiment.ExpState">
-    <Position X="4" Y="3.5" Width="2" />
+    <Position X="6.25" Y="0.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAQAQAAAAAAAAQAAAAAAAgEAIAABAAAAA=</HashCode>
       <FileName>Experiment\ExpState.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MR.BinPacking.Library.Experiment.Sample">
-    <Position X="6.25" Y="0.5" Width="2.25" />
+    <Position X="8.5" Y="0.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAIAAAAAAAAAgAQASAAAAAQQAIAAIAAAAIAAABQAAAA=</HashCode>
       <FileName>Experiment\Sample.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MR.BinPacking.Library.Base.Instance" Collapsed="true">
-    <Position X="3.25" Y="0.5" Width="1.5" />
+    <Position X="6.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAQAAAAAAAAAQAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Base\Instance.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MR.BinPacking.Library.Experiment.Worker">
-    <Position X="8.25" Y="1.5" Width="2.75" />
+    <Position X="0.5" Y="0.5" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAEAABAAAAAAIAAAQAAAAAIAAAAAAAJgAAAAAAAAA=</HashCode>
       <FileName>Experiment\Worker.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Enum Name="MR.BinPacking.Library.Experiment.Distribution" Collapsed="true">
-    <Position X="2.25" Y="6.75" Width="1.5" />
+    <Position X="0.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAhA=</HashCode>
       <FileName>Experiment\Enums.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="MR.BinPacking.Library.Experiment.Sorting" Collapsed="true">
-    <Position X="4" Y="6.75" Width="1.5" />
+    <Position X="0.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAABAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>Experiment\Enums.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="MR.BinPacking.Library.Experiment.Algorithm" Collapsed="true">
-    <Position X="0.5" Y="6.75" Width="1.5" />
+    <Position X="0.5" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAIABAQAgAiAAAAAAAAIAAAACAAAAAAAAAAABAQA=</HashCode>
       <FileName>Experiment\Enums.cs</FileName>
