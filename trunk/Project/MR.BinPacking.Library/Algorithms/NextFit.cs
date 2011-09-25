@@ -73,8 +73,7 @@ namespace MR.BinPacking.Library.Algorithms
             if (IsPresentation)
                 Wait(-1, -1);
             #endregion
-
-
+            
             return Result;
         }
     }
