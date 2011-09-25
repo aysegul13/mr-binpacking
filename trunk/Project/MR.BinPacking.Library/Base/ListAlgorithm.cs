@@ -21,6 +21,7 @@ namespace MR.BinPacking.Library.Base
         }
 
         public virtual bool IsPresentation { get; set; }
+        public virtual bool ShowScaled { get; set; }
 
         public virtual void Wait(int bin, int elem)
         {

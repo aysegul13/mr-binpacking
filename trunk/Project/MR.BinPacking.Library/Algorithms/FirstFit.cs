@@ -27,6 +27,7 @@ namespace MR.BinPacking.Library.Algorithms
             for (int i = 0; i < Result.Elements.Count; i++)
             {
                 int elem = Result.Elements[i];
+                string elemStr = ShowScaled ? ((double)elem / binSize).ToString("0.####") : elem.ToString();
                 bool fit = false;
 
                 for (int k = 0; k < Result.Bins.Count; k++)
@@ -34,7 +35,7 @@ namespace MR.BinPacking.Library.Algorithms
                     #region UI
                     if (IsPresentation)
                     {
-                        Message += String.Format("Sprawdzanie miejsca w skrzynce {0} dla elementu {1} ({2})", k + 1, i + 1, elem) + Environment.NewLine + Environment.NewLine;
+                        Message += String.Format("Sprawdzanie miejsca w skrzynce {0} dla elementu nr {1} ({2})", k + 1, i + 1, elemStr) + Environment.NewLine + Environment.NewLine;
                         Wait(k, i);
                     }
                     #endregion
@@ -47,7 +48,7 @@ namespace MR.BinPacking.Library.Algorithms
 
                         #region UI
                         if (IsPresentation)
-                            Message = String.Format("Wstawiono element {0} ({1}) do skrzynki {2}.", i + 1, elem, k + 1) + Environment.NewLine + Environment.NewLine;
+                            Message = String.Format("Wstawiono element nr {0} ({1}) do skrzynki {2}.", i + 1, elemStr, k + 1) + Environment.NewLine + Environment.NewLine;
                         #endregion
 
                         break;
@@ -56,7 +57,7 @@ namespace MR.BinPacking.Library.Algorithms
                     {
                         #region UI
                         if (IsPresentation)
-                            Message = String.Format("Brak miejsca w skrzynce {0} dla elementu {1} ({2}).", k + 1, i + 1, elem) + Environment.NewLine + Environment.NewLine;
+                            Message = String.Format("Brak miejsca w skrzynce {0} dla elementu nr {1} ({2}).", k + 1, i + 1, elemStr) + Environment.NewLine + Environment.NewLine;
                         #endregion
                     }
                 }
@@ -77,7 +78,7 @@ namespace MR.BinPacking.Library.Algorithms
 
                     #region UI
                     if (IsPresentation)
-                        Message = String.Format("Wstawiono element {0} ({1}) do skrzynki {2}.", i + 1, elem, Result.Bins.Count) + Environment.NewLine + Environment.NewLine;
+                        Message = String.Format("Wstawiono element nr {0} ({1}) do skrzynki {2}.", i + 1, elemStr, Result.Bins.Count) + Environment.NewLine + Environment.NewLine;
                     #endregion
                 }
             }

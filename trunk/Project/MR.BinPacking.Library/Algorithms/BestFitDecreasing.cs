@@ -112,6 +112,20 @@ namespace MR.BinPacking.Library.Algorithms
             }
         }
 
+        public override bool ShowScaled
+        {
+            get
+            {
+                return base.ShowScaled;
+            }
+            set
+            {
+                base.ShowScaled = value;
+                if (algorithm != null)
+                    algorithm.ShowScaled = value;
+            }
+        }
+
         private ListAlgorithm algorithm = null;
 
         public BestFitDecreasing()
