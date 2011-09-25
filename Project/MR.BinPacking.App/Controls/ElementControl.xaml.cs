@@ -19,13 +19,19 @@ namespace MR.BinPacking.App.Controls
     /// </summary>
     public partial class ElementControl : UserControl
     {
+        public static Brush fillBrush = Brushes.LightPink;
+        public static Brush borderBrush = Brushes.CornflowerBlue;
+        public static Brush fontForeground = Brushes.OrangeRed;
+
         public ElementControl() : this(0) { }
 
         public ElementControl(int size)
         {
             InitializeComponent();
 
-            Color = Brushes.White;
+            Color = fillBrush;
+            Border.BorderBrush = ElementControl.borderBrush;
+            laSize.Foreground = ElementControl.fontForeground;
 
             Size = size;
             Message = Size.ToString();

@@ -102,7 +102,6 @@ namespace MR.BinPacking.App
                     newBin.ShowAsElement = true;
                     newBin.Bin = bin;
 
-                    newBin.LayoutTransform = new ScaleTransform(0.8, 0.8);
                     newBin.Border.BorderThickness = new Thickness(0);
                     newBin.Border.Background = Brushes.Transparent;
                     newBin.laFreeSpace.Visibility = Visibility.Collapsed;

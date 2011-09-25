@@ -130,6 +130,7 @@ namespace MR.BinPacking.App
 
                     newBin.Border.BorderThickness = new Thickness(0);
                     newBin.Border.Background = Brushes.Transparent;
+                    newBin.Border.BorderBrush = BinControl.borderBrush;
                     newBin.laFreeSpace.Visibility = Visibility.Collapsed;
                     newBin.ShowFiller = false;
 
