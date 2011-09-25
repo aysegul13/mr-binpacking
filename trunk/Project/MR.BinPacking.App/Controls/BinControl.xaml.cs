@@ -22,6 +22,12 @@ namespace MR.BinPacking.App.Controls
     /// </summary>
     public partial class BinControl : UserControl
     {
+        public static double borderThickness = 1.0;
+        public static Brush fillBrush = Brushes.Chocolate;
+        public static Brush borderBrush = Brushes.CornflowerBlue;
+        public static Thickness padding = new Thickness(2);
+        public static Brush fontForeground = Brushes.Orchid;
+
         public bool ShowFiller = true;
         public bool ShowAsElement = false;
 
@@ -87,6 +93,11 @@ namespace MR.BinPacking.App.Controls
         {
             InitializeComponent();
             Bin = new Bin();
+
+            Padding = BinControl.padding;
+            Border.Background = BinControl.fillBrush;
+            Border.BorderBrush = BinControl.borderBrush;
+            laFreeSpace.Foreground = BinControl.fontForeground;
         }
 
         public void UpdateGrid()
@@ -104,12 +115,12 @@ namespace MR.BinPacking.App.Controls
                 if (ShowFiller)
                 {
                     Border border = new Border();
-                    border.BorderBrush = Brushes.Black;
+                    border.BorderBrush = borderBrush;
 
                     if (bin.Elements.Count > 0)
-                        border.BorderThickness = new Thickness(0, 3, 0, 0);
+                        border.BorderThickness = new Thickness(0, BinControl.borderThickness, 0, 0);
                     else
-                        border.BorderThickness = new Thickness(0, 3, 0, 3);
+                        border.BorderThickness = new Thickness(0, BinControl.borderThickness, 0, BinControl.borderThickness);
                     gElements.Children.Add(border);
                 }
             }
@@ -126,9 +137,9 @@ namespace MR.BinPacking.App.Controls
 
                 ElementControl newElemControl = new ElementControl(elem);
                 if (ShowAsElement)
-                    newElemControl.Border.BorderThickness = new Thickness(3);
+                    newElemControl.Border.BorderThickness = new Thickness(BinControl.borderThickness);
                 else if (i == bin.Elements.Count - 1)
-                    newElemControl.Border.BorderThickness = new Thickness(0, 3, 0, 3);
+                    newElemControl.Border.BorderThickness = new Thickness(0, BinControl.borderThickness, 0, BinControl.borderThickness);
 
                 if (ShowScaled)
                     newElemControl.Message = ((double)elem / Bin.Size).ToString("0.####");

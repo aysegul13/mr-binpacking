@@ -34,7 +34,7 @@
                             </Grid>
                         </Expander.Header>
                         <StackPanel>
-                            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" Padding="4">
                                 <StackPanel x:Name="spPreview" Orientation="Horizontal"/>
                             </ScrollViewer>
                             <Label x:Name="laBounds" FontWeight="Normal" Visibility="Collapsed"/>
