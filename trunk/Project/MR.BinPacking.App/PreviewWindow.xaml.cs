@@ -223,7 +223,7 @@ namespace MR.BinPacking.App
                 if (Algorithm is ListAlgorithm)
                 {
                     tblMessage.Text = (Algorithm as ListAlgorithm).Message;
-                    (Algorithm as ListAlgorithm).ShowScaled = Settings.Default.PRE_ScaleElements;
+                    //(Algorithm as ListAlgorithm).ShowScaled = Settings.Default.PRE_ScaleElements;
                 }
 
                 if (result == null)
