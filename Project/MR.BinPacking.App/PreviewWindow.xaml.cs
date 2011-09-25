@@ -221,7 +221,10 @@ namespace MR.BinPacking.App
             try
             {
                 if (Algorithm is ListAlgorithm)
+                {
                     tblMessage.Text = (Algorithm as ListAlgorithm).Message;
+                    (Algorithm as ListAlgorithm).ShowScaled = Settings.Default.PRE_ScaleElements;
+                }
 
                 if (result == null)
                 {
@@ -374,18 +377,18 @@ namespace MR.BinPacking.App
                     exPreview.IsExpanded = Settings.Default.PRE_ExpandPreviewInPresentation;
                     exSideBar.IsExpanded = Settings.Default.PRE_ExpandSideBarInPresentation;
                     vbLoading.Visibility = Visibility.Collapsed;
+                    (Algorithm as ListAlgorithm).ShowScaled = Settings.Default.PRE_ScaleElements;
 
                     DrawPreview();
-                    Execute();
                 }
                 else
                 {
                     exPreview.IsExpanded = Settings.Default.PRE_ExpandPreviewInResult;
                     exSideBar.IsExpanded = Settings.Default.PRE_ExpandSideBarInResult;
                     vbLoading.Visibility = Visibility.Visible;
-
-                    Execute();
                 }
+
+                Execute();
             }
             catch (ThreadAbortException) { }
             catch (Exception exc)

@@ -33,10 +33,11 @@ namespace MR.BinPacking.Library.Algorithms
             while (elemIndexes.Count > 0)
             {
                 int elemIndex = random.Next(elemIndexes.Count);
+                string elemStr = ShowScaled ? ((double)elements[elemIndexes[elemIndex]] / binSize).ToString("0.####") : elements[elemIndexes[elemIndex]].ToString();
 
                 #region UI
                 if (IsPresentation)
-                    Message += String.Format("Wylosowano element nr {0} ({1}).", elemIndexes[elemIndex] + 1, elements[elemIndexes[elemIndex]]) + Environment.NewLine + Environment.NewLine;
+                    Message += String.Format("Wylosowano element nr {0} ({1}).", elemIndexes[elemIndex] + 1, elemStr) + Environment.NewLine + Environment.NewLine;
                 #endregion
 
                 List<int> binsIndexes = new List<int>();
@@ -77,7 +78,7 @@ namespace MR.BinPacking.Library.Algorithms
 
                 #region UI
                 if (IsPresentation)
-                    Message = String.Format("Wstawiono element {0} ({1}) do skrzynki {2}.", elemIndexes[elemIndex] + 1, elements[elemIndexes[elemIndex]], index + 1) + Environment.NewLine + Environment.NewLine;
+                    Message = String.Format("Wstawiono element nr {0} ({1}) do skrzynki {2}.", elemIndexes[elemIndex] + 1, elemStr, index + 1) + Environment.NewLine + Environment.NewLine;
                 #endregion
 
                 elemIndexes.RemoveAt(elemIndex);
