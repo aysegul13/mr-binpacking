@@ -592,6 +592,8 @@ namespace MR.BinPacking.App
         {
             try
             {
+                cbNonListAlgorithm_CheckedChanged(null, null);
+
                 BinSize = Int32.Parse(ntbBinSize.Text);
                 int elementsNumber = Int32.Parse(ntbElementsNumber.Text);
                 int minValue = Int32.Parse(ntbMinValue.Text);
