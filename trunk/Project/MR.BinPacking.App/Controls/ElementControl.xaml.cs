@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MR.BinPacking.App.Properties;
 
 namespace MR.BinPacking.App.Controls
 {
@@ -19,9 +20,9 @@ namespace MR.BinPacking.App.Controls
     /// </summary>
     public partial class ElementControl : UserControl
     {
-        public static Brush fillBrush = Brushes.LightPink;
-        public static Brush borderBrush = Brushes.CornflowerBlue;
-        public static Brush fontForeground = Brushes.OrangeRed;
+        //public static Brush fillBrush = Brushes.LightPink;
+        //public static Brush borderBrush = Brushes.CornflowerBlue;
+        //public static Brush fontForeground = Brushes.OrangeRed;
 
         public ElementControl() : this(0) { }
 
@@ -29,9 +30,13 @@ namespace MR.BinPacking.App.Controls
         {
             InitializeComponent();
 
-            Color = fillBrush;
-            Border.BorderBrush = ElementControl.borderBrush;
-            laSize.Foreground = ElementControl.fontForeground;
+            //Color = fillBrush;
+            //Border.BorderBrush = ElementControl.borderBrush;
+            //laSize.Foreground = ElementControl.fontForeground;
+
+            Color = new SolidColorBrush(Settings.Default.PRE_ElementsFillColor);
+            Border.BorderBrush = new SolidColorBrush(Settings.Default.PRE_BinsElementsBorderColor);
+            laSize.Foreground = new SolidColorBrush(Settings.Default.PRE_ElementsFontColor);
 
             Size = size;
             Message = Size.ToString();

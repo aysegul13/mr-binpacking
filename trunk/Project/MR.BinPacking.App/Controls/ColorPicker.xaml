@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="MR.BinPacking.App.Controls.ColorPicker"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:gui="clr-namespace:MR.BinPacking.App.Controls"
+    Height="Auto" Width="Auto">
+    <Grid Name="colorPickerGrid">
+        <Image Source="/MR.BinPacking.App;component/images/transparent_background_small.png" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,0,0,0" Width="14" Height="14" />
+        <Rectangle VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,0,0,0" Width="14" Height="14" Stroke="Black" Name="colorSample" />
+        <Label FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Padding="0" Name="colorLabel" />
+        <Button FontSize="11" HorizontalAlignment="Right" Margin="3,0,1,0" Width="22" Padding="0" Click="expandButton_Click">...</Button>
+        <Popup PlacementTarget="{Binding ElementName=colorPickerGrid}" Placement="Bottom" StaysOpen="False" Name="popup">
+            <Grid Background="White">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="22" />
+                    <RowDefinition Height="22" />
+                    <RowDefinition />
+                    <RowDefinition Height="22" />
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" BorderThickness="1,1,1,0" BorderBrush="Gray" />
+                <Border Grid.Row="0" HorizontalAlignment="Left" Margin="1,1,0,0" Width="21">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0.5,0.0" EndPoint="0.5,1.0">
+                            <GradientStop Color="White" Offset="0.0" />
+                            <GradientStop Color="LightGray" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+                <Image Grid.Row="0" Source="/MR.BinPacking.App;component/images/transparent_background_small.png" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0,0,0" Width="14" Height="14" />
+                <gui:ColorPresenter Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0,0,0" x:Name="currentColorPresenter" />
+                <Label Grid.Row="0" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0">Current Color</Label>
+                <Border Grid.Row="1" BorderThickness="1,0,1,0" BorderBrush="Gray">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0.5,0.0" EndPoint="0.5,1.0">
+                            <GradientStop Color="LightGray" Offset="0.0" />
+                            <GradientStop Color="White" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+                <Label Grid.Row="1" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="2,0,0,0">Predefined Colors</Label>
+                <Grid Grid.Row="2">
+                    <StackPanel Margin="1,1,1,1" Orientation="Horizontal" Name="colorsStackPanel" />
+                    <Border BorderThickness="1,0,1,1" BorderBrush="Gray" />
+                </Grid>
+            </Grid>
+        </Popup>
+    </Grid>
+</UserControl>

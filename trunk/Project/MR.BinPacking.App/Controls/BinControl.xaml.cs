@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using MR.BinPacking.Library.Base;
 using System.Windows.Media.Animation;
+using MR.BinPacking.App.Properties;
 
 namespace MR.BinPacking.App.Controls
 {
@@ -22,11 +23,11 @@ namespace MR.BinPacking.App.Controls
     /// </summary>
     public partial class BinControl : UserControl
     {
-        public static double borderThickness = 1.0;
-        public static Brush fillBrush = Brushes.Chocolate;
-        public static Brush borderBrush = Brushes.CornflowerBlue;
-        public static Thickness padding = new Thickness(2);
-        public static Brush fontForeground = Brushes.Orchid;
+        //public static double borderThickness = 1.0;
+        //public static Brush fillBrush = Brushes.Chocolate;
+        //public static Brush borderBrush = Brushes.CornflowerBlue;
+        //public static double padding = 2.0;
+        //public static Brush fontForeground = Brushes.Orchid;
 
         public bool ShowFiller = true;
         public bool ShowAsElement = false;
@@ -94,10 +95,17 @@ namespace MR.BinPacking.App.Controls
             InitializeComponent();
             Bin = new Bin();
 
-            Padding = BinControl.padding;
-            Border.Background = BinControl.fillBrush;
-            Border.BorderBrush = BinControl.borderBrush;
-            laFreeSpace.Foreground = BinControl.fontForeground;
+            //Padding = new Thickness(BinControl.padding);
+            //Border.Background = BinControl.fillBrush;
+            //Border.BorderBrush = BinControl.borderBrush;
+            //laFreeSpace.Foreground = BinControl.fontForeground;
+
+            Padding = new Thickness(Settings.Default.PRE_BinsElementsPadding);
+            Border.Background = new SolidColorBrush(Settings.Default.PRE_BinsFillColor);
+            Border.BorderBrush = new SolidColorBrush(Settings.Default.PRE_BinsElementsBorderColor);
+            laFreeSpace.Foreground = new SolidColorBrush(Settings.Default.PRE_BinsFontColor);
+
+            Border.BorderThickness = new Thickness(Settings.Default.PRE_BinsElementsBorderThickness, 0, Settings.Default.PRE_BinsElementsBorderThickness, 0);
         }
 
         public void UpdateGrid()
@@ -115,12 +123,12 @@ namespace MR.BinPacking.App.Controls
                 if (ShowFiller)
                 {
                     Border border = new Border();
-                    border.BorderBrush = borderBrush;
+                    border.BorderBrush = new SolidColorBrush(Settings.Default.PRE_BinsFillColor);
 
                     if (bin.Elements.Count > 0)
-                        border.BorderThickness = new Thickness(0, BinControl.borderThickness, 0, 0);
+                        border.BorderThickness = new Thickness(0, Settings.Default.PRE_BinsElementsBorderThickness, 0, 0);
                     else
-                        border.BorderThickness = new Thickness(0, BinControl.borderThickness, 0, BinControl.borderThickness);
+                        border.BorderThickness = new Thickness(0, Settings.Default.PRE_BinsElementsBorderThickness, 0, Settings.Default.PRE_BinsElementsBorderThickness);
                     gElements.Children.Add(border);
                 }
             }
@@ -137,9 +145,11 @@ namespace MR.BinPacking.App.Controls
 
                 ElementControl newElemControl = new ElementControl(elem);
                 if (ShowAsElement)
-                    newElemControl.Border.BorderThickness = new Thickness(BinControl.borderThickness);
+                    newElemControl.Border.BorderThickness = new Thickness(Settings.Default.PRE_BinsElementsBorderThickness);
                 else if (i == bin.Elements.Count - 1)
-                    newElemControl.Border.BorderThickness = new Thickness(0, BinControl.borderThickness, 0, BinControl.borderThickness);
+                    newElemControl.Border.BorderThickness = new Thickness(0, Settings.Default.PRE_BinsElementsBorderThickness, 0, Settings.Default.PRE_BinsElementsBorderThickness);
+                else
+                    newElemControl.Border.BorderThickness = new Thickness(0, Settings.Default.PRE_BinsElementsBorderThickness, 0, 0);
 
                 if (ShowScaled)
                     newElemControl.Message = ((double)elem / Bin.Size).ToString("0.####");

@@ -130,7 +130,7 @@ namespace MR.BinPacking.App
 
                     newBin.Border.BorderThickness = new Thickness(0);
                     newBin.Border.Background = Brushes.Transparent;
-                    newBin.Border.BorderBrush = BinControl.borderBrush;
+                    newBin.Border.BorderBrush = new SolidColorBrush(Settings.Default.PRE_BinsElementsBorderColor);
                     newBin.laFreeSpace.Visibility = Visibility.Collapsed;
                     newBin.ShowFiller = false;
 
@@ -239,8 +239,12 @@ namespace MR.BinPacking.App
                     Instance instance = fileTypeWindow.Result;
                     if (instance != null)
                     {
-                        BinSize = instance.BinSize;
                         Elements = instance.Elements;
+                        ntbElementsNumber.Text = Settings.Default.VIS_ElementsCount = instance.Elements.Count.ToString();
+
+                        BinSize = Math.Max(instance.BinSize, Elements.Max());
+                        ntbBinSize.Text = Settings.Default.VIS_BinSize = BinSize.ToString();
+                        UpdateMinMaxValues();
 
                         RefreshElements();
                         RefreshPreview();
@@ -286,6 +290,12 @@ namespace MR.BinPacking.App
         {
             try
             {
+                ntbElementsNumber.Text = Settings.Default.VIS_ElementsCount = Elements.Count.ToString();
+
+                BinSize = Math.Max(BinSize, Elements.Max());
+                ntbBinSize.Text = Settings.Default.VIS_BinSize = BinSize.ToString();
+                UpdateMinMaxValues();
+
                 List<ListAlgorithm> algorithms = new List<ListAlgorithm>();
                 if (cbNextFit.IsChecked == true)
                     algorithms.Add(new NextFit());
@@ -318,6 +328,13 @@ namespace MR.BinPacking.App
         {
             try
             {
+                ntbElementsNumber.Text = Settings.Default.VIS_ElementsCount = Elements.Count.ToString();
+
+                BinSize = Math.Max(BinSize, Elements.Max());
+                ntbBinSize.Text = Settings.Default.VIS_BinSize = BinSize.ToString();
+                UpdateMinMaxValues();
+
+
                 List<BaseAlgorithm> algorithms = new List<BaseAlgorithm>();
                 if (cbNextFit.IsChecked == true)
                     algorithms.Add(new NextFit());
@@ -515,20 +532,23 @@ namespace MR.BinPacking.App
             }
         }
 
+        void UpdateMinMaxValues()
+        {
+            ntbMaxValue.MaxValue = BinSize;
+
+            int maxVal = Int32.Parse(ntbMaxValue.Text);
+            ntbMinValue.MaxValue = maxVal;
+
+            int minVal = Int32.Parse(ntbMinValue.Text);
+            ntbMaxValue.MinValue = minVal;
+        }
+
         private void ntbBinSize_LostFocus(object sender, RoutedEventArgs e)
         {
             try
             {
-                int binSize = Int32.Parse(ntbBinSize.Text);
-                ntbMaxValue.MaxValue = binSize;
-
-                int maxVal = Int32.Parse(ntbMaxValue.Text);
-                ntbMinValue.MaxValue = maxVal;
-
-                int minVal = Int32.Parse(ntbMinValue.Text);
-                ntbMaxValue.MinValue = minVal;
-
                 BinSize = Int32.Parse(ntbBinSize.Text);
+                UpdateMinMaxValues();
             }
             catch (ThreadAbortException) { }
             catch (Exception exc)
@@ -576,8 +596,12 @@ namespace MR.BinPacking.App
                 Elements = (from elemStr in tbElements.Text.Split()
                             where Int32.TryParse(elemStr, out parse)
                             select Int32.Parse(elemStr)).ToList();
-                //BinSize = Elements.Max();
-                BinSize = Int32.Parse(ntbBinSize.Text);
+
+                ntbElementsNumber.Text = Settings.Default.VIS_ElementsCount = Elements.Count.ToString();
+
+                BinSize = Math.Max(BinSize, Elements.Max());
+                ntbBinSize.Text = Settings.Default.VIS_BinSize = BinSize.ToString();
+                UpdateMinMaxValues();
             }
             catch (ThreadAbortException) { }
             catch (Exception exc)

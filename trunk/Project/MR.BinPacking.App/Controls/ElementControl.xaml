@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d"
-             MinWidth="24"
+             MinWidth="28"
              x:Name="elemControl">
     <Grid ToolTip="{Binding ElementName=elemControl, Path=Message}">
         <Border x:Name="Border" Background="{Binding ElementName=elemControl, Path=Color}" BorderBrush="Black" BorderThickness="0,1,0,0" />
         <Label x:Name="laSize" Content="{Binding ElementName=elemControl, Path=Message}" VerticalAlignment="Center" HorizontalAlignment="Center"
-               FontWeight="Bold" Padding="0" Foreground="SteelBlue" />
+               FontWeight="Bold" Padding="0" Foreground="SteelBlue" Margin="4,0"/>
     </Grid>
 </UserControl>
