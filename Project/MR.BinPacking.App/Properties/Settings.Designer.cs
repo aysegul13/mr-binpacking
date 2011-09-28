@@ -586,5 +586,101 @@ namespace MR.BinPacking.App.Properties {
                 this["PRE_ExpandSideBarInResult"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public double PRE_BinsElementsPadding {
+            get {
+                return ((double)(this["PRE_BinsElementsPadding"]));
+            }
+            set {
+                this["PRE_BinsElementsPadding"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("24")]
+        public double PRE_BinsElementsMinWidth {
+            get {
+                return ((double)(this["PRE_BinsElementsMinWidth"]));
+            }
+            set {
+                this["PRE_BinsElementsMinWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public double PRE_BinsElementsBorderThickness {
+            get {
+                return ((double)(this["PRE_BinsElementsBorderThickness"]));
+            }
+            set {
+                this["PRE_BinsElementsBorderThickness"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFBFBFBF")]
+        public global::System.Windows.Media.Color PRE_BinsFillColor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["PRE_BinsFillColor"]));
+            }
+            set {
+                this["PRE_BinsFillColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF000000")]
+        public global::System.Windows.Media.Color PRE_BinsFontColor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["PRE_BinsFontColor"]));
+            }
+            set {
+                this["PRE_BinsFontColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF000000")]
+        public global::System.Windows.Media.Color PRE_BinsElementsBorderColor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["PRE_BinsElementsBorderColor"]));
+            }
+            set {
+                this["PRE_BinsElementsBorderColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFFFFFF")]
+        public global::System.Windows.Media.Color PRE_ElementsFillColor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["PRE_ElementsFillColor"]));
+            }
+            set {
+                this["PRE_ElementsFillColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF000000")]
+        public global::System.Windows.Media.Color PRE_ElementsFontColor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["PRE_ElementsFontColor"]));
+            }
+            set {
+                this["PRE_ElementsFontColor"] = value;
+            }
+        }
     }
 }

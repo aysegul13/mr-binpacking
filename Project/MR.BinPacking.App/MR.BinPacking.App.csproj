@@ -59,6 +59,9 @@
     <Compile Include="Chart\ChartDataType.cs" />
     <Compile Include="Chart\DataSerie.cs" />
     <Compile Include="Chart\FunctionHandler.cs" />
+    <Compile Include="Controls\ColorPicker.xaml.cs">
+      <DependentUpon>ColorPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NumberTextBox.cs" />
     <Compile Include="Chart\Point2D.cs" />
     <Compile Include="ExperimentProgressWindow.xaml.cs">
@@ -79,6 +82,10 @@
     <Page Include="Chart\ChartControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ColorPicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\ElementControl.xaml">
       <SubType>Designer</SubType>
@@ -176,6 +183,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\bin128.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\transparent_background_small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
