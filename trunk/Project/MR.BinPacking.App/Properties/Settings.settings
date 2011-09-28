@@ -143,7 +143,7 @@
     <Setting Name="PRE_ExpandSideBarInResult" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="PRE_BinsElementsPadding" Type="System.Double" Scope="User">
+    <Setting Name="PRE_BinsElementsMargin" Type="System.Double" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
     <Setting Name="PRE_BinsElementsMinWidth" Type="System.Double" Scope="User">

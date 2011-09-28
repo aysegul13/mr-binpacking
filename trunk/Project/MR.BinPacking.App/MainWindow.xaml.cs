@@ -625,6 +625,17 @@ namespace MR.BinPacking.App
                 int maxValue = Int32.Parse(ntbMaxValue.Text);
 
                 Elements = Generator.GenerateData(elementsNumber, minValue, maxValue, Distribution.Uniform);
+
+
+                cpBinsFill.Color = Settings.Default.PRE_BinsFillColor;
+                cpBinsFont.Color = Settings.Default.PRE_BinsFontColor;
+                cpBinsElementsBorder.Color = Settings.Default.PRE_BinsElementsBorderColor;
+                cpElementsFill.Color = Settings.Default.PRE_ElementsFillColor;
+                cpElementsFont.Color = Settings.Default.PRE_ElementsFontColor;
+
+                ntbBinsElementsMargin.Text = Settings.Default.PRE_BinsElementsMargin.ToString();
+                ntbBinsElementsMinWidth.Text = Settings.Default.PRE_BinsElementsMinWidth.ToString();
+                ntbBinsElementsBorderThickness.Text = Settings.Default.PRE_BinsElementsBorderThickness.ToString();
             }
             catch (ThreadAbortException) { }
             catch (Exception exc)
@@ -800,6 +811,52 @@ namespace MR.BinPacking.App
             {
                 ShowError(exc, MethodBase.GetCurrentMethod().Name);
             }
+        }
+
+        private void cpBinsFill_ColorChanged(object sender, EventArgs e)
+        {
+            Settings.Default.PRE_BinsFillColor = cpBinsFill.Color;
+        }
+
+        private void cpBinsFont_ColorChanged(object sender, EventArgs e)
+        {
+            Settings.Default.PRE_BinsFontColor = cpBinsFont.Color;
+        }
+
+        private void cpBinsElementsBorder_ColorChanged(object sender, EventArgs e)
+        {
+            Settings.Default.PRE_BinsElementsBorderColor = cpBinsElementsBorder.Color;
+        }
+
+        private void cpElementsFill_ColorChanged(object sender, EventArgs e)
+        {
+            Settings.Default.PRE_ElementsFillColor = cpElementsFill.Color;
+        }
+
+        private void cpElementsFont_ColorChanged(object sender, EventArgs e)
+        {
+            Settings.Default.PRE_ElementsFontColor = cpElementsFont.Color;
+        }
+
+        private void ntbBinsElementsMargin_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double tmp;
+            if (Double.TryParse(ntbBinsElementsMargin.Text, out tmp))
+                Settings.Default.PRE_BinsElementsMargin = tmp;
+        }
+
+        private void ntbBinsElementsMinWidth_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double tmp;
+            if (Double.TryParse(ntbBinsElementsMinWidth.Text, out tmp))
+                Settings.Default.PRE_BinsElementsMinWidth = tmp;
+        }
+
+        private void ntbBinsElementsBorderThickness_LostFocus(object sender, RoutedEventArgs e)
+        {
+            double tmp;
+            if (Double.TryParse(ntbBinsElementsBorderThickness.Text, out tmp))
+                Settings.Default.PRE_BinsElementsBorderThickness = tmp;
         }
     }
 }

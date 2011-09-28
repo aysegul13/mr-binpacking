@@ -15,7 +15,6 @@ namespace MR.BinPacking.App.Controls
     public partial class ColorPicker : UserControl
     {
         private Color color;
-
         public Color Color
         {
             get
@@ -31,14 +30,12 @@ namespace MR.BinPacking.App.Controls
                 colorLabel.Content = color.ToString();
                 currentColorPresenter.SetColor(color);
 
-                if (this.Changed != null)
-                {
-                    this.Changed(this, EventArgs.Empty);
-                }
+                if (this.ColorChanged != null)
+                    this.ColorChanged(this, EventArgs.Empty);
             }
         }
 
-        public event EventHandler Changed;
+        public event EventHandler ColorChanged;
 
         public ColorPicker()
         {

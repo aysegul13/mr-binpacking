@@ -100,7 +100,7 @@ namespace MR.BinPacking.App.Controls
             //Border.BorderBrush = BinControl.borderBrush;
             //laFreeSpace.Foreground = BinControl.fontForeground;
 
-            Padding = new Thickness(Settings.Default.PRE_BinsElementsPadding);
+            Padding = new Thickness(Settings.Default.PRE_BinsElementsMargin);
             Border.Background = new SolidColorBrush(Settings.Default.PRE_BinsFillColor);
             Border.BorderBrush = new SolidColorBrush(Settings.Default.PRE_BinsElementsBorderColor);
             laFreeSpace.Foreground = new SolidColorBrush(Settings.Default.PRE_BinsFontColor);
@@ -123,7 +123,7 @@ namespace MR.BinPacking.App.Controls
                 if (ShowFiller)
                 {
                     Border border = new Border();
-                    border.BorderBrush = new SolidColorBrush(Settings.Default.PRE_BinsFillColor);
+                    border.BorderBrush = new SolidColorBrush(Settings.Default.PRE_BinsElementsBorderColor);
 
                     if (bin.Elements.Count > 0)
                         border.BorderThickness = new Thickness(0, Settings.Default.PRE_BinsElementsBorderThickness, 0, 0);
