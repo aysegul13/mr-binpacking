@@ -91,7 +91,9 @@ namespace MR.BinPacking.Library.Experiment
             try
             {
                 ExpParams prms = experimentParams;
-                int samplesCount = prms.Sortings.Count * prms.Algorithms.Count;
+                prms.BinSize = experimentInstance.BinSize;
+                //int samplesCount = prms.Sortings.Count * prms.Algorithms.Count;
+                int samplesCount = prms.Repeat * prms.Sortings.Count * prms.Algorithms.Count;
                 //int samplesCount = prms.Repeat * (((prms.MaxN - prms.MinN) / prms.Step) + 1) * prms.Distributions.Count * prms.Sortings.Count * prms.Algorithms.Count;
                 int sampleNumber = 0;
 
@@ -102,12 +104,16 @@ namespace MR.BinPacking.Library.Experiment
                 };
 
 
-                int counter = 0;
-                List<Sample> samples = DoWorkInternal(experimentInstance, prms, samplesCount, sampleNumber, out counter, 0);
-                if (samples == null)
-                    return;
+                for (int R = 0; R < prms.Repeat; R++)
+                {
+                    int counter = 0;
+                    List<Sample> samples = DoWorkInternal(experimentInstance, prms, samplesCount, sampleNumber, out counter, R);
+                    if (samples == null)
+                        return;
 
-                result.Samples.AddRange(samples);
+                    result.Samples.AddRange(samples);
+                    sampleNumber += counter;    //
+                }
 
                 Complete(result);
             }

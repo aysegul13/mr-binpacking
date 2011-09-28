@@ -702,6 +702,8 @@ namespace MR.BinPacking.App
                     fileTypeWindow.ShowDialog();
 
                     Instance = fileTypeWindow.Result;
+
+                    ntbExpBinSize.Text = Settings.Default.EXP_BinSize = Instance.BinSize.ToString();
                 }
             }
             catch (ThreadAbortException) { }
