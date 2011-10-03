@@ -48,15 +48,15 @@
                         <StackPanel Grid.Column="1">
                             <TextBlock Text="Nagłówek:" FontWeight="Bold"/>
                             <RadioButton x:Name="rbHeaderEmpty" Content="brak" IsChecked="True" Checked="rbHeaderEmpty_Checked"/>
-                            <RadioButton x:Name="rbOnlyBinSize" Content="wielkość skrzynki" Checked="rbOnlyBinSize_Checked"/>
+                            <RadioButton x:Name="rbOnlyBinSize" Content="rozmiar pudełek" Checked="rbOnlyBinSize_Checked"/>
                             <RadioButton x:Name="rbOnlyElemCount" Content="liczba elementów" Checked="rbOnlyElemCount_Checked"/>
                             <RadioButton x:Name="rbBinSizeElemCount" Checked="rbBinSizeElemCount_Checked">
-                                <TextBlock Text="wielkość skrzynki, liczba elementów" TextWrapping="Wrap"/>
+                                <TextBlock Text="rozmiar pudełek, liczba elementów" TextWrapping="Wrap"/>
                             </RadioButton>
                             <RadioButton x:Name="rbElemCountBinSize" Checked="rbElemCountBinSize_Checked">
-                                <TextBlock Text="liczba elementów, wielkość skrzynki" TextWrapping="Wrap"/>
+                                <TextBlock Text="liczba elementów, rozmiar pudełek" TextWrapping="Wrap"/>
                             </RadioButton>
-                            <TextBlock Text="Wielkość skrzynki:" FontWeight="Bold" Margin="0,12,0,0"/>
+                            <TextBlock Text="Rozmiar pudełek:" FontWeight="Bold" Margin="0,12,0,0"/>
                             <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Left">
                                 <gui:NumberTextBox x:Name="ntbBinSize" Style="{StaticResource tbStyle}" MinWidth="48"
                                                    MinValue="1" MaxValue="10000" Text="{Binding Source={x:Static props:Settings.Default}, Path=LastFileBinSize, Mode=TwoWay}"/>
@@ -73,7 +73,7 @@
                         <Button x:Name="bFileTypeMulti" Content="Wybierz" HorizontalAlignment="Right" VerticalAlignment="Bottom" MinWidth="75" Click="bFileTypeMulti_Click"/>
                     </Grid>
                 </TabItem>
-                <TabItem x:Name="tiMultiWithWeights" Header="wiele instancji z wagami">
+                <TabItem x:Name="tiMultiWithWeights" Header="wiele instancji z rozmiarami">
                     <Grid>
                         <Border Grid.Row="1" Grid.Column="3" Style="{StaticResource tbBorderStyle}">
                             <TextBox x:Name="tbFiletypeMultiWithWeights" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>

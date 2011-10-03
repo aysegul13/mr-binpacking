@@ -64,7 +64,7 @@
                         <gui:NumberTextBox x:Name="ntbElementsNumber" Style="{StaticResource tbStyle}" MinWidth="48"
                                            MinValue="1" MaxValue="1000" Text="{Binding Source={x:Static props:Settings.Default}, Path=VIS_ElementsCount, Mode=TwoWay}"/>
                     </Border>
-                    <Label Grid.Row="2" Grid.Column="0" Content="Rozmiar skrzynki (c):"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="Rozmiar pudełka (c):"/>
                     <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
                         <gui:NumberTextBox x:Name="ntbBinSize" Style="{StaticResource tbStyle}" MinWidth="48"
                                            MinValue="1" MaxValue="1000" Text="{Binding Source={x:Static props:Settings.Default}, Path=VIS_BinSize, Mode=TwoWay}"
@@ -231,12 +231,12 @@
                                                    MinValue="1" MaxValue="1000000" Text="{Binding Source={x:Static props:Settings.Default}, Path=EXP_Step, Mode=TwoWay}"/>
                             </Border>
 
-                            <Label Grid.Column="1" Content="Rozmiar elementów" FontWeight="Bold"/>
-                            <Label Grid.Row="1" Grid.Column="1" Content="Skrzynki (c):"/>
-                            <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
+                            <Label Grid.Column="1" Content="Rozmiar pudełek:" Margin="0,1,0,25" Grid.RowSpan="2" />
+                            <Border Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
                                 <gui:NumberTextBox x:Name="ntbExpBinSize" Style="{StaticResource tbStyle}" MinWidth="48"
                                                    MinValue="1" MaxValue="10000" Text="{Binding Source={x:Static props:Settings.Default}, Path=EXP_BinSize, Mode=TwoWay}"/>
                             </Border>
+                            <Label Grid.Row="1" Grid.Column="1" Content="Rozmiary elementów" FontWeight="Bold"/>
                             <Label Grid.Row="2" Grid.Column="1" Content="Min:"/>
                             <Border Grid.Row="2" Grid.Column="1" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
                                 <gui:NumberTextBox x:Name="ntbExpMinVal" Style="{StaticResource tbStyle}" MinWidth="48" LostFocus="ntbExpMinVal_LostFocus"
@@ -349,52 +349,52 @@
                           IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ExpandPreviewInPresentation, Mode=TwoWay}"/>
                 <CheckBox x:Name="cbExpandPreviewResult" Content="rozwijaj podgląd elementów (wynik)" Margin="4"
                           IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ExpandPreviewInResult, Mode=TwoWay}"/>
-                <CheckBox x:Name="cbExpandSideBarPresentation" Content="rozwijaj sidebar opisujący prezentację (prezentacja)" Margin="4"
+                <CheckBox x:Name="cbExpandSideBarPresentation" Content="rozwijaj panel boczny opisujący prezentację (prezentacja)" Margin="4"
                           IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ExpandSideBarInPresentation, Mode=TwoWay}"/>
-                <CheckBox x:Name="cbExpandSideBarResult" Content="rozwijaj sidebar ze statystykami (wynik)" Margin="4"
+                <CheckBox x:Name="cbExpandSideBarResult" Content="rozwijaj panel boczny ze statystykami (wynik)" Margin="4"
                           IsChecked="{Binding Source={x:Static props:Settings.Default}, Path=PRE_ExpandSideBarInResult, Mode=TwoWay}"/>
-                <Label Content="Ustawienia wyglądu skrzynek/elementów" FontWeight="Black" Margin="0,10,0,0"/>
+                <Label Content="Ustawienia wyglądu pudełek i elementów" FontWeight="Black" Margin="0,10,0,0"/>
                 <Grid>
-                    <Label Grid.Row="1" Grid.Column="0" Content="margines skrzynek/elementów:"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="margines pudełek i elementów:"/>
                     <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
                         <gui:NumberTextBox x:Name="ntbBinsElementsMargin" Style="{StaticResource tbStyle}" MinWidth="48"
                                            MinValue="0" MaxValue="8" LostFocus="ntbBinsElementsMargin_LostFocus"/>
                     </Border>
                 </Grid>
-                <StackPanel Orientation="Horizontal">
-                    <Label Grid.Row="1" Grid.Column="0" Content="kolor skrzynek:"/>
-                    <gui:ColorPicker x:Name="cpBinsFill" Margin="4" MinWidth="96" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Grid.Row="1" Grid.Column="0" Content="kolor czcionki skrzynek:"/>
-                    <gui:ColorPicker x:Name="cpBinsFont" Margin="4" MinWidth="96" ColorChanged="cpBinsFont_ColorChanged"/>
-                </StackPanel>
                 <Grid>
-                    <Label Grid.Row="1" Grid.Column="0" Content="minimalna szerokość skrzynek/elementów:"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="kolor wypełnienia pudełek:"/>
+                    <gui:ColorPicker x:Name="cpBinsFill" Margin="4" MinWidth="96" HorizontalAlignment="Right" ColorChanged="cpBinsFill_ColorChanged"/>
+                </Grid>
+                <Grid>
+                    <Label Grid.Row="1" Grid.Column="0" Content="kolor czcionki pudełek:"/>
+                    <gui:ColorPicker x:Name="cpBinsFont" Margin="4" MinWidth="96" HorizontalAlignment="Right" ColorChanged="cpBinsFont_ColorChanged"/>
+                </Grid>
+                <Grid>
+                    <Label Grid.Row="1" Grid.Column="0" Content="minimalna szerokość pudełek i elementów (w pikselach):"/>
                     <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
                         <gui:NumberTextBox x:Name="ntbBinsElementsMinWidth" Style="{StaticResource tbStyle}" MinWidth="48"
                                            MinValue="16" MaxValue="128" LostFocus="ntbBinsElementsMinWidth_LostFocus"/>
                     </Border>
                 </Grid>
                 <Grid>
-                    <Label Grid.Row="1" Grid.Column="0" Content="grubość obramowania skrzynek/elementów:"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="grubość obramowania pudełek i elementów (w pikselach):"/>
                     <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource tbBorderStyle}" HorizontalAlignment="Right">
                         <gui:NumberTextBox x:Name="ntbBinsElementsBorderThickness" Style="{StaticResource tbStyle}" MinWidth="48"
-                                           MinValue="1" MaxValue="5" LostFocus="ntbBinsElementsBorderThickness_LostFocus"/>
+                                           MinValue="1" MaxValue="8" LostFocus="ntbBinsElementsBorderThickness_LostFocus"/>
                     </Border>
                 </Grid>
-                <StackPanel Orientation="Horizontal">
-                    <Label Grid.Row="1" Grid.Column="0" Content="kolor obramowania skrzynek/elementów:"/>
-                    <gui:ColorPicker x:Name="cpBinsElementsBorder" Margin="4" MinWidth="96" ColorChanged="cpBinsElementsBorder_ColorChanged"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Grid.Row="1" Grid.Column="0" Content="kolor elementów:"/>
-                    <gui:ColorPicker x:Name="cpElementsFill" Margin="4" MinWidth="96" ColorChanged="cpElementsFill_ColorChanged"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <Grid>
+                    <Label Grid.Row="1" Grid.Column="0" Content="kolor obramowania pudełek i elementów:"/>
+                    <gui:ColorPicker x:Name="cpBinsElementsBorder" Margin="4" MinWidth="96" HorizontalAlignment="Right" ColorChanged="cpBinsElementsBorder_ColorChanged"/>
+                </Grid>
+                <Grid>
+                    <Label Grid.Row="1" Grid.Column="0" Content="kolor wypełnienia elementów:"/>
+                    <gui:ColorPicker x:Name="cpElementsFill" Margin="4" MinWidth="96" HorizontalAlignment="Right" ColorChanged="cpElementsFill_ColorChanged"/>
+                </Grid>
+                <Grid>
                     <Label Grid.Row="1" Grid.Column="0" Content="kolor czcionki elementów:"/>
-                    <gui:ColorPicker x:Name="cpElementsFont" Margin="4" MinWidth="96" ColorChanged="cpElementsFont_ColorChanged"/>
-                </StackPanel>
+                    <gui:ColorPicker x:Name="cpElementsFont" Margin="4" MinWidth="96" HorizontalAlignment="Right" ColorChanged="cpElementsFont_ColorChanged"/>
+                </Grid>
             </StackPanel>
         </TabItem>
         <TabItem Name="tabAbout" Header="Informacje" MinHeight="32">

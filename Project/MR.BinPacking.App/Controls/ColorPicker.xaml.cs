@@ -41,14 +41,14 @@ namespace MR.BinPacking.App.Controls
         {
             InitializeComponent();
 
-            AddPredefinedColor(Colors.White, "White", PredefinedColorPresentationMode.Darker);
-            AddPredefinedColor(Colors.Black, "Black", PredefinedColorPresentationMode.Lighter);
-            AddPredefinedColor(Colors.Red, "Red", PredefinedColorPresentationMode.Mixed);
-            AddPredefinedColor(Colors.Orange, "Orange", PredefinedColorPresentationMode.Mixed);
-            AddPredefinedColor(Colors.Yellow, "Yellow", PredefinedColorPresentationMode.Mixed);
-            AddPredefinedColor(Colors.Green, "Green", PredefinedColorPresentationMode.Mixed);
-            AddPredefinedColor(Colors.Blue, "Blue", PredefinedColorPresentationMode.Mixed);
-            AddPredefinedColor(Colors.Purple, "Purple", PredefinedColorPresentationMode.Mixed);
+            AddPredefinedColor(Colors.White, "Biały", PredefinedColorPresentationMode.Darker);
+            AddPredefinedColor(Colors.Black, "Czarny", PredefinedColorPresentationMode.Lighter);
+            AddPredefinedColor(Colors.Red, "Czerwony", PredefinedColorPresentationMode.Mixed);
+            AddPredefinedColor(Colors.Orange, "Pomarańczowy", PredefinedColorPresentationMode.Mixed);
+            AddPredefinedColor(Colors.Yellow, "Żółty", PredefinedColorPresentationMode.Mixed);
+            AddPredefinedColor(Colors.Green, "Zielony", PredefinedColorPresentationMode.Mixed);
+            AddPredefinedColor(Colors.Blue, "Niebieski", PredefinedColorPresentationMode.Mixed);
+            AddPredefinedColor(Colors.Purple, "Fioletowy", PredefinedColorPresentationMode.Mixed);
         }
 
         #region Methods
@@ -72,51 +72,51 @@ namespace MR.BinPacking.App.Controls
             {
                 case PredefinedColorPresentationMode.Darker:
                     colorPresenters[0] = new ColorPresenter(AdjustColorBrightness(predefinedColor, -0.05), ColorPresenterType.Top);
-                    colorPresenters[0].ToolTip = colorName + ", Darker 5%";
+                    colorPresenters[0].ToolTip = colorName + ", ciemniejszy o 5%";
 
                     colorPresenters[1] = new ColorPresenter(AdjustColorBrightness(predefinedColor, -0.15), ColorPresenterType.Middle);
-                    colorPresenters[1].ToolTip = colorName + ", Darker 15%";
+                    colorPresenters[1].ToolTip = colorName + ", ciemniejszy o 15%";
 
                     colorPresenters[2] = new ColorPresenter(AdjustColorBrightness(predefinedColor, -0.25), ColorPresenterType.Middle);
-                    colorPresenters[2].ToolTip = colorName + ", Darker 25%";
+                    colorPresenters[2].ToolTip = colorName + ", ciemniejszy o 25%";
 
                     colorPresenters[3] = new ColorPresenter(AdjustColorBrightness(predefinedColor, -0.35), ColorPresenterType.Middle);
-                    colorPresenters[3].ToolTip = colorName + ", Darker 35%";
+                    colorPresenters[3].ToolTip = colorName + ", ciemniejszy o 35%";
 
                     colorPresenters[4] = new ColorPresenter(AdjustColorBrightness(predefinedColor, -0.5), ColorPresenterType.Bottom);
-                    colorPresenters[4].ToolTip = colorName + ", Darker 50%";
+                    colorPresenters[4].ToolTip = colorName + ", ciemniejszy o 50%";
                     break;
                 case PredefinedColorPresentationMode.Lighter:
                     colorPresenters[0] = new ColorPresenter(AdjustColorBrightness(predefinedColor, 0.5), ColorPresenterType.Top);
-                    colorPresenters[0].ToolTip = colorName + ", Lighter 50%";
+                    colorPresenters[0].ToolTip = colorName + ", jaśniejszy o 50%";
 
                     colorPresenters[1] = new ColorPresenter(AdjustColorBrightness(predefinedColor, 0.35), ColorPresenterType.Middle);
-                    colorPresenters[1].ToolTip = colorName + ", Lighter 35%";
+                    colorPresenters[1].ToolTip = colorName + ", jaśniejszy o 35%";
 
                     colorPresenters[2] = new ColorPresenter(AdjustColorBrightness(predefinedColor, 0.25), ColorPresenterType.Middle);
-                    colorPresenters[2].ToolTip = colorName + ", Lighter 25%";
+                    colorPresenters[2].ToolTip = colorName + ", jaśniejszy o 25%";
 
                     colorPresenters[3] = new ColorPresenter(AdjustColorBrightness(predefinedColor, 0.15), ColorPresenterType.Middle);
-                    colorPresenters[3].ToolTip = colorName + ", Lighter 15%";
+                    colorPresenters[3].ToolTip = colorName + ", jaśniejszy o 15%";
 
                     colorPresenters[4] = new ColorPresenter(AdjustColorBrightness(predefinedColor, 0.05), ColorPresenterType.Bottom);
-                    colorPresenters[4].ToolTip = colorName + ", Lighter 5%";
+                    colorPresenters[4].ToolTip = colorName + ", jaśniejszy o 5%";
                     break;
                 case PredefinedColorPresentationMode.Mixed:
                     colorPresenters[0] = new ColorPresenter(AdjustColorBrightness(predefinedColor, 0.8), ColorPresenterType.Top);
-                    colorPresenters[0].ToolTip = colorName + ", Lighter 80%";
+                    colorPresenters[0].ToolTip = colorName + ", jaśniejszy o 80%";
 
                     colorPresenters[1] = new ColorPresenter(AdjustColorBrightness(predefinedColor, 0.6), ColorPresenterType.Middle);
-                    colorPresenters[1].ToolTip = colorName + ", Lighter 60%";
+                    colorPresenters[1].ToolTip = colorName + ", jaśniejszy o 60%";
 
                     colorPresenters[2] = new ColorPresenter(AdjustColorBrightness(predefinedColor, 0.4), ColorPresenterType.Middle);
-                    colorPresenters[2].ToolTip = colorName + ", Lighter 40%";
+                    colorPresenters[2].ToolTip = colorName + ", jaśniejszy o 40%";
 
                     colorPresenters[3] = new ColorPresenter(AdjustColorBrightness(predefinedColor, -0.25), ColorPresenterType.Middle);
-                    colorPresenters[3].ToolTip = colorName + ", Darker 25%";
+                    colorPresenters[3].ToolTip = colorName + ", ciemniejszy o 25%";
 
                     colorPresenters[4] = new ColorPresenter(AdjustColorBrightness(predefinedColor, -0.5), ColorPresenterType.Bottom);
-                    colorPresenters[4].ToolTip = colorName + ", Darker 50%";
+                    colorPresenters[4].ToolTip = colorName + ", ciemniejszy o 50%";
                     break;
             }
 
