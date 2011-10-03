@@ -36,7 +36,7 @@ namespace MR.BinPacking.Library.Algorithms
                     #region UI
                     if (IsPresentation)
                     {
-                        Message += String.Format("Sprawdzanie miejsca w skrzynce {0} dla elementu nr {1} ({2})", k + 1, i + 1, elemStr) + Environment.NewLine + Environment.NewLine;
+                        Message += String.Format("Sprawdzanie miejsca w pudełku {0} dla elementu nr {1} ({2})", k + 1, i + 1, elemStr) + Environment.NewLine + Environment.NewLine;
                         Wait(k, i);
                     }
                     #endregion
@@ -49,7 +49,7 @@ namespace MR.BinPacking.Library.Algorithms
                         #region UI
                         if (IsPresentation)
                         {
-                            Message = String.Format("Znaleziono lepsze dopasowanie - skrzynka {0}", k + 1) + Environment.NewLine + Environment.NewLine;
+                            Message = String.Format("Znaleziono lepsze dopasowanie - pudełko {0}", k + 1) + Environment.NewLine + Environment.NewLine;
                             Wait(k, i);
                         }
                         #endregion
@@ -60,7 +60,7 @@ namespace MR.BinPacking.Library.Algorithms
                         if (IsPresentation)
                         {
                             if (Result.Bins[k].FreeSpace() < elem)
-                                Message = String.Format("Brak miejsca w skrzynce {0} dla elementu nr {1} ({2}).", k + 1, i + 1, elemStr) + Environment.NewLine + Environment.NewLine;
+                                Message = String.Format("Brak miejsca w pudełku {0} dla elementu nr {1} ({2}).", k + 1, i + 1, elemStr) + Environment.NewLine + Environment.NewLine;
                             else
                                 Message = "Aktualne dopasowanie jest gorsze od najlepszego znalezionego." + Environment.NewLine + Environment.NewLine;
                         }
@@ -76,7 +76,7 @@ namespace MR.BinPacking.Library.Algorithms
                     #region UI
                     if (IsPresentation)
                     {
-                        Message += "Brak miejsca we wszystkich skrzynkach. Dodano nową skrzynkę." + Environment.NewLine + Environment.NewLine;
+                        Message += "Brak miejsca we wszystkich pudełkach. Dodano nowe pudełko." + Environment.NewLine + Environment.NewLine;
                         Wait(minIndex, i);
                     }
                     #endregion
@@ -86,7 +86,7 @@ namespace MR.BinPacking.Library.Algorithms
 
                 #region UI
                 if (IsPresentation)
-                    Message = String.Format("Wstawiono element nr {0} ({1}) do skrzynki {2}.", i + 1, elemStr, minIndex + 1) + Environment.NewLine + Environment.NewLine;
+                    Message = String.Format("Wstawiono element nr {0} ({1}) do pudełka {2}.", i + 1, elemStr, minIndex + 1) + Environment.NewLine + Environment.NewLine;
                 #endregion
             }
 

@@ -56,7 +56,7 @@ namespace MR.BinPacking.Library.Algorithms
                     #region UI
                     if (IsPresentation)
                     {
-                        Message += "Brak miejsca we wszystkich skrzynkach. Dodano nową skrzynkę." + Environment.NewLine + Environment.NewLine;
+                        Message += "Brak miejsca we wszystkich pudełkach. Dodano nowe pudełko." + Environment.NewLine + Environment.NewLine;
                         Wait(Result.Bins.Count - 1, elemIndexes[elemIndex]);
                     }
                     #endregion
@@ -68,7 +68,7 @@ namespace MR.BinPacking.Library.Algorithms
                     #region UI
                     if (IsPresentation)
                     {
-                        Message += String.Format("Wylosowano skrzynkę nr {0}.", index + 1);
+                        Message += String.Format("Wylosowano pudełko nr {0}.", index + 1);
                         Wait(index, elemIndexes[elemIndex]);
                     }
                     #endregion
@@ -78,7 +78,7 @@ namespace MR.BinPacking.Library.Algorithms
 
                 #region UI
                 if (IsPresentation)
-                    Message = String.Format("Wstawiono element nr {0} ({1}) do skrzynki {2}.", elemIndexes[elemIndex] + 1, elemStr, index + 1) + Environment.NewLine + Environment.NewLine;
+                    Message = String.Format("Wstawiono element nr {0} ({1}) do pudełka {2}.", elemIndexes[elemIndex] + 1, elemStr, index + 1) + Environment.NewLine + Environment.NewLine;
                 #endregion
 
                 elemIndexes.RemoveAt(elemIndex);

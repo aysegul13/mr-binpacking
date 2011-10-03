@@ -59,7 +59,7 @@ namespace MR.BinPacking.App
 
         void InitTextBoxes()
         {
-            tbFileTypeSimple.Text = "[wielkość_skrzynki]" + Environment.NewLine
+            tbFileTypeSimple.Text = "[rozmiar_pudełek]" + Environment.NewLine
                 + "[liczba_elementów]" + Environment.NewLine
                 + "element_1" + Environment.NewLine
                 + "element_2" + Environment.NewLine
@@ -68,47 +68,47 @@ namespace MR.BinPacking.App
 
             tbFileTypeMulti.Text = "liczba_instancji" + Environment.NewLine
                 + "  nazwa_instancji_1" + Environment.NewLine
-                + "  wielkość_skrzynki_1 liczba_elementów_1 [najlepsze_znane_rozw_1]" + Environment.NewLine
+                + "  rozmiar_pudełek_1 liczba_elementów_1 [najlepsze_znane_rozw_1]" + Environment.NewLine
                 + "    element_1_1" + Environment.NewLine
                 + "    element_1_2" + Environment.NewLine
                 + "    ..." + Environment.NewLine
                 + "    element_1_m" + Environment.NewLine
                 + "  nazwa_instancji_2" + Environment.NewLine
-                + "  wielkość_skrzynki_2 liczba_elementów_2 [najlepsze_znane_rozw_2]" + Environment.NewLine
+                + "  rozmiar_pudełek_2 liczba_elementów_2 [najlepsze_znane_rozw_2]" + Environment.NewLine
                 + "    element_2_1" + Environment.NewLine
                 + "    element_2_2" + Environment.NewLine
                 + "    ..." + Environment.NewLine
                 + "    element_2_m" + Environment.NewLine
                 + "  ..." + Environment.NewLine
                 + "  nazwa_instancji_n" + Environment.NewLine
-                + "  wielkość_skrzynki_n liczba_elementów_n [najlepsze_znane_rozw_n]" + Environment.NewLine
+                + "  rozmiar_pudełek_n liczba_elementów_n [najlepsze_znane_rozw_n]" + Environment.NewLine
                 + "    element_n_1" + Environment.NewLine
                 + "    element_n_2" + Environment.NewLine
                 + "    ..." + Environment.NewLine
                 + "    element_n_m" + Environment.NewLine;
 
             tbFiletypeMultiWithWeights.Text = "nazwa_instancji_1" + Environment.NewLine
-                + "  liczba_wag_1" + Environment.NewLine
-                + "  wielkość_skrzynki_1" + Environment.NewLine
-                + "    waga_elem_1_1 liczba_elem_1_1" + Environment.NewLine
-                + "    waga_elem_1_2 liczba_elem_1_2" + Environment.NewLine
+                + "  liczba_rozmiarów_elementów_1" + Environment.NewLine
+                + "  rozmiar_pudełek_1" + Environment.NewLine
+                + "    rozmiar_elem_1_1 liczba_elem_1_1" + Environment.NewLine
+                + "    rozmiar_elem_1_2 liczba_elem_1_2" + Environment.NewLine
                 + "    ..." + Environment.NewLine
-                + "    waga_elem_1_m liczba_elem_1_m" + Environment.NewLine
+                + "    rozmiar_elem_1_m liczba_elem_1_m" + Environment.NewLine
                 + "nazwa_instancji_2" + Environment.NewLine
-                + "  liczba_wag_2" + Environment.NewLine
-                + "  wielkość_skrzynki_2" + Environment.NewLine
-                + "    waga_elem_2_1 liczba_elem_2_1" + Environment.NewLine
-                + "    waga_elem_2_2 liczba_elem_2_2" + Environment.NewLine
+                + "  liczba_rozmiarów_elementów_2" + Environment.NewLine
+                + "  rozmiar_pudełek_2" + Environment.NewLine
+                + "    rozmiar_elem_2_1 liczba_elem_2_1" + Environment.NewLine
+                + "    rozmiar_elem_2_2 liczba_elem_2_2" + Environment.NewLine
                 + "    ..." + Environment.NewLine
-                + "    waga_elem_2_m liczba_elem_2_m" + Environment.NewLine
+                + "    rozmiar_elem_2_m liczba_elem_2_m" + Environment.NewLine
                 + "..." + Environment.NewLine
                 + "nazwa_instancji_n" + Environment.NewLine
-                + "  liczba_wag_n" + Environment.NewLine
-                + "  wielkość_skrzynki_n" + Environment.NewLine
-                + "    waga_elem_n_1 liczba_elem_n_1" + Environment.NewLine
-                + "    waga_elem_n_2 liczba_elem_n_2" + Environment.NewLine
+                + "  liczba_rozmiarów_elementów_n" + Environment.NewLine
+                + "  rozmiar_pudełek_n" + Environment.NewLine
+                + "    rozmiar_elem_n_1 liczba_elem_n_1" + Environment.NewLine
+                + "    rozmiar_elem_n_2 liczba_elem_n_2" + Environment.NewLine
                 + "    ..." + Environment.NewLine
-                + "    waga_elem_n_m liczba_elem_n_m" + Environment.NewLine;
+                + "    rozmiar_elem_n_m liczba_elem_n_m" + Environment.NewLine;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
