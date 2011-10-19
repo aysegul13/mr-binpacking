@@ -187,7 +187,16 @@
   <ItemGroup>
     <Resource Include="images\transparent_background_small.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Libraries\lpsolve55.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)Libraries\lpsolve55.dll" "$(TargetDir)lpsolve55.dll"
+rd "$(TargetDir)Libraries" /S /Q</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
