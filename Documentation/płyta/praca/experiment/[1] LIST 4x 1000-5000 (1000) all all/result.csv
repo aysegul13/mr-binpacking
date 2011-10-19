@@ -1,0 +1,7 @@
+PORÓWNANIE ALGORYTMÓW - wynik [liczba elementów];
+N \ Seria danych;Next Fit;First Fit;Best Fit;First Fit Decreasing;Best Fit Decreasing;Random Fit;
+1000;503;430;428;385;385;409;
+2000;1031;882;879;798;798;835;
+3000;1484;1262;1259;1136;1136;1191;
+4000;2111;1813;1809;1656;1656;1718;
+5000;2549;2166;2161;1957;1957;2051;
