@@ -150,7 +150,7 @@
       <Value Profile="(Default)">24</Value>
     </Setting>
     <Setting Name="PRE_BinsElementsBorderThickness" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">4</Value>
+      <Value Profile="(Default)">2</Value>
     </Setting>
     <Setting Name="PRE_BinsFillColor" Type="System.Windows.Media.Color" Scope="User">
       <Value Profile="(Default)">#FFBFBFBF</Value>
